@@ -8,7 +8,15 @@ const authMiddleware=require("./middleware/auth");
 const User=require("./models/User");
 const Reel=require("./models/Reel");
 const Comment=require("./models/Comment");
+const path = require('path');
 
+// Static files (Frontend) ko serve karne ke liye
+app.use(express.static(path.join(__dirname, './'))); 
+
+// Jab koi main URL khole toh index.html dikhaye
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 const app=express();
 app.use(express.json());
 app.use(cors());
@@ -78,4 +86,5 @@ res.json({message:"Followed"});
 
 
 app.listen(process.env.PORT||5000);
+
 
