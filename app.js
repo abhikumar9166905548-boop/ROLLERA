@@ -7,9 +7,9 @@ window.onload = () => {
     const yearSelect = document.getElementById('dob-year');
 
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    months.forEach((m, i) => monthSelect.innerHTML += `<option value="${i+1}">${m}</option>`);
-    for (let i = 1; i <= 31; i++) daySelect.innerHTML += `<option value="${i}">${i}</option>`;
-    for (let i = 2024; i >= 1950; i--) yearSelect.innerHTML += `<option value="${i}">${i}</option>`;
+    if(monthSelect) months.forEach((m, i) => monthSelect.innerHTML += `<option value="${i+1}">${m}</option>`);
+    if(daySelect) for (let i = 1; i <= 31; i++) daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    if(yearSelect) for (let i = 2024; i >= 1950; i--) yearSelect.innerHTML += `<option value="${i}">${i}</option>`;
 };
 
 // --- 2. Signup & Login Logic ---
@@ -19,16 +19,27 @@ function closeSignup() { document.getElementById("signupModal").style.display = 
 async function handleLogin() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
+    
     const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     });
+
     if (res.ok) {
         alert("Login Successful! 🔥");
+        
+        // --- YE RAHI WO LINE JO HUMNE ADD KI HAI ---
+        if(document.getElementById("mainHeader")) {
+            document.getElementById("mainHeader").style.display = "none";
+        }
+        // ------------------------------------------
+
         document.getElementById("auth").style.display = "none";
         document.getElementById("app").style.display = "block";
-    } else { alert("Login Failed!"); }
+    } else { 
+        alert("Login Failed!"); 
+    }
 }
 
 async function verifyAndSignup() {
@@ -53,19 +64,18 @@ async function verifyAndSignup() {
     } else { alert("Signup fail!"); }
 }
 
-// --- 3. REELS UPLOAD & FEED LOGIC (Jo aapne pucha) ---
+// --- 3. REELS UPLOAD & FEED LOGIC ---
 async function uploadMyReel() {
     const videoFile = document.getElementById("reelVideo").files[0];
     const caption = document.getElementById("reelCaption").value;
 
     if (!videoFile) return alert("Please select a video first!");
 
-    // Abhi ke liye message dikhayenge
     alert("Video uploading feature coming soon! Backend setup ho raha hai.");
     console.log("Uploading:", videoFile.name, "with caption:", caption);
 }
 
 async function loadFeed() {
     const container = document.getElementById("reelsContainer");
-    // Future mein yahan reels fetch hongi
+    // Future mein yahan reels backend se load hongi
 }
