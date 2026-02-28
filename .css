@@ -4,3 +4,15 @@
     gap: 2px; 
     margin-top: 20px;
 }
+
+/* Reels View Snap Effect */
+#reelsView {
+    scroll-snap-type: y mandatory; /* Vertical scroll snap */
+    overflow-y: scroll;
+    height: 100vh;
+}
+
+.reel-video-container {
+    scroll-snap-align: start; /* Har video start par chipak jayegi */
+    scroll-snap-stop: always;
+}
