@@ -4,97 +4,75 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const path = require('path');
+const multer = require('multer'); // Advance upload ke liye
 
-// Models load karna
-const User = require("./models/User");
-const Reel = require("./models/Reel");
-const Comment = require("./models/Comment");
-const authMiddleware = require("./middleware/auth");
-
-const app = express(); // 1. Sabse pehle app define karein
+const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 2. Static files (Frontend) ko serve karein
-app.use(express.static(path.join(__dirname, './')));
+// 1. Video Storage Setting (Server par folder banayega)
+const storage = multer.diskStorage({
+    destination: './uploads/',
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 
-// 3. Database Connection (Sahi variable MONGO_URI use karein)
+// 2. Models Load Karein
+const User = require("./models/User");
+const Reel = require("./models/Reel");
+
+// 3. Static Files (Frontend aur Uploads ke liye)
+app.use(express.static(__dirname));
+app.use('/uploads', express.static('uploads'));
+
+// 4. Database Connection
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("DB Connected! ✅"))
-.catch(err => console.log("DB Error: ", err));
+.catch(err => console.log(err));
 
 /* --- ROUTES --- */
 
-// Home Route (Frontend load karne ke liye)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// SIGNUP
+// ADVANCE UPLOAD ROUTE
+app.post("/upload", upload.single('video'), async (req, res) => {
+    try {
+        const newReel = new Reel({
+            videoUrl: `/uploads/${req.file.filename}`,
+            caption: req.body.caption
+        });
+        await newReel.save();
+        res.json({ message: "Reel Uploaded Successfully! 🎬" });
+    } catch (err) {
+        res.status(500).json({ error: "Upload failed" });
+    }
+});
+
+// SIGNUP & LOGIN (Wahi rahega jo pehle tha...)
 app.post("/signup", async (req, res) => {
-    try {
-        const hashed = await bcrypt.hash(req.body.password, 10);
-        const user = new User({ ...req.body, password: hashed });
-        await user.save();
-        res.json({ message: "User Created Successfully! 🎉" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+    const hashed = await bcrypt.hash(req.body.password, 10);
+    const user = new User({ ...req.body, password: hashed });
+    await user.save();
+    res.json({ message: "User Created! 🎉" });
 });
 
-// LOGIN
 app.post("/login", async (req, res) => {
-    try {
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(400).json({ message: "User not found" });
-
-        const valid = await bcrypt.compare(req.body.password, user.password);
-        if (!valid) return res.status(400).json({ message: "Wrong Password" });
-
-        const token = jwt.sign({ id: user._id }, "SECRETKEY");
-        res.json({ token, message: "Login Success!" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    const user = await User.findOne({ email: req.body.email });
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(400).json({ message: "Invalid Credentials" });
     }
+    const token = jwt.sign({ id: user._id }, "SECRETKEY");
+    res.json({ token });
 });
 
-// UPLOAD REEL
-app.post("/upload", authMiddleware, async (req, res) => {
-    const reel = new Reel({ ...req.body, user: req.user.id });
-    await reel.save();
-    res.json({ message: "Uploaded" });
-});
-
-// GET REELS
 app.get("/reels", async (req, res) => {
-    const reels = await Reel.find().populate('user', 'username');
+    const reels = await Reel.find().sort({ createdAt: -1 });
     res.json(reels);
 });
 
-// LIKE
-app.post("/like/:id", authMiddleware, async (req, res) => {
-    await Reel.findByIdAndUpdate(req.params.id, { $addToSet: { likes: req.user.id } });
-    res.json({ message: "Liked" });
-});
-
-// COMMENT
-app.post("/comment/:id", authMiddleware, async (req, res) => {
-    const comment = new Comment({
-        reelId: req.params.id,
-        user: req.user.id,
-        text: req.body.text
-    });
-    await comment.save();
-    res.json({ message: "Comment Added" });
-});
-
-// FOLLOW
-app.post("/follow/:id", authMiddleware, async (req, res) => {
-    await User.findByIdAndUpdate(req.user.id, { $addToSet: { following: req.params.id } });
-    await User.findByIdAndUpdate(req.params.id, { $addToSet: { followers: req.user.id } });
-    res.json({ message: "Followed" });
-});
-
-// Server Start
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server Live on ${PORT}`));
