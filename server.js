@@ -8,7 +8,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static(__dirname)); // Frontend files serve karne ke liye
+app.use(express.static(__dirname));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -27,12 +27,12 @@ const User = mongoose.model('User', userSchema);
 
 // --- ROUTES ---
 
-// 1. Send OTP (Simulated for testing)
+// OTP Route
 app.post('/send-otp', (req, res) => {
     res.status(200).json({ message: "OTP Sent (Use 123456)" });
 });
 
-// 2. Verify & Signup (Fixed Route Name)
+// Verify & Signup (Fixed: No Space)
 app.post('/verify-signup', async (req, res) => {
     try {
         const { name, age, email, mobile, password, otp } = req.body;
@@ -47,17 +47,23 @@ app.post('/verify-signup', async (req, res) => {
     }
 });
 
-// 3. Login Route
+// Login Route
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User nahi mila" });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Galat Password" });
-    res.json({ message: "Success", token: "rollera-token-123" });
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ message: "User nahi mila" });
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ message: "Galat Password" });
+        
+        res.json({ message: "Success", token: "rollera-token-123" });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
 });
 
-// Catch-all to serve index.html
+// Serve Frontend
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
