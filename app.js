@@ -1,5 +1,18 @@
 const API_URL = "https://rollera.onrender.com"; 
 
+// --- 1. Birthday Dropdowns Bharne ka Logic ---
+window.onload = () => {
+    const monthSelect = document.getElementById('dob-month');
+    const daySelect = document.getElementById('dob-day');
+    const yearSelect = document.getElementById('dob-year');
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    months.forEach((m, i) => monthSelect.innerHTML += `<option value="${i+1}">${m}</option>`);
+    for (let i = 1; i <= 31; i++) daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    for (let i = 2024; i >= 1950; i--) yearSelect.innerHTML += `<option value="${i}">${i}</option>`;
+};
+
+// --- 2. Signup & Login Logic ---
 function openSignup() { document.getElementById("signupModal").style.display = "flex"; }
 function closeSignup() { document.getElementById("signupModal").style.display = "none"; }
 
@@ -18,20 +31,14 @@ async function handleLogin() {
     } else { alert("Login Failed!"); }
 }
 
-function sendOtpLogic() {
-    document.getElementById("otpSection").style.display = "block";
-    document.getElementById("sendOtpBtn").style.display = "none";
-    alert("OTP sent! (Use 123456)");
-}
-
 async function verifyAndSignup() {
     const data = {
         name: document.getElementById("signup-name").value,
-        age: document.getElementById("signup-age").value,
+        username: document.getElementById("signup-username").value,
         email: document.getElementById("signup-email").value,
-        mobile: document.getElementById("signup-mobile").value,
         password: document.getElementById("signup-password").value,
-        otp: document.getElementById("otpInput").value
+        birthday: `${document.getElementById("dob-day").value}-${document.getElementById("dob-month").value}-${document.getElementById("dob-year").value}`,
+        otp: "123456" // Default testing ke liye
     };
 
     const res = await fetch(`${API_URL}/verify-signup`, {
@@ -43,8 +50,22 @@ async function verifyAndSignup() {
     if (res.ok) {
         alert("Account Created! 🎉 Ab login karein.");
         location.reload();
-    } else {
-        const err = await res.json();
-        alert("Signup failed: " + err.message);
-    }
+    } else { alert("Signup fail!"); }
+}
+
+// --- 3. REELS UPLOAD & FEED LOGIC (Jo aapne pucha) ---
+async function uploadMyReel() {
+    const videoFile = document.getElementById("reelVideo").files[0];
+    const caption = document.getElementById("reelCaption").value;
+
+    if (!videoFile) return alert("Please select a video first!");
+
+    // Abhi ke liye message dikhayenge
+    alert("Video uploading feature coming soon! Backend setup ho raha hai.");
+    console.log("Uploading:", videoFile.name, "with caption:", caption);
+}
+
+async function loadFeed() {
+    const container = document.getElementById("reelsContainer");
+    // Future mein yahan reels fetch hongi
 }
