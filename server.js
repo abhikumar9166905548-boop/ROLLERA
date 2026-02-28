@@ -20,7 +20,7 @@ mongoose.connect(MONGO_URI)
 
 // 3. User Schema
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 });
 const User = mongoose.model('User', userSchema);
@@ -28,16 +28,15 @@ const User = mongoose.model('User', userSchema);
 // 4. SIGNUP ROUTE
 app.post('/signup', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword });
+        const newUser = new User({ email, password: hashedPassword });
         await newUser.save();
-        res.status(201).json({ message: "User registered successfully! 🎉" });
+        res.status(201).json({ message: "User Created Successfully!" });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ message: "Signup fail ho gaya" });
     }
 });
-
 // 5. LOGIN ROUTE
 app.post('/login', async (req, res) => {
     try {
@@ -64,3 +63,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
