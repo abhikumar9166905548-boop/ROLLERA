@@ -18,10 +18,10 @@ mongoose.connect(process.env.MONGO_URI)
 // User Schema
 const userSchema = new mongoose.Schema({
     name: String,
-    age: Number,
+    username: { type: String, unique: true }, // Naya field
     email: { type: String, unique: true, required: true },
-    mobile: String,
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    birthday: String // Naya field
 });
 const User = mongoose.model('User', userSchema);
 
@@ -70,3 +70,4 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, "0.0.0.0", () => console.log(`Rollera Server live on ${PORT} 🚀`));
+
