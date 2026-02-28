@@ -1,4 +1,5 @@
 let currentUserId = null; // Global variable user ID track karne ke liye
+
 // Iske peeche slash '/' mat lagana
 const API_URL = "https://rollera.onrender.com"; 
 
@@ -37,18 +38,21 @@ async function handleLogin() {
 
         if (res.ok) {
             alert("Login Successful! 🔥");
+            
+            // --- ID SAVE KARNA ---
+            currentUserId = data.user._id; 
+            
             document.getElementById("auth").style.display = "none";
             document.getElementById("mainHeader").style.display = "none";
             document.getElementById("app").style.display = "block";
 
-            // --- MERGED LOGIC HERE ---
-            // Login successful hone par username aur posts load karo
+            // Login hone par Profile aur Global Feed dono load karo
             if(data.user) {
                 const profileUser = document.getElementById("profile-username");
                 if(profileUser) profileUser.innerText = data.user.username; 
                 loadProfilePosts(data.user._id); 
+                loadAllPosts(); // Global Feed load karein
             }
-            // -------------------------
 
         } else {
             alert("Login Failed: " + (data.message || "Check credentials."));
@@ -74,12 +78,17 @@ function hideAllSections() {
     document.querySelectorAll('video').forEach(v => v.pause());
 }
 
+// UPDATE: showHome ab feed refresh karega
 function showHome() {
     hideAllSections();
     document.getElementById('homeView').style.display = 'block';
     document.getElementById('reelsContainer').style.display = 'block';
     const storyContainer = document.querySelector('.story-container');
     if (storyContainer) storyContainer.style.display = 'flex';
+    
+    // Nayi posts load karo
+    loadAllPosts(); 
+
     const header = document.getElementById("mainHeader");
     if (header) {
         header.style.display = "block";
@@ -205,29 +214,23 @@ async function uploadMyReel() {
 
     if (!file) return;
 
-    // Loading indicator (optional alert)
     alert("Uploading shuru ho rahi hai... Please wait.");
 
     const formData = new FormData();
     formData.append("file", file);
-    // Yahan hum user ka ID bhej rahe hain (Jo login ke waqt humein mila tha)
-    // Note: Iske liye humein userId ko global variable mein save karna hoga ya localStorage se lena hoga.
-    // Abhi ke liye hum login session handle karne ke liye simple approach rakhte hain.
+    formData.append("userId", currentUserId); 
 
     try {
         const res = await fetch(`${API_URL}/upload`, {
             method: "POST",
-            body: formData, // File upload ke liye headers mein 'Content-Type' nahi dete, browser khud handle karta hai
+            body: formData,
         });
 
         const data = await res.json();
 
         if (res.ok) {
             alert("Upload Successful! 🔥");
-            // Upload ke baad profile refresh karo taaki nayi post dikhe
-            showProfile(); 
-            // Agar aapke paas logged-in user ID save hai to niche wala function call karein:
-            // loadProfilePosts(currentUserId); 
+            showHome(); // Upload ke baad Home par le jao taaki sabko dikhe
         } else {
             alert("Upload Failed: " + (data.message || "Something went wrong"));
         }
@@ -235,7 +238,113 @@ async function uploadMyReel() {
         console.error("Upload Error:", err);
         alert("Server error during upload.");
     } finally {
-        // Input ko khali karo taaki dubara wahi file select ho sake
         fileInput.value = "";
+    }
+}
+
+// --- 9. Load All Posts (Home Feed) ---
+async function loadAllPosts() {
+    const reelsContainer = document.getElementById("reelsContainer");
+    if (!reelsContainer) return;
+
+    try {
+        const res = await fetch(`${API_URL}/posts`);
+        const posts = await res.json();
+
+        reelsContainer.innerHTML = "";
+
+        if (!posts || posts.length === 0) {
+            reelsContainer.innerHTML = "<p style='text-align: center; color: #8e8e8e; margin-top: 50px;'>No posts available. Be the first to post!</p>";
+            return;
+        }
+
+        posts.forEach(post => {
+            const postHTML = `
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="${post.userProfile || 'https://i.pravatar.cc/150?u=' + post.userId}">
+                        <span style="font-weight: 600; font-size: 14px;">${post.username || 'User'}</span>
+                    </div>
+                    
+                    ${post.url.endsWith('.mp4') || post.url.includes('video') 
+                        ? `<video class="post-img" src="${post.url}" controls loop muted playsinline></video>`
+                        : `<img class="post-img" src="${post.url}">`
+                    }
+
+                    <div class="post-actions">
+                        <i class="fa-regular fa-heart" onclick="toggleLike(this)"></i>
+                        <i class="fa-regular fa-comment"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                    <div class="post-info">
+                        <p><b>${Math.floor(Math.random() * 1000)} likes</b></p>
+                        <p><b>${post.username || 'User'}</b> ${post.caption || 'No caption'}</p>
+                    </div>
+                </div>
+            `;
+            reelsContainer.innerHTML += postHTML;
+        });
+    } catch (err) {
+        console.error("Error loading feed:", err);
+    }
+}
+
+// --- 10. Search Users Logic ---
+async function handleSearch() {
+    const query = document.getElementById("search-input").value;
+    const searchResults = document.getElementById("searchResults");
+    
+    if (!query) {
+        searchResults.innerHTML = "<p style='text-align:center; color:gray;'>Kuch type toh karo bhai...</p>";
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/search?username=${query}`);
+        const users = await res.json();
+
+        searchResults.innerHTML = "";
+
+        if (users.length === 0) {
+            searchResults.innerHTML = "<p style='text-align:center; color:gray;'>Koi nahi mila 😅</p>";
+            return;
+        }
+
+        users.forEach(user => {
+            const userDiv = document.createElement("div");
+            userDiv.className = "search-item";
+            userDiv.style.cssText = "display:flex; align-items:center; padding:10px; border-bottom:1px solid #262626; cursor:pointer;";
+            userDiv.innerHTML = `
+                <img src="https://i.pravatar.cc/150?u=${user._id}" style="width:40px; height:40px; border-radius:50%; margin-right:15px;">
+                <span style="color:white; font-weight:600;">${user.username}</span>
+            `;
+            // Search result par click karne par uski posts load ho jayengi
+            userDiv.onclick = () => {
+                document.getElementById("profile-username").innerText = user.username;
+                loadProfilePosts(user._id);
+                showProfile();
+            };
+            searchResults.appendChild(userDiv);
+        });
+    } catch (err) {
+        console.error("Search Error:", err);
+    }
+}
+
+// --- 11. Logout Logic ---
+function handleLogout() {
+    if (confirm("Kya aap sach mein logout karna chahte hain?")) {
+        currentUserId = null;
+        // Wapas login screen dikhao
+        document.getElementById("app").style.display = "none";
+        document.getElementById("auth").style.display = "block";
+        document.getElementById("mainHeader").style.display = "block";
+        document.getElementById("mainHeader").innerText = "Rollera";
+        
+        // Input fields saaf karo
+        document.getElementById("login-email").value = "";
+        document.getElementById("login-password").value = "";
+        
+        alert("Logged out successfully! Dobara aana 👋");
     }
 }
