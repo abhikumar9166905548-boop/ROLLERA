@@ -35,7 +35,7 @@ if(!valid) return res.status(400).json({message:"Wrong Password"});
 const token=jwt.sign({id:user._id},"SECRETKEY");
 res.json({token});
 });
-
+https://rollera.onrender.com
 /* UPLOAD REEL */
 app.post("/upload",authMiddleware,async(req,res)=>{
 const reel=new Reel({...req.body,user:req.user.id});
@@ -55,7 +55,7 @@ await Reel.findByIdAndUpdate(req.params.id,
 {$addToSet:{likes:req.user.id}});
 res.json({message:"Liked"});
 });
-
+https://rollera.onrender.com
 /* COMMENT */
 app.post("/comment/:id",authMiddleware,async(req,res)=>{
 const comment=new Comment({
@@ -75,5 +75,6 @@ await User.findByIdAndUpdate(req.params.id,
 {$addToSet:{followers:req.user.id}});
 res.json({message:"Followed"});
 });
+
 
 app.listen(process.env.PORT||5000);
