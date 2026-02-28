@@ -8,11 +8,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// --- FRONTEND FIX: Ise dhyan se dekhiye ---
-// Ye line aapki index.html ko browser mein dikhayegi
+// --- FRONTEND FIX: Path ko ekdam simple rakha hai ---
 app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
+    // Bina folder ke direct file load karega
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -31,27 +31,20 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// OTP Route
-app.post('/send-otp', (req, res) => {
-    res.status(200).json({ message: "OTP Sent (Use 123456)" });
-});
+// Routes
+app.post('/send-otp', (req, res) => res.json({ message: "OTP Sent (Use 123456)" }));
 
-// Verify + Signup Route
 app.post('/verify-signup', async (req, res) => {
     try {
         const { name, age, email, mobile, password, otp } = req.body;
         if (otp !== "123456") return res.status(400).json({ message: "Galat OTP!" });
-
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ name, age, email, mobile, password: hashedPassword });
         await newUser.save();
         res.status(201).json({ message: "Account Ban Gaya! 🎉" });
-    } catch (err) {
-        res.status(500).json({ message: "Signup Fail: " + err.message });
-    }
+    } catch (err) { res.status(500).json({ message: "Signup Fail: " + err.message }); }
 });
 
-// Login Route
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
