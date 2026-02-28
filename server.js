@@ -53,3 +53,12 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+const path = require('path'); // Isse file ka rasta milta hai
+
+// Static files (CSS, Images, JS) load karne ke liye
+app.use(express.static(path.join(__dirname, './'))); 
+
+// Asli Website (index.html) ko Render par dikhane ke liye
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
