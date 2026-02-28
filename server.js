@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Frontend files dikhane ke liye
+// Frontend files ke liye
 app.use(express.static(path.join(__dirname, './')));
 
 // Database Connection
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected Successfully! ✅"))
   .catch(err => console.log("DB Connection Error: ", err));
 
-// User Schema (Name, Age, Mobile sab ke saath)
+// User Schema (Name, Age, Email, Mobile, Password)
 const userSchema = new mongoose.Schema({
     name: String,
     age: Number,
@@ -26,9 +26,10 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// 1. OTP Route (Abhi testing ke liye 123456 rakha hai)
+// 1. OTP Route (Testing OTP: 123456)
 app.post('/send-otp', (req, res) => {
-    res.status(200).json({ message: "OTP Sent Successfully (Use 123456)" });
+    console.log("OTP Request received for mobile:", req.body.mobile);
+    res.status(200).json({ message: "OTP Sent (Use 123456)" });
 });
 
 // 2. Verify + Signup Route
@@ -37,7 +38,7 @@ app.post('/verify-signup', async (req, res) => {
         const { name, age, email, mobile, password, otp } = req.body;
         
         if (otp !== "123456") {
-            return res.status(400).json({ message: "Galat OTP daala hai bhai!" });
+            return res.status(400).json({ message: "Galat OTP daala hai!" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
