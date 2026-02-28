@@ -1,41 +1,72 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const cookieParser = require("cookie-parser");
-
-const authRoutes = require("./routes/auth");
+const express = require('express');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const cors = require('cors');
+const path = require('path');
 
 const app = express();
-
-/* SECURITY */
-app.use(helmet());
-
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
-
 app.use(express.json());
-app.use(cookieParser());
+app.use(cors());
 
-/* RATE LIMIT */
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
-});
-app.use(limiter);
+// Frontend files dikhane ke liye
+app.use(express.static(path.join(__dirname, './')));
 
-/* DATABASE */
+// Database Connection
 mongoose.connect(process.env.MONGO_URI)
-.then(()=>console.log("MongoDB Connected ✅"))
-.catch(err=>console.log(err));
+  .then(() => console.log("MongoDB Connected Successfully! ✅"))
+  .catch(err => console.log("DB Connection Error: ", err));
 
-/* ROUTES */
-app.use("/api", authRoutes);
+// User Schema (Name, Age, Mobile sab ke saath)
+const userSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    email: { type: String, unique: true, required: true },
+    mobile: String,
+    password: { type: String, required: true }
+});
+const User = mongoose.model('User', userSchema);
 
-app.listen(process.env.PORT, ()=>{
-  console.log("Server running on port", process.env.PORT);
+// 1. OTP Route (Abhi testing ke liye 123456 rakha hai)
+app.post('/send-otp', (req, res) => {
+    res.status(200).json({ message: "OTP Sent Successfully (Use 123456)" });
+});
+
+// 2. Verify + Signup Route
+app.post('/verify-signup', async (req, res) => {
+    try {
+        const { name, age, email, mobile, password, otp } = req.body;
+        
+        if (otp !== "123456") {
+            return res.status(400).json({ message: "Galat OTP daala hai bhai!" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, age, email, mobile, password: hashedPassword });
+        await newUser.save();
+        
+        res.status(201).json({ message: "Account Ban Gaya! 🎉" });
+    } catch (err) {
+        res.status(500).json({ message: "Signup Fail: " + err.message });
+    }
+});
+
+// 3. Login Route
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ message: "User nahi mila!" });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ message: "Galat Password!" });
+
+        res.json({ message: "Login Successful!", token: "dummy-token-123" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server is running on port ${PORT} 🚀`);
 });
