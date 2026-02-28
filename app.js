@@ -27,6 +27,42 @@ async function handleLogin() {
     });
 
     if (res.ok) {
+
+        // --- 6. NAVIGATION & REELS LOGIC ---
+
+function showReels() {
+    // Feed chupao, Reels dikhao
+    document.querySelector('.story-container').style.display = 'none';
+    document.getElementById('reelsContainer').style.display = 'none';
+    document.getElementById('reelsView').style.display = 'block';
+    
+    // Pehla video play karo
+    const firstVideo = document.querySelector('#reelsView video');
+    if(firstVideo) firstVideo.play();
+}
+
+function showHome() {
+    // Reels chupao, Feed dikhao
+    document.querySelector('.story-container').style.display = 'flex';
+    document.getElementById('reelsContainer').style.display = 'block';
+    document.getElementById('reelsView').style.display = 'none';
+    
+    // Sare videos pause kar do
+    document.querySelectorAll('video').forEach(v => v.pause());
+}
+
+// Auto Play/Pause logic on scroll
+document.getElementById('reelsView').addEventListener('scroll', () => {
+    const videos = document.querySelectorAll('#reelsView video');
+    videos.forEach(video => {
+        const rect = video.getBoundingClientRect();
+        if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    });
+});
         alert("Login Successful! 🔥");
         
         // --- YE RAHI WO LINE JO HUMNE ADD KI HAI ---
