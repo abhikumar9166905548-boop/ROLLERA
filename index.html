@@ -1,49 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rollera • Final Boss</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body { margin: 0; background: #000; color: #fff; font-family: system-ui; text-align: center; }
-        header { padding: 20px; background: linear-gradient(90deg, #ff0050, #7f00ff); margin-bottom: 20px; }
-        .container { padding: 16px; max-width: 400px; margin: auto; }
-        h2, h3 { margin: 10px 0; }
-        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; margin-top: 12px; border-radius: 8px; border: none; background: #ff0050; color: #fff; font-weight: bold; cursor: pointer; font-size: 16px; }
-        button:hover { opacity: 0.9; }
-        #app { display: none; }
-        .reel { height: 80vh; margin-top: 20px; position: relative; border-radius: 12px; overflow: hidden; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; padding: 10px 0; border-top: 1px solid #222; }
-        nav button { background: none; margin: 0; flex: 1; }
-    </style>
-</head>
-<body>
-
-<header><h2>🔥 Rollera</h2></header>
-
-<div class="container">
-    <div id="auth">
-        <h3 style="text-align: left;">Login / Signup</h3>
-        <input id="email" type="email" placeholder="Email">
-        <input id="password" type="password" placeholder="Password">
-        <button onclick="handleLogin()">Login</button>
-        <button onclick="handleSignup()" style="background: #ff0050;">Signup</button>
-        <p style="color: #888; margin-top: 15px; font-size: 14px;">Forgot Password?</p>
-    </div>
-
-    <div id="app">
-        <div id="feed"></div>
-        
-        <div style="background: #111; padding: 15px; border-radius: 10px; margin-top: 20px;">
-            <input type="file" id="videoFile" accept="video/*">
-            <input id="caption" placeholder="Caption...">
-            <button onclick="uploadReel()">Upload Reel</button>
-        </div>
-    </div>
+<div id="auth" class="container">
+    <h3>Welcome to Rollera</h3>
+    <input id="login-email" type="email" placeholder="Email">
+    <input id="login-password" type="password" placeholder="Password">
+    <button onclick="handleLogin()">Login</button>
+    <p>Naye ho? <a href="#" onclick="openSignup()" style="color: #ff0050;">Account Banayein</a></p>
 </div>
 
-<script src="app.js"></script>
-</body>
-</html>
+<div id="signupModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000;">
+    <div class="container" style="margin-top: 50px; background:#111; padding:20px; border-radius:15px; border:1px solid #333;">
+        <h3>Create Account</h3>
+        <input id="name" type="text" placeholder="Full Name">
+        <input id="age" type="number" placeholder="Age">
+        <input id="email" type="email" placeholder="Gmail ID">
+        <input id="mobile" type="tel" placeholder="Mobile Number">
+        <input id="password" type="password" placeholder="Set Password">
+        <button onclick="handleSignup()" style="background:#ff0050;">Register Now</button>
+        <button onclick="closeSignup()" style="background:#333; margin-top:10px;">Cancel</button>
+    </div>
+</div>
