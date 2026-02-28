@@ -46,66 +46,76 @@ async function handleLogin() {
     }
 }
 
-// --- 3. Navigation Functions (Teeno Screens ke liye) ---
+// --- 3. Navigation Functions (Screens switching) ---
+
+// Sabhi sections ko hide karne ke liye helper function
+function hideAllSections() {
+    const sections = ['homeView', 'reelsView', 'profileView', 'searchView', 'reelsContainer'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    
+    const storyContainer = document.querySelector('.story-container');
+    if (storyContainer) storyContainer.style.display = 'none';
+
+    // Sabhi videos ko pause karne ke liye
+    document.querySelectorAll('video').forEach(v => v.pause());
+}
 
 // HOME SCREEN DIKHAO
 function showHome() {
-    document.getElementById('reelsView').style.display = 'none';
-    document.getElementById('profileView').style.display = 'none';
+    hideAllSections();
+    
+    document.getElementById('homeView').style.display = 'block';
     document.getElementById('reelsContainer').style.display = 'block';
     
     const storyContainer = document.querySelector('.story-container');
     if (storyContainer) storyContainer.style.display = 'flex';
     
-    // Header Reset
     const header = document.getElementById("mainHeader");
     if (header) {
         header.style.display = "block";
         header.innerText = "Rollera";
     }
+}
+
+// SEARCH SCREEN DIKHAO
+function showSearch() {
+    hideAllSections();
     
-    // Stop Videos
-    document.querySelectorAll('video').forEach(v => v.pause());
+    document.getElementById('searchView').style.display = 'block';
+
+    // Search mein header ki zaroorat nahi hoti
+    const header = document.getElementById("mainHeader");
+    if (header) header.style.display = "none";
 }
 
 // REELS SCREEN DIKHAO
 function showReels() {
-    document.getElementById('reelsContainer').style.display = 'none';
-    document.getElementById('profileView').style.display = 'none';
-    
-    const storyContainer = document.querySelector('.story-container');
-    if (storyContainer) storyContainer.style.display = 'none';
+    hideAllSections();
     
     document.getElementById('reelsView').style.display = 'block';
     
-    // Header Chupao (Reels full screen hoti hain)
     const header = document.getElementById("mainHeader");
     if (header) header.style.display = "none";
 
-    // Play first video
+    // Pehli video play karo
     const vid = document.querySelector('#reelsView video');
     if (vid) vid.play();
 }
 
 // PROFILE SCREEN DIKHAO
 function showProfile() {
-    document.getElementById('reelsView').style.display = 'none';
-    document.getElementById('reelsContainer').style.display = 'none';
-    
-    const storyContainer = document.querySelector('.story-container');
-    if (storyContainer) storyContainer.style.display = 'none';
+    hideAllSections();
     
     document.getElementById('profileView').style.display = 'block';
 
-    // Header Title
     const header = document.getElementById("mainHeader");
     if (header) {
         header.style.display = "block";
         header.innerText = "Profile";
     }
-    
-    // Stop Videos
-    document.querySelectorAll('video').forEach(v => v.pause());
 }
 
 // --- 4. Like System ---
@@ -125,6 +135,7 @@ function openSignup() {
     const modal = document.getElementById("signupModal");
     if(modal) modal.style.display = "flex"; 
 }
+
 function closeSignup() { 
     const modal = document.getElementById("signupModal");
     if(modal) modal.style.display = "none"; 
