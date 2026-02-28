@@ -5,23 +5,25 @@
     <title>Rollera • Final Boss</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body{margin:0;background:#000;color:#fff;font-family:system-ui;}
+        body{margin:0;background:#000;color:#fff;font-family:system-ui; overflow-x: hidden;}
         header{padding:20px;text-align:center;background:linear-gradient(90deg,#ff0050,#7f00ff);font-size:24px;font-weight:bold;}
-        #auth, #app {padding:20px;}
+        #auth, #app {padding:0px;} /* Feed ke liye padding hatayi */
+        #auth {padding: 20px;}
         input, button {width:100%;padding:15px;margin-top:10px;border-radius:10px;border:none;box-sizing:border-box;}
         input {background:#111;color:#fff;border:1px solid #333;}
         button {background:#ff0050;color:#fff;font-weight:bold;cursor:pointer;}
         .modal-overlay {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;}
         .modal-content {background:#000;width:90%;max-width:400px;padding:30px;border-radius:20px;border:1px solid #333;text-align:center;}
         
-        /* Video Player Style */
-        .reel-card { background: #111; border-radius: 15px; margin-bottom: 20px; padding: 10px; border: 1px solid #222; }
-        video { width: 100%; border-radius: 10px; max-height: 450px; background: #000; }
+        /* Story Styling */
+        .story-circle { flex-shrink: 0; cursor: pointer; padding: 5px; }
+        .reel-card { background: #000; border-bottom: 0.5px solid #262626; margin-bottom: 10px; }
+        video { width: 100%; display: block; background: #000; }
     </style>
 </head>
 <body>
 
-<header>🔥 Rollera</header>
+<header id="mainHeader">🔥 Rollera</header>
 
 <div id="auth">
     <h3>Login / Signup</h3>
@@ -59,20 +61,55 @@
     </div>
 </div>
 
-<div id="app" style="display:none;">
-    <h2 style="text-align:center;">🔥 Rollera Feed</h2>
+<div id="app" style="display:none; background: #000; min-height: 100vh; padding-bottom: 60px;">
     
-    <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px dashed #ff0050;">
-        <input type="file" id="reelVideo" accept="video/*" style="margin-bottom: 10px;">
-        <input id="reelCaption" placeholder="Write a caption..." style="margin-bottom: 10px;">
-        <button onclick="uploadMyReel()" style="background: #7f00ff;">Post Reel 🚀</button>
+    <div style="display: flex; overflow-x: auto; padding: 10px; border-bottom: 0.5px solid #262626; gap: 15px; scrollbar-width: none;">
+        <div class="story-circle" onclick="alert('Add Story')">
+            <div style="width: 65px; height: 65px; border-radius: 50%; border: 2px solid #ff0050; padding: 2px;">
+                <img src="https://via.placeholder.com/65" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            </div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">Your story</p>
+        </div>
+        <div class="story-circle">
+            <div style="width: 65px; height: 65px; border-radius: 50%; border: 2px solid #ff0050; padding: 2px;">
+                <img src="https://i.pravatar.cc/65?img=1" style="width: 100%; height: 100%; border-radius: 50%;">
+            </div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">himanshu_</p>
+        </div>
+        <div class="story-circle">
+            <div style="width: 65px; height: 65px; border-radius: 50%; border: 2px solid #ff0050; padding: 2px;">
+                <img src="https://i.pravatar.cc/65?img=2" style="width: 100%; height: 100%; border-radius: 50%;">
+            </div>
+            <p style="font-size: 11px; text-align: center; margin-top: 5px;">sunil_sk</p>
+        </div>
     </div>
 
     <div id="reelsContainer">
-        <p style="text-align:center; color:#888;">No reels yet. Be the first to post!</p>
+        <div class="reel-card">
+            <div style="display: flex; align-items: center; padding: 10px; gap: 10px;">
+                <img src="https://i.pravatar.cc/32?img=3" style="width: 32px; height: 32px; border-radius: 50%;">
+                <span style="font-weight: 600; font-size: 14px;">collectorbabu_</span>
+            </div>
+            <img src="https://via.placeholder.com/500x600" style="width: 100%; display: block;">
+            <div style="padding: 12px;">
+                <div style="display: flex; gap: 15px; margin-bottom: 8px; font-size: 20px;">
+                    <span style="cursor:pointer">❤️</span> <span style="cursor:pointer">💬</span> <span style="cursor:pointer">✈️</span>
+                </div>
+                <p style="font-size: 14px; margin: 0;"><b>856 likes</b></p>
+                <p style="font-size: 14px; margin: 5px 0;"><b>collectorbabu_</b> Bhai time lagega but Flex to isi car se karna hai' ❤️🔥</p>
+            </div>
+        </div>
     </div>
 
-    <button onclick="localStorage.clear(); location.reload()" style="background: #333; margin-top: 20px;">Logout</button>
+    <div style="position: fixed; bottom: 0; width: 100%; background: #000; border-top: 0.5px solid #262626; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000;">
+        <span onclick="loadFeed()" style="font-size: 24px; cursor: pointer;">🏠</span>
+        <span style="font-size: 24px; cursor: pointer;">🔍</span>
+        <span onclick="document.getElementById('reelVideo').click()" style="font-size: 24px; cursor: pointer;">➕</span>
+        <span style="font-size: 24px; cursor: pointer;">🎬</span>
+        <span onclick="alert('Profile Page')" style="font-size: 24px; cursor: pointer;">👤</span>
+    </div>
+
+    <input type="file" id="reelVideo" accept="video/*" style="display:none;" onchange="uploadMyReel()">
 </div>
 
 <script src="app.js"></script>
