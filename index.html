@@ -1,22 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Rollera Reels</title>
+    <meta charset="UTF-8">
+    <title>Rollera • Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* "Final Boss" wala Design */
+        body { margin: 0; background: #000; color: #fff; font-family: system-ui; overflow-x: hidden; }
+        header { padding: 14px; text-align: center; background: linear-gradient(90deg, #ff0050, #7f00ff); position: sticky; top: 0; z-index: 100; }
+        input, button { width: 90%; padding: 12px; margin-top: 10px; border-radius: 10px; border: none; display: block; margin-left: auto; margin-right: auto; }
+        input { background: #111; color: #fff; border: 1px solid #333; }
+        button { background: #ff0050; color: #fff; font-weight: 700; cursor: pointer; }
+        #auth, #app { padding: 16px; }
+        #app { display: none; } /* Login ke baad dikhega */
+        .reel { height: 90vh; position: relative; border-bottom: 1px solid #222; margin-bottom: 10px; }
+        video { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
+        .caption { position: absolute; left: 12px; bottom: 80px; text-shadow: 1px 1px 5px #000; }
+        .actions { position: absolute; right: 15px; bottom: 100px; font-size: 20px; text-align: center; }
+        nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #111; padding: 10px 0; border-top: 1px solid #333; }
+        nav button { flex: 1; background: none; color: #fff; margin: 0; padding: 5px; }
+        .box { background: #111; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #222; }
+    </style>
 </head>
-<body style="background-color: #121212; color: white; text-align: center; font-family: Arial;">
+<body>
 
-    <h1>Welcome to Rollera 🚀</h1>
-    
-    <div style="margin-top: 50px;">
-        <button onclick="signup()" style="padding: 10px 20px; cursor: pointer;">Signup</button>
-        <button onclick="login()" style="padding: 10px 20px; cursor: pointer; margin-left: 10px;">Login</button>
+<header><h2>🔥 Rollera</h2></header>
+
+<div id="auth">
+    <h3 style="text-align:center;">Welcome Back</h3>
+    <input id="email" type="email" placeholder="Email Address">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="handleSignup()">Signup</button>
+    <button onclick="handleLogin()" style="background:#7f00ff;">Login</button>
+</div>
+
+<div id="app">
+    <div id="feed">
+        <p style="text-align:center; color:#888;">Fetching reels...</p>
     </div>
 
-    <div class="reel-container" id="feed">
-        <p>No reels yet. Login to see content!</p>
+    <div class="box">
+        <h3>Upload New Reel</h3>
+        <input id="videoUrl" placeholder="Video URL (mp4)">
+        <input id="caption" placeholder="Write a caption...">
+        <button onclick="uploadReel()">Post Reel</button>
     </div>
 
-    <script src="app.js"></script>
+    <nav>
+        <button onclick="location.reload()">🏠 Home</button>
+        <button onclick="logout()">🚪 Logout</button>
+    </nav>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
