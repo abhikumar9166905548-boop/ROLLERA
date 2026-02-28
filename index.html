@@ -40,12 +40,15 @@
         <p style="text-align:center; color:#888;">Fetching reels...</p>
     </div>
 
-    <div class="box">
-        <h3>Upload New Reel</h3>
-        <input id="videoUrl" placeholder="Video URL (mp4)">
-        <input id="caption" placeholder="Write a caption...">
-        <button onclick="uploadReel()">Post Reel</button>
-    </div>
+   <div class="box">
+    <h3>Upload New Reel 🎬</h3>
+    <input type="file" id="videoFile" accept="video/*" style="background: none; border: none;">
+    <input id="caption" placeholder="Write a catchy caption...">
+    
+    <div id="uploadStatus" style="font-size: 12px; color: #ff0050; margin-top: 5px; display: none;">Uploading... Please wait.</div>
+    
+    <button id="uploadBtn" onclick="uploadReel()">Post Reel</button>
+</div>
 
     <nav>
         <button onclick="location.reload()">🏠 Home</button>
@@ -56,3 +59,4 @@
 <script src="app.js"></script>
 </body>
 </html>
+
