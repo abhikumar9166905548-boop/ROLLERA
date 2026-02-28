@@ -28,22 +28,42 @@
 </div>
 
 <div id="signupModal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 style="color:#ff0050;">Join Rollera</h2>
-        <input id="signup-name" placeholder="Full Name">
-        <input id="signup-age" type="number" placeholder="Age">
-        <input id="signup-mobile" placeholder="Mobile Number">
-        <input id="signup-email" placeholder="Gmail ID">
-        <input id="signup-password" type="password" placeholder="Set Password">
+    <div class="modal-content" style="background: #fff; color: #000; border-radius: 1px; border: 1px solid #dbdbdb; max-width: 350px;">
+        <h1 style="font-family: 'Cookie', cursive; font-size: 40px; margin-bottom: 10px;">Rollera</h1>
+        <p style="color: #8e8e8e; font-weight: 600; font-size: 17px; line-height: 20px; margin-bottom: 20px;">
+            Sign up to see photos and videos from your friends.
+        </p>
         
-        <div id="otpSection" style="display:none;margin-top:15px;">
-            <p style="color:#ff0050;font-size:12px;">Testing OTP: 123456</p>
-            <input id="otpInput" placeholder="Enter OTP">
-            <button onclick="verifyAndSignup()" style="background:#28a745;">Verify & Register</button>
+        <input id="signup-email" placeholder="Mobile number or email" style="background: #fafafa; border: 1px solid #dbdbdb; color: #262626;">
+        <input id="signup-password" type="password" placeholder="Password" style="background: #fafafa; border: 1px solid #dbdbdb; color: #262626;">
+        
+        <div style="text-align: left; margin-top: 15px;">
+            <label style="font-size: 12px; color: #8e8e8e;">Birthday <span style="cursor:help;">❓</span></label>
+            <div style="display: flex; gap: 5px; margin-top: 5px;">
+                <select id="dob-month" style="flex: 1; padding: 5px; border: 1px solid #dbdbdb; background: #fafafa;">
+                    <option>Month</option><option value="1">January</option><option value="2">February</option>
+                </select>
+                <select id="dob-day" style="flex: 1; padding: 5px; border: 1px solid #dbdbdb; background: #fafafa;">
+                    <option>Day</option>
+                </select>
+                <select id="dob-year" style="flex: 1; padding: 5px; border: 1px solid #dbdbdb; background: #fafafa;">
+                    <option>Year</option>
+                </select>
+            </div>
         </div>
+
+        <input id="signup-name" placeholder="Full Name" style="background: #fafafa; border: 1px solid #dbdbdb; color: #262626;">
+        <input id="signup-username" placeholder="Username" style="background: #fafafa; border: 1px solid #dbdbdb; color: #262626;">
+
+        <p style="font-size: 12px; color: #8e8e8e; margin: 15px 0;">
+            People who use our service may have uploaded your contact information to Rollera. <a href="#" style="text-decoration: none; color: #00376b;">Learn more</a>.
+        </p>
+
+        <button onclick="verifyAndSignup()" style="background: #0095f6; color: #fff; border-radius: 8px; padding: 7px; font-size: 14px; margin-top: 0;">Sign up</button>
         
-        <button id="sendOtpBtn" onclick="sendOtpLogic()">Send OTP</button>
-        <button onclick="closeSignup()" style="background:#222;margin-top:10px;">Cancel</button>
+        <div style="margin-top: 20px; border-top: 1px solid #dbdbdb; padding-top: 15px;">
+            <p style="font-size: 14px;">Have an account? <a href="#" onclick="closeSignup()" style="color: #0095f6; text-weight: bold; text-decoration: none;">Log in</a></p>
+        </div>
     </div>
 </div>
 
