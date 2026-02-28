@@ -1,6 +1,7 @@
+// Iske peeche slash '/' mat lagana
 const API_URL = "https://rollera.onrender.com"; 
 
-// --- 1. Birthday Dropdowns ---
+// --- 1. Birthday Dropdowns (Signup ke liye) ---
 window.onload = () => {
     const monthSelect = document.getElementById('dob-month');
     const daySelect = document.getElementById('dob-day');
@@ -12,19 +13,20 @@ window.onload = () => {
     if(yearSelect) for (let i = 2024; i >= 1950; i--) yearSelect.innerHTML += `<option value="${i}">${i}</option>`;
 };
 
-// --- 2. Login Logic (Fixed with Safety) ---
+// --- 2. Login Logic (Fixed & Secure) ---
 async function handleLogin() {
     const emailField = document.getElementById("login-email");
     const passwordField = document.getElementById("login-password");
 
     if (!emailField || !passwordField) {
-        return alert("Login fields not found! Check your HTML IDs.");
+        return alert("Login fields nahi mile! HTML mein IDs check karein.");
     }
 
     const email = emailField.value;
     const password = passwordField.value;
 
     try {
+        // API Call
         const res = await fetch(`${API_URL}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -34,11 +36,11 @@ async function handleLogin() {
         if (res.ok) {
             alert("Login Successful! 🔥");
             
-            // Safety Check for Header
+            // Header ko hide karna
             const header = document.getElementById("mainHeader");
             if (header) header.style.display = "none";
 
-            // Switch Screens
+            // Screens switch karna
             const authDiv = document.getElementById("auth");
             const appDiv = document.getElementById("app");
             
@@ -46,15 +48,15 @@ async function handleLogin() {
             if (appDiv) appDiv.style.display = "block";
             
         } else {
-            alert("Login Failed! Please check email/password.");
+            alert("Login Failed! Email ya Password galat hai.");
         }
     } catch (err) {
         console.error("Login Error:", err);
-        alert("Server connection failed!");
+        alert("Server se connect nahi ho pa raha. Check karein ki Render server 'Live' hai ya nahi.");
     }
 }
 
-// --- 3. Navigation Functions (Reels Toggle) ---
+// --- 3. Navigation (Home vs Reels switch) ---
 function showReels() {
     const reelsView = document.getElementById('reelsView');
     const reelsContainer = document.getElementById('reelsContainer');
@@ -64,7 +66,7 @@ function showReels() {
     if (reelsContainer) reelsContainer.style.display = 'none';
     if (storyContainer) storyContainer.style.display = 'none';
 
-    // Play first video
+    // Pehla video play karein
     const vid = document.querySelector('#reelsView video');
     if (vid) vid.play();
 }
@@ -78,29 +80,51 @@ function showHome() {
     if (reelsContainer) reelsContainer.style.display = 'block';
     if (storyContainer) storyContainer.style.display = 'flex';
 
-    // Stop videos
+    // Saare videos pause karein
     document.querySelectorAll('video').forEach(v => v.pause());
 }
 
-// --- 4. Like System ---
+// --- 4. Like System (Instagram Style) ---
 function toggleLike(element) {
     if (!element) return;
     
     if (element.classList.contains('fa-regular')) {
+        // Like karna
         element.classList.replace('fa-regular', 'fa-solid');
         element.style.color = "red";
     } else {
+        // Unlike karna
         element.classList.replace('fa-solid', 'fa-regular');
         element.style.color = "white";
     }
 }
 
-// Signup Modal Helpers
+// --- 5. Signup Modal Helpers ---
 function openSignup() { 
     const modal = document.getElementById("signupModal");
     if(modal) modal.style.display = "flex"; 
 }
+
 function closeSignup() { 
     const modal = document.getElementById("signupModal");
     if(modal) modal.style.display = "none"; 
+}
+
+// --- 6. PROFILE NAVIGATION ---
+function showProfile() {
+    // Sab kuch chupao
+    if(document.getElementById('reelsView')) document.getElementById('reelsView').style.display = 'none';
+    if(document.getElementById('reelsContainer')) document.getElementById('reelsContainer').style.display = 'none';
+    if(document.querySelector('.story-container')) document.querySelector('.story-container').style.display = 'none';
+    
+    // Profile dikhao
+    const profileView = document.getElementById('profileView');
+    if(profileView) profileView.style.display = 'block';
+
+    // Header ko wapas dikhana hai toh:
+    const header = document.getElementById("mainHeader");
+    if (header) {
+        header.style.display = "block";
+        header.innerText = "Profile";
+    }
 }
