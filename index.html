@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body{margin:0;background:#000;color:#fff;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;}
+        body{margin:0;background:#000;color:#fff;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow-x: hidden;}
         #mainHeader {padding:15px; text-align:center; background: #000; border-bottom: 0.5px solid #262626; font-size:24px; font-weight:bold; position: sticky; top: 0; z-index: 100;}
         
         #auth {padding: 20px; max-width: 400px; margin: auto;}
@@ -36,6 +36,10 @@
         /* Bottom Navbar */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 0.5px solid #262626; display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
         .bottom-nav i { font-size: 22px; cursor: pointer; color: #fff; }
+
+        /* Reels Snap Container */
+        #reelsView { scroll-snap-type: y mandatory; }
+        .reel-video-container { scroll-snap-align: start; }
 
         .modal-overlay {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;}
     </style>
@@ -77,9 +81,8 @@
                 <span style="font-weight: 600; font-size: 14px;">collectorbabu_</span>
             </div>
             <img class="post-img" src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
-            
             <div class="post-actions">
-                <i class="fa-regular fa-heart"></i>
+                <i class="fa-regular fa-heart" onclick="toggleLike(this)"></i>
                 <i class="fa-regular fa-comment"></i>
                 <i class="fa-regular fa-paper-plane"></i>
             </div>
@@ -90,18 +93,39 @@
         </div>
     </div>
 
+    <div id="reelsView" style="display:none; height: 100vh; background: #000; overflow-y: scroll; scrollbar-width: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 999;">
+        <div class="reel-video-container" style="height: 100vh; width: 100%; position: relative;">
+            <video src="https://www.w3schools.com/html/mov_bbb.mp4" loop muted playsinline style="height: 100%; width: 100%; object-fit: cover;"></video>
+            
+            <div style="position: absolute; right: 15px; bottom: 120px; display: flex; flex-direction: column; gap: 20px; font-size: 25px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">
+                <div onclick="toggleLike(this.children[0])" style="text-align:center;"><i class="fa-regular fa-heart"></i><p style="font-size:12px;">1.2k</p></div>
+                <div style="text-align:center;"><i class="fa-regular fa-comment"></i><p style="font-size:12px;">45</p></div>
+                <div style="text-align:center;"><i class="fa-regular fa-paper-plane"></i></div>
+            </div>
+
+            <div style="position: absolute; left: 15px; bottom: 100px; width: 80%;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <img src="https://i.pravatar.cc/150?img=5" style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff;">
+                    <span style="font-weight: bold;">himanshu_sk</span>
+                    <button style="width: auto; padding: 5px 10px; margin: 0; font-size: 12px; background: transparent; border: 1px solid #fff;">Follow</button>
+                </div>
+                <p style="font-size: 14px;">Rollera par meri pehli Reel! 🔥 #trending #rollera</p>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-nav">
-        <i class="fa-solid fa-house" onclick="location.reload()"></i>
+        <i class="fa-solid fa-house" onclick="showHome()"></i>
         <i class="fa-solid fa-magnifying-glass"></i>
         <i class="fa-regular fa-square-plus" onclick="document.getElementById('reelVideo').click()"></i>
-        <i class="fa-solid fa-clapperboard"></i>
+        <i class="fa-solid fa-clapperboard" onclick="showReels()"></i>
         <i class="fa-regular fa-circle-user"></i>
     </div>
 
     <input type="file" id="reelVideo" accept="video/*" style="display:none;" onchange="uploadMyReel()">
 </div>
 
-<div id="signupModal" class="modal-overlay"> ... </div>
+<div id="signupModal" class="modal-overlay"> </div>
 
 <script src="app.js"></script>
 </body>
