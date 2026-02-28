@@ -1,28 +1,31 @@
-const API_URL = "https://rollera.onrender.com"; // Apna sahi Render URL check karein
+const API_URL = "https://rollera.onrender.com"; // Is URL ko Render se match karein
 
 function openSignup() { document.getElementById("signupModal").style.display = "flex"; }
 function closeSignup() { document.getElementById("signupModal").style.display = "none"; }
 
+async function handleLogin() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
+    if (res.ok) {
+        alert("Login Successful! 🔥");
+        document.getElementById("auth").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    } else { alert("Login Failed!"); }
+}
+
 async function sendOtpLogic() {
-    const mobile = document.getElementById("signup-mobile").value;
-    if (!mobile || mobile.length < 10) return alert("Sahi mobile number daaliye!");
-    
-    try {
-        const res = await fetch(`${API_URL}/send-otp`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mobile })
-        });
-        if (res.ok) {
-            document.getElementById("otpSection").style.display = "block";
-            document.getElementById("sendOtpBtn").style.display = "none";
-            alert("OTP bhej diya gaya!");
-        }
-    } catch (e) { alert("Server error!"); }
+    document.getElementById("otpSection").style.display = "block";
+    document.getElementById("sendOtpBtn").style.display = "none";
+    alert("OTP sent for testing!");
 }
 
 async function verifyAndSignup() {
-    const userData = {
+    const data = {
         name: document.getElementById("signup-name").value,
         age: document.getElementById("signup-age").value,
         email: document.getElementById("signup-email").value,
@@ -31,21 +34,14 @@ async function verifyAndSignup() {
         otp: document.getElementById("otpInput").value
     };
 
-    if (!userData.otp) return alert("OTP daaliye!");
+    const res = await fetch(`${API_URL}/verify-signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
 
-    try {
-        const res = await fetch(`${API_URL}/verify-signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userData)
-        });
-
-        if (res.ok) {
-            alert("Account Ban Gaya! 🎉 Ab Login karein.");
-            location.reload();
-        } else {
-            const data = await res.json();
-            alert(data.message || "Signup failed");
-        }
-    } catch (e) { alert("Server Connection Fail!"); }
+    if (res.ok) {
+        alert("Account Created! 🎉");
+        closeSignup();
+    } else { alert("Signup failed, check console."); }
 }
