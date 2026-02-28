@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rollera</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:#0f0f0f;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  width:360px;
+  background:#1a1a1a;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 0 25px rgba(255,0,80,0.2);
+}
+
+h1{
+  text-align:center;
+  color:#ff0050;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border:none;
+  border-radius:8px;
+  background:#2a2a2a;
+  color:white;
+  outline:none;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.primary{
+  background:#ff0050;
+  color:white;
+}
+
+.secondary{
+  background:#333;
+  color:white;
+}
+
+.success{
+  background:#28a745;
+  color:white;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.link{
+  text-align:center;
+  font-size:13px;
+  color:#aaa;
+  cursor:pointer;
+}
+
+#signupSection,
+#otpSection,
+#app{
+  display:none;
+}
+
+nav{
+  text-align:center;
+  padding:15px;
+  border-bottom:1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="authContainer">
+
+<h1>Rollera</h1>
+
+<!-- LOGIN SECTION -->
+<div id="loginSection">
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Password">
+
+<button class="primary" onclick="handleLogin()">Login</button>
+<button class="secondary" onclick="showSignup()">Create Account</button>
+
+<p class="link">Secure Login System 🔐</p>
+</div>
+
+<!-- SIGNUP SECTION -->
+<div id="signupSection">
+<input id="signupName" type="text" placeholder="Full Name">
+<input id="signupEmail" type="email" placeholder="Email">
+<input id="signupMobile" type="tel" placeholder="Mobile Number">
+<input id="signupPassword" type="password" placeholder="Create Password">
+
+<button class="primary" onclick="sendOTP()">Send OTP</button>
+
+<div id="otpSection">
+<input id="otpInput" type="text" maxlength="6"
+placeholder="Enter 6-digit OTP"
+style="text-align:center;letter-spacing:5px;">
+
+<button class="success" onclick="verifySignup()">Verify & Register</button>
+</div>
+
+<button class="secondary" onclick="showLogin()">Back to Login</button>
+</div>
+
+</div>
+
+<!-- APP SECTION -->
+<div id="app">
+<nav>
+<h2 style="color:#ff0050;">Welcome to Rollera Feed 🔥</h2>
+<button onclick="logout()" style="background:#ff0050;padding:8px 15px;border:none;border-radius:5px;color:white;">Logout</button>
+</nav>
+
+<div style="padding:20px;text-align:center;">
+<p>You are successfully logged in 🎉</p>
+</div>
+</div>
+
+<script>
+
+const API_URL = "http://localhost:5000/api";
+
+/* Toggle Sections */
+function showSignup(){
+  loginSection.style.display="none";
+  signupSection.style.display="block";
+}
+
+function showLogin(){
+  signupSection.style.display="none";
+  otpSection.style.display="none";
+  loginSection.style.display="block";
+}
+
+/* LOGIN */
+async function handleLogin(){
+  const email = loginEmail.value.trim();
+  const password = loginPassword.value.trim();
+
+  if(!email || !password){
+    alert("All fields required");
+    return;
+  }
+
+  const res = await fetch(`${API_URL}/login`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email,password})
+  });
+
+  const data = await res.json();
+
+  if(res.ok){
+    localStorage.setItem("token",data.accessToken);
+    authContainer.style.display="none";
+    app.style.display="block";
+  }else{
+    alert(data.message);
+  }
+}
+
+/* SEND OTP */
+async function sendOTP(){
+  const mobile = signupMobile.value.trim();
+
+  if(!mobile){
+    alert("Enter mobile number");
+    return;
+  }
+
+  const res = await fetch(`${API_URL}/send-otp`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({mobile})
+  });
+
+  if(res.ok){
+    otpSection.style.display="block";
+    alert("OTP sent (check backend console)");
+  }
+}
+
+/* VERIFY SIGNUP */
+async function verifySignup(){
+  const payload = {
+    name: signupName.value,
+    email: signupEmail.value,
+    mobile: signupMobile.value,
+    password: signupPassword.value,
+    otp: otpInput.value
+  };
+
+  const res = await fetch(`${API_URL}/verify-signup`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+
+  if(res.ok){
+    alert("Account Created Successfully 🎉");
+    showLogin();
+  }else{
+    alert(data.message);
+  }
+}
+
+/* Logout */
+function logout(){
+  localStorage.removeItem("token");
+  app.style.display="none";
+  authContainer.style.display="block";
+}
+
+/* Auto Login Check */
+window.onload = function(){
+  const token = localStorage.getItem("token");
+  if(token){
+    authContainer.style.display="none";
+    app.style.display="block";
+  }
+};
+
+</script>
+
+</body>
+</html>
