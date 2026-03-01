@@ -67,7 +67,7 @@ async function handleLogin() {
     }
 }
 
-// --- 3. Navigation ---
+// --- 3. Navigation & Search Logic ---
 function hideAllSections() {
     const sections = ['homeView', 'reelsView', 'profileView', 'searchView', 'reelsContainer'];
     sections.forEach(id => {
@@ -113,7 +113,56 @@ function showSearch() {
     document.getElementById('searchView').style.display = 'block';
 }
 
-// --- 4. Content Loading (REFINED) ---
+// User Search Function
+async function handleSearch() {
+    const query = document.getElementById("search-input").value;
+    const resultsDiv = document.getElementById("searchResults");
+    const exploreGrid = document.getElementById("exploreGrid");
+
+    if (query.length < 1) {
+        resultsDiv.innerHTML = "";
+        if(exploreGrid) exploreGrid.style.display = "grid"; 
+        return;
+    }
+
+    if(exploreGrid) exploreGrid.style.display = "none"; 
+
+    try {
+        const res = await fetch(`${API_URL}/api/search?q=${query}`);
+        const users = await res.json();
+
+        resultsDiv.innerHTML = "";
+        if (users.length === 0) {
+            resultsDiv.innerHTML = "<p style='text-align:center; color:#999;'>No users found.</p>";
+            return;
+        }
+
+        users.forEach(user => {
+            const userRow = document.createElement("div");
+            userRow.className = "search-item";
+            userRow.style.cssText = "display:flex; align-items:center; gap:12px; padding:10px 15px; cursor:pointer;";
+            
+            userRow.innerHTML = `
+                <img src="https://i.pravatar.cc/150?u=${user._id}" style="width:44px; height:44px; border-radius:50%;">
+                <div>
+                    <div style="font-weight:bold; font-size:14px; color:white;">${user.username}</div>
+                    <div style="color:#8e8e8e; font-size:14px;">${user.fullName || ''}</div>
+                </div>
+            `;
+            
+            userRow.onclick = () => {
+                alert("Opening profile of " + user.username);
+                // Yahan aap future mein profile open karne ka function daal sakte hain
+            };
+            
+            resultsDiv.appendChild(userRow);
+        });
+    } catch (err) {
+        console.error("Search Error:", err);
+    }
+}
+
+// --- 4. Content Loading ---
 async function loadProfilePosts(userId) {
     const postGrid = document.getElementById("userPostGrid");
     const postCountEl = document.getElementById("post-count"); 
