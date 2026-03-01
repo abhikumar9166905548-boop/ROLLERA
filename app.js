@@ -1,6 +1,7 @@
 // --- Global Variables ---
 let currentUserId = null; 
 const API_URL = "https://rollera.onrender.com"; 
+let activePostId = null; // For comments
 
 // --- 1. Birthday Dropdowns ---
 window.onload = () => {
@@ -54,7 +55,7 @@ async function handleLogin() {
             }
 
             loadProfilePosts(currentUserId); 
-            loadAllPosts(); 
+            showHome(); // Changed to showHome to initialize feed
         } else {
             alert("Login Failed: " + (data.message || "Check credentials."));
         }
@@ -79,22 +80,21 @@ function hideAllSections() {
     if (storyContainer) storyContainer.style.display = 'none';
 
     document.querySelectorAll('video').forEach(v => v.pause());
+    closeComments(); // Close comment sheet when switching tabs
 }
 
 function showHome() {
     hideAllSections();
     document.getElementById('homeView').style.display = 'block';
-    document.getElementById('reelsContainer').style.display = 'block';
     const storyContainer = document.querySelector('.story-container');
     if (storyContainer) storyContainer.style.display = 'flex';
     
-    loadAllPosts(); 
-
     const header = document.getElementById("mainHeader");
     if (header) {
         header.style.display = "block";
         header.innerText = "Rollera";
     }
+    // Load home feed here if needed
 }
 
 function showProfile() {
@@ -155,7 +155,44 @@ async function handleSearch() {
     } catch (err) { console.error("Search Error:", err); }
 }
 
-// --- 4. Upload Feature ---
+// --- 4. Comment Logic ---
+function openComments(postId) {
+    activePostId = postId;
+    document.getElementById("commentSheet").classList.add("active");
+    document.getElementById("sheetOverlay").style.display = "block";
+    // Future: Load comments from API here
+}
+
+function closeComments() {
+    document.getElementById("commentSheet").classList.remove("active");
+    document.getElementById("sheetOverlay").style.display = "none";
+    activePostId = null;
+}
+
+async function postComment() {
+    const input = document.getElementById("newCommentInput");
+    const commentText = input.value.trim();
+    
+    if(!commentText) return;
+
+    const list = document.getElementById("commentList");
+    // Clear the "No comments yet" text if it's there
+    if(list.querySelector('p')) list.innerHTML = '';
+
+    const newComment = document.createElement("div");
+    newComment.className = "comment-item";
+    newComment.style.cssText = "display:flex; gap:12px; margin-bottom:15px; font-size:14px;";
+    newComment.innerHTML = `
+        <img src="https://i.pravatar.cc/150?u=me" style="width:32px; height:32px; border-radius:50%;">
+        <div>
+            <b>You</b> ${commentText}
+        </div>
+    `;
+    list.prepend(newComment);
+    input.value = "";
+}
+
+// --- 5. Upload Feature ---
 function openUpload() {
     document.getElementById("uploadModal").style.display = "flex";
 }
@@ -201,7 +238,7 @@ async function startUpload() {
     }
 }
 
-// --- 5. Content Loading ---
+// --- 6. Content Loading ---
 async function showReels() {
     hideAllSections(); 
     const reelsView = document.getElementById("reelsView");
@@ -228,13 +265,13 @@ async function showReels() {
 
                 <i class="fa-solid fa-heart heart-animation"></i>
 
-                <div class="reel-sidebar" style="position: absolute; right: 15px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 20;">
+                <div class="reel-sidebar">
                     <div style="text-align:center;">
                         <i class="fa-solid fa-heart" style="font-size: 28px; color: white; cursor: pointer;" onclick="likeReel('${reel._id}', this)"></i>
                         <div style="font-size: 12px; color: white;">${reel.likes || 0}</div>
                     </div>
                     <div style="text-align:center;">
-                        <i class="fa-solid fa-comment" style="font-size: 28px; color: white;"></i>
+                        <i class="fa-solid fa-comment" style="font-size: 28px; color: white; cursor: pointer;" onclick="openComments('${reel._id}')"></i>
                         <div style="font-size: 12px; color: white;">${reel.comments || 0}</div>
                     </div>
                 </div>
@@ -274,7 +311,7 @@ async function loadProfilePosts(userId) {
     } catch (err) { console.error("Profile Load Error:", err); }
 }
 
-// --- 6. Utility & Interaction Functions ---
+// --- 7. Utility & Interaction Functions ---
 let lastTap = 0;
 function handleReelClick(video) {
     const now = Date.now();
@@ -291,7 +328,6 @@ function handleReelClick(video) {
         }
         
         if(likeIcon) likeIcon.style.color = '#ff3040';
-        console.log("Reel Liked via Double Tap!");
     } else {
         togglePlayPause(video);
     }
