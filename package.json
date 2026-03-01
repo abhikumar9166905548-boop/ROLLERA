@@ -19,3 +19,5 @@
     "mongoose": "^8.0.0"
   }
 }
+
+npm install multer
