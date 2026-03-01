@@ -113,7 +113,6 @@ function showSearch() {
     document.getElementById('searchView').style.display = 'block';
 }
 
-// User Search Function
 async function handleSearch() {
     const query = document.getElementById("search-input").value;
     const resultsDiv = document.getElementById("searchResults");
@@ -150,44 +149,59 @@ async function handleSearch() {
                 </div>
             `;
             
-            userRow.onclick = () => {
-                alert("Opening profile of " + user.username);
-                // Yahan aap future mein profile open karne ka function daal sakte hain
-            };
-            
+            userRow.onclick = () => { alert("Opening profile of " + user.username); };
             resultsDiv.appendChild(userRow);
         });
-    } catch (err) {
-        console.error("Search Error:", err);
-    }
+    } catch (err) { console.error("Search Error:", err); }
 }
 
-// --- 4. Content Loading ---
-async function loadProfilePosts(userId) {
-    const postGrid = document.getElementById("userPostGrid");
-    const postCountEl = document.getElementById("post-count"); 
+// --- 4. Upload Feature ---
+function openUpload() {
+    document.getElementById("uploadModal").style.display = "flex";
+}
 
-    if (!postGrid) return;
+function closeUpload() {
+    document.getElementById("uploadModal").style.display = "none";
+}
+
+async function startUpload() {
+    const fileInput = document.getElementById("fileInput");
+    const caption = document.getElementById("uploadCaption").value;
+    
+    if (!fileInput.files[0]) return alert("Pehle file select karo bhai!");
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+    formData.append("userId", currentUserId);
+    formData.append("caption", caption);
+
+    const btn = event.target;
+    btn.innerText = "Uploading...";
+    btn.disabled = true;
 
     try {
-        const res = await fetch(`${API_URL}/posts/user/${userId}`);
-        const posts = await res.json();
-        
-        if(postCountEl) postCountEl.innerText = posts.length;
-
-        postGrid.innerHTML = posts.length ? "" : "<p style='grid-column:1/4; text-align:center; color:#999; margin-top:20px;'>No posts yet</p>";
-        
-        posts.forEach(post => {
-            const img = document.createElement("img");
-            img.src = post.url; 
-            img.style.cssText = "width:100%; aspect-ratio:1/1; object-fit:cover; cursor:pointer;";
-            postGrid.appendChild(img);
+        const res = await fetch(`${API_URL}/api/upload`, {
+            method: "POST",
+            body: formData 
         });
-    } catch (err) { 
-        console.error("Profile Load Error:", err); 
+
+        if (res.ok) {
+            alert("Post shared successfully! 🚀");
+            closeUpload();
+            location.reload(); 
+        } else {
+            alert("Upload fail ho gaya.");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Server error during upload.");
+    } finally {
+        btn.innerText = "Share";
+        btn.disabled = false;
     }
 }
 
+// --- 5. Content Loading ---
 async function showReels() {
     hideAllSections(); 
     const reelsView = document.getElementById("reelsView");
@@ -204,11 +218,27 @@ async function showReels() {
         reels.forEach(reel => {
             const reelContainer = document.createElement("div");
             reelContainer.className = "reel-video-container";
+            reelContainer.style.position = "relative";
+            
             reelContainer.innerHTML = `
                 <video src="${reel.videoUrl}" loop muted playsinline 
                        style="height: 100%; width: 100%; object-fit: cover;"
-                       onclick="togglePlayPause(this)">
+                       onclick="handleReelClick(this)">
                 </video>
+
+                <i class="fa-solid fa-heart heart-animation"></i>
+
+                <div class="reel-sidebar" style="position: absolute; right: 15px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 20;">
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-heart" style="font-size: 28px; color: white; cursor: pointer;" onclick="likeReel('${reel._id}', this)"></i>
+                        <div style="font-size: 12px; color: white;">${reel.likes || 0}</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-comment" style="font-size: 28px; color: white;"></i>
+                        <div style="font-size: 12px; color: white;">${reel.comments || 0}</div>
+                    </div>
+                </div>
+
                 <div style="position: absolute; bottom: 80px; left: 15px; z-index: 10; color: white;">
                     <b>@${reel.username}</b>
                     <p>${reel.caption || ''}</p>
@@ -225,20 +255,66 @@ async function showReels() {
     }
 }
 
-// --- 5. Utility Functions ---
+async function loadProfilePosts(userId) {
+    const postGrid = document.getElementById("userPostGrid");
+    const postCountEl = document.getElementById("post-count"); 
+
+    if (!postGrid) return;
+    try {
+        const res = await fetch(`${API_URL}/posts/user/${userId}`);
+        const posts = await res.json();
+        if(postCountEl) postCountEl.innerText = posts.length;
+        postGrid.innerHTML = posts.length ? "" : "<p style='grid-column:1/4; text-align:center; color:#999; margin-top:20px;'>No posts yet</p>";
+        posts.forEach(post => {
+            const img = document.createElement("img");
+            img.src = post.url; 
+            img.style.cssText = "width:100%; aspect-ratio:1/1; object-fit:cover; cursor:pointer;";
+            postGrid.appendChild(img);
+        });
+    } catch (err) { console.error("Profile Load Error:", err); }
+}
+
+// --- 6. Utility & Interaction Functions ---
+let lastTap = 0;
+function handleReelClick(video) {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+    
+    if (now - lastTap < DOUBLE_PRESS_DELAY) {
+        const heart = video.parentElement.querySelector('.heart-animation');
+        const likeIcon = video.parentElement.querySelector('.fa-heart');
+        
+        if(heart) {
+            heart.style.animation = 'none';
+            heart.offsetHeight; 
+            heart.style.animation = 'heartPop 0.8s ease-out';
+        }
+        
+        if(likeIcon) likeIcon.style.color = '#ff3040';
+        console.log("Reel Liked via Double Tap!");
+    } else {
+        togglePlayPause(video);
+    }
+    lastTap = now;
+}
+
 function togglePlayPause(video) {
     if (video.paused) video.play();
     else video.pause();
 }
 
-async function handleSignup() {
-    const email = document.getElementById("signup-email").value;
-    const fullName = document.getElementById("signup-fullname").value;
-    const username = document.getElementById("signup-username").value;
-    const password = document.getElementById("signup-password").value;
-    const birthday = `${document.getElementById("dob-year").value}-${document.getElementById("dob-month").value}-${document.getElementById("dob-day").value}`;
+function likeReel(reelId, icon) {
+    icon.style.color = icon.style.color === 'rgb(255, 48, 64)' || icon.style.color === '#ff3040' ? 'white' : '#ff3040';
+}
 
+async function handleSignup() {
     try {
+        const email = document.getElementById("signup-email").value;
+        const fullName = document.getElementById("signup-fullname").value;
+        const username = document.getElementById("signup-username").value;
+        const password = document.getElementById("signup-password").value;
+        const birthday = `${document.getElementById("dob-year").value}-${document.getElementById("dob-month").value}-${document.getElementById("dob-day").value}`;
+
         const res = await fetch(`${API_URL}/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
