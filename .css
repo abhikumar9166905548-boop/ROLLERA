@@ -90,3 +90,52 @@
     height: 100%;
     object-fit: cover; /* Video poori screen cover karegi */
 }
+
+/* --- 4. Reels Icons Sidebar --- */
+.reel-sidebar {
+    position: absolute;
+    right: 15px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    z-index: 20;
+}
+
+.reel-sidebar i {
+    font-size: 28px;
+    color: white;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.reel-sidebar span {
+    font-size: 12px;
+    color: white;
+    margin-top: 5px;
+}
+
+/* --- 5. Double Tap Heart Animation --- */
+.heart-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 100px;
+    color: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+}
+
+/* Animation trigger karne ke liye is class ko JS se toggle kar sakte ho */
+.heart-pop {
+    animation: heartPop 0.8s ease-out;
+}
+
+@keyframes heartPop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
