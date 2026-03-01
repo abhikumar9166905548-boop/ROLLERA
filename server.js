@@ -9,27 +9,39 @@ require('dotenv').config();
 
 const app = express();
 
-// --- 1. UPLOADS FOLDER SETUP (Render Error Fix) ---
+// --- 1. UPLOADS FOLDER SETUP (ENOTDIR & EEXIST Fix) ---
 const uploadDir = path.join(__dirname, 'uploads');
-// Agar folder nahi hai tabhi banaye, varna ignore kare (EEXIST fix)
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-    console.log("Uploads folder created! 📁");
+
+try {
+    if (fs.existsSync(uploadDir)) {
+        const stats = fs.statSync(uploadDir);
+        if (!stats.isDirectory()) {
+            // Agar 'uploads' naam ki FILE hai toh use delete karke FOLDER banao
+            fs.unlinkSync(uploadDir);
+            fs.mkdirSync(uploadDir, { recursive: true });
+            console.log("Purani file hatayi aur 'uploads' folder banaya! 📁");
+        }
+    } else {
+        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log("Uploads folder created! 📁");
+    }
+} catch (err) {
+    console.error("Folder setup error:", err);
 }
 
 // --- 2. MIDDLEWARES ---
 app.use(express.json());
 app.use(cors());
-app.use(express.static(__dirname)); 
+// Static files serve karne ka sahi tarika
 app.use('/uploads', express.static(uploadDir)); 
+app.use(express.static(path.join(__dirname))); 
 
-// --- 3. MULTER CONFIGURATION (Smart Way) ---
+// --- 3. MULTER CONFIGURATION ---
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // File kahan save hogi
+        cb(null, uploadDir); // Path object use karein
     },
     filename: function (req, file, cb) {
-        // Unique filename: fieldname + timestamp + extension
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
@@ -43,7 +55,7 @@ const upload = multer({
 // --- 4. MONGODB CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Rollera DB Connected! ✅"))
-  .catch(err => console.log("DB Connection Error: ", err));
+  .catch(err => console.error("DB Connection Error: ", err));
 
 // --- 5. SCHEMAS ---
 const userSchema = new mongoose.Schema({
@@ -84,7 +96,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         await newPost.save();
         res.status(200).json({ message: "Upload Success!", post: newPost });
     } catch (err) {
-        console.error(err);
+        console.error("Upload Route Error:", err);
         res.status(500).json({ error: "Server par upload fail ho gaya" });
     }
 });
@@ -148,8 +160,10 @@ app.post('/login', async (req, res) => {
 
 // --- 7. SERVE FRONTEND ---
 app.get('*', (req, res) => {
-    const apiRoutes = ['/api', '/login', '/signup', '/status'];
-    if (apiRoutes.some(route => req.path.startsWith(route))) return;
+    // API calls ko index.html par redirect mat hone dena
+    if (req.path.startsWith('/api') || req.path.startsWith('/login') || req.path.startsWith('/signup') || req.path.startsWith('/status')) {
+        return;
+    }
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
