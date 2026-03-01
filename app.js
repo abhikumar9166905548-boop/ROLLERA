@@ -189,7 +189,7 @@ async function postComment() {
     input.value = "";
 }
 
-// --- 5. Upload Feature (Fixed Logic) ---
+// --- 5. Upload Feature (Optimized) ---
 function openUpload() {
     document.getElementById("uploadModal").style.display = "flex";
 }
@@ -200,22 +200,30 @@ function closeUpload() {
 
 async function startUpload() {
     const fileInput = document.getElementById("fileInput");
-    const caption = document.getElementById("uploadCaption").value;
-    const btn = event.target;
-    
-    if (!fileInput.files[0]) return alert("Pehle file select karo bhai!");
+    const captionInput = document.getElementById("uploadCaption");
+    const btn = event.target; // Upload button reference
 
-    const file = fileInput.files[0];
-    // Optional: 10MB limit check client-side
-    if (file.size > 10 * 1024 * 1024) {
-        return alert("Bhai, file bahut badi hai! 10MB se kam ki file try karein.");
+    // 1. Check if file is selected
+    if (!fileInput.files[0]) {
+        alert("Pehle file select karo bhai!");
+        return;
     }
 
+    const file = fileInput.files[0];
+
+    // 2. MERGED LOGIC: File Size Check (10MB Limit)
+    if (file.size > 10 * 1024 * 1024) { 
+        alert("Bhai, file bahut badi hai! 10MB se kam ki file upload karo.");
+        return;
+    }
+
+    // 3. Prepare Data for Server
     const formData = new FormData();
     formData.append("file", file);
     formData.append("userId", currentUserId);
-    formData.append("caption", caption);
+    formData.append("caption", captionInput.value);
 
+    // 4. UI Feedback
     btn.innerText = "Uploading...";
     btn.disabled = true;
 
