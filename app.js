@@ -18,21 +18,28 @@ window.onload = () => {
     if(yearSelect) for (let i = currentYear; i >= 1950; i--) yearSelect.innerHTML += `<option value="${i}">${i}</option>`;
 };
 
-// --- 2. Login Logic ---
+// --- 2. Integrated Login Logic (New & Improved) ---
 async function handleLogin() {
     const emailField = document.getElementById("login-email");
     const passwordField = document.getElementById("login-password");
+    const loginBtn = document.querySelector("#auth button"); 
 
-    if (!emailField || !passwordField) return alert("Login fields nahi mile!");
+    if (!emailField.value || !passwordField.value) {
+        return alert("Bhai, email aur password toh daalo!");
+    }
 
-    const email = emailField.value;
-    const password = passwordField.value;
+    // Button status badlein taaki user ko pata chale server wake up ho raha hai
+    loginBtn.innerText = "Connecting to Server..."; 
+    loginBtn.disabled = true;
 
     try {
         const res = await fetch(`${API_URL}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ 
+                email: emailField.value, 
+                password: passwordField.value 
+            })
         });
 
         const data = await res.json(); 
@@ -41,22 +48,32 @@ async function handleLogin() {
             alert("Login Successful! 🔥");
             currentUserId = data.user._id; 
             
+            // UI Update Logic
             document.getElementById("auth").style.display = "none";
             document.getElementById("mainHeader").style.display = "none";
             document.getElementById("app").style.display = "block";
-
-            if(data.user) {
+            
+            if(data.user.username) {
                 const profileUser = document.getElementById("profile-username");
-                if(profileUser) profileUser.innerText = data.user.username; 
-                loadProfilePosts(data.user._id); 
-                loadAllPosts(); 
+                if(profileUser) profileUser.innerText = data.user.username;
             }
+
+            // Login ke baad posts load karein
+            loadProfilePosts(data.user._id); 
+            loadAllPosts(); 
+
         } else {
             alert("Login Failed: " + (data.message || "Check credentials."));
         }
+
     } catch (err) {
         console.error("Login Error:", err);
+        // Render free tier 30s delay alert
         alert("Server connection failed! Please wait 30s for Render to wake up.");
+    } finally {
+        // Button ko wapas normal kar dein
+        loginBtn.innerText = "Login"; 
+        loginBtn.disabled = false;
     }
 }
 
@@ -97,7 +114,6 @@ function showSearch() {
     if (header) header.style.display = "none";
 }
 
-// FIXED: Changed hideAllViews to hideAllSections
 async function showReels() {
     hideAllSections(); 
     const reelsView = document.getElementById("reelsView");
@@ -146,6 +162,7 @@ function showProfile() {
         header.style.display = "block";
         header.innerText = "Profile";
     }
+    if(currentUserId) loadProfilePosts(currentUserId);
 }
 
 // --- 4. Utilities ---
