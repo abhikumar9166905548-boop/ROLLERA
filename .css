@@ -1,4 +1,50 @@
-/* Profile Grid: Bilkul Square Photos */
+/* --- 1. Profile Header & Stats (Followers/Following) --- */
+.profile-stats-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 10px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.stat-item b {
+    display: block;
+    font-size: 18px;
+    color: #fff;
+}
+
+.stat-item span {
+    font-size: 13px;
+    color: #999;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+.edit-btn, .follow-btn {
+    flex: 1;
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.edit-btn:active, .follow-btn:active {
+    opacity: 0.7; /* Click karne par effect */
+}
+
+.follow-btn {
+    background: #0095f6; /* Instagram Blue */
+}
+
+/* --- 2. Profile Grid: 3x3 Square Photos --- */
 #userPostGrid {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
@@ -12,7 +58,7 @@
     object-fit: cover;
 }
 
-/* Reels View: Smooth Snap Effect */
+/* --- 3. Reels View: Full Screen Snap Effect --- */
 #reelsView {
     display: none; /* JS isse show karega */
     scroll-snap-type: y mandatory;
@@ -20,12 +66,12 @@
     height: 100vh;
     width: 100%;
     background: #000;
-    scrollbar-width: none; /* Firefox ke liye scrollbar hide */
+    scrollbar-width: none; /* Firefox ke liye */
     -ms-overflow-style: none; /* IE ke liye */
-    -webkit-overflow-scrolling: touch; /* iOS par smooth scrolling */
+    -webkit-overflow-scrolling: touch; 
 }
 
-/* Chrome aur Safari se scrollbar hatane ke liye */
+/* Chrome/Safari se scrollbar hatane ke liye */
 #reelsView::-webkit-scrollbar {
     display: none;
 }
