@@ -3,1354 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROLLERA - Apna Swad</title>
-    <style>        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
-        body {
-            background-color: #000;
-            color: #fff;
-            overflow: hidden;
-            max-width: 420px;
-            margin: 0 auto;
-            height: 100vh;
-            position: relative;
-        }
-
-        /* App Container */
-        .app-container {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scrollbar-width: none;
-        }
-
-        .app-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Video Container */
-        .video-container {
-            height: 100vh;
-            width: 100%;
-            position: relative;
-            scroll-snap-align: start;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Video Overlay */
-        .video-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding-bottom: 100px;
-        }
-
-        /* Side Actions */
-        .side-actions {
-            position: absolute;
-            right: 10px;
-            bottom: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .action-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 5px;
-            transition: transform 0.2s;
-        }
-
-        .action-icon:hover {
-            transform: scale(1.1);
-            background: rgba(255,255,255,0.2);
-        }
-
-        .action-count {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* User Info */
-        .user-info {
-            margin-bottom: 15px;
-        }
-
-        .username {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .user-bio {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .sound-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .sound-icon {
-            font-size: 16px;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: #000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 5px 15px;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .nav-item.active {
-            opacity: 1;
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            margin-bottom: 3px;
-        }
-
-        .nav-label {
-            font-size: 10px;
-        }
-
-        /* Top Header */
-        .top-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            background: rgba(0,0,0,0.3);
-            z-index: 100;
-        }
-
-        .header-tab {
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            padding-bottom: 5px;
-            opacity: 0.6;
-            border-bottom: 2px solid transparent;
-        }
-
-        .header-tab.active {
-            opacity: 1;
-            border-bottom-color: #fff;
-        }
-
-        /* Profile Section */
-        .profile-section {
-            display: none;
-            padding: 20px;
-            background: #000;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 30px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.6;
-        }
-
-        .profile-bio {
-            margin-bottom: 20px;
-        }
-
-        .profile-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .profile-username {
-            font-size: 14px;
-            opacity: 0.6;
-            margin-bottom: 10px;
-        }
-
-        .profile-links {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .link-btn {
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .edit-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .share-btn {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Video Grid in Profile */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-        }
-
-        .grid-item {
-            aspect-ratio: 1;
-            background: rgba(255,255,255,0.1);
-            position: relative;
-            cursor: pointer;
-        }
-
-        .grid-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .grid-item:hover .grid-overlay {
-            opacity: 1;
-        }
-
-        /* Following/Followers Tabs */
-        .profile-tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-
-        .profile-tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-        }
-
-        .profile-tab.active {
-            border-bottom-color: #fff;
-        }
-
-        /* Like Animation */
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        .liked .action-icon {
-            color: #ff0050;
-            animation: heartBeat 0.3s ease;
-        }
-
-        /* Discover Section */
-        .discover-section {
-            display: none;
-            padding: 20px;
-            background: #000;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .discover-header {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .trending-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .tag-chip {
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .tag-chip:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        /* Inbox Section */
-        .inbox-section {
-            display: none;
-            padding: 20px;
-            background: #000;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .inbox-header {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .message-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .message-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .message-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .message-info {
-            flex: 1;
-        }
-
-        .message-name {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .message-preview {
-            font-size: 14px;
-            opacity: 0.6;
-        }
-
-        .message-time {
-            font-size: 12px;
-            opacity: 0.6;
-        }
-
-        /* Section visibility */
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* Following Button */
-        .follow-btn {
-            background: #fe2c55;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .follow-btn.following {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Plus Button in Nav */
-        .plus-btn {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(45deg, #fe2c55, #25f4ee);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            body {
-                max-width: 100%;
-            }
-        }
-
-        /* Comments Modal */
-        .comments-modal {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #1a1a1a;
-            border-radius: 20px 20px 0 0;
-            padding: 20px;
-            z-index: 200;
-            max-height: 70vh;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .comments-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .comments-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.6;
-        }
-
-        .comment-item {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .comment-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .comment-content {
-            flex: 1;
-        }
-
-        .comment-username {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-
-        .comment-text {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        .comment-actions {
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-            opacity: 0.6;
-        }
-
-        .comment-input-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .comment-input {
-            flex: 1;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 20px;
-            padding: 12px 20px;
-            color: white;
-            font-size: 14px;
-        }
-
-        .comment-input:focus {
-            outline: none;
-        }
-
-        .send-btn {
-            background: #fe2c55;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        /* Overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 150;
-        }
-
-        /* Suggested Users */
-        .suggested-users {
-            margin-bottom: 30px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .user-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .user-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .user-details {
-            flex: 1;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .user-bio-small {
-            font-size: 12px;
-            opacity: 0.6;
-        }
-
-        /* Live Section */
-        .live-section {
-            display: none;
-            padding: 20px;
-            background: #000;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .live-header {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .live-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .live-card {
-            aspect-ratio: 1;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .live-card video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .live-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-        }
-
-        .live-user {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-        }
-
-        .live-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .live-username {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .live-viewers {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .live-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #fe2c55;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* Search Section */
-        .search-section {
-            display: none;
-            padding: 20px;
-            background: #000;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .search-header {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 25px;
-            padding: 12px 20px;
-            margin-bottom: 25px;
-        }
-
-        .search-bar input {
-            flex: 1;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-
-        .search-bar input:focus {
-            outline: none;
-        }
-
-        .search-icon {
-            font-size: 18px;
-            opacity: 0.6;
-        }
-
-        .search-history {
-            margin-bottom: 25px;
-        }
-
-        .history-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer;
-        }
-
-        .history-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .history-icon {
-            font-size: 18px;
-            opacity: 0.6;
-        }
-
-        .history-text {
-            font-size: 15px;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.9);
-            color: #000;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-weight: 600;
-            z-index: 300;
-            display: none;
-            animation: fadeInOut 2s ease;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-        }
-
-        /* Loading Spinner */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #fe2c55;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Verified Badge */
-        .verified {
-            display: inline-flex;
-            margin-left: 5px;
-        }
-
-        /* Video Progress Bar */
-        .video-progress {
-            position: absolute;
-            bottom: 60px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255,255,255,0.3);
-            cursor: pointer;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #fe2c55;
-            width: 0%;
-            transition: width 0.1s;
-        }
-
-        /* Duet/React Button */
-        .duet-btn {
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Stitch Button */
-        .stitch-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 20px;
-            border-radius: 20px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Sound Wave Animation */
-        @keyframes soundWave {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.5); }
-        }
-
-        .sound-wave {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            height: 20px;
-        }
-
-        .wave-bar {
-            width: 3px;
-            background: white;
-            border-radius: 3px;
-            animation: soundWave 0.5s ease-in-out infinite;
-        }
-
-        .wave-bar:nth-child(1) { height: 10px; animation-delay: 0s; }
-        .wave-bar:nth-child(2) { height: 15px; animation-delay: 0.1s; }
-        .wave-bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
-        .wave-bar:nth-child(4) { height: 15px; animation-delay: 0.3s; }
-        .wave-bar:nth-child(5) { height: 10px; animation-delay: 0.4s; }
-    </style>
+    <title>Roller - Apna Swad</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Top Header -->
-    <div class="top-header">
-        <div class="header-tab active" onclick="switchTab('following')">Following</div>
-        <div class="header-tab" onclick="switchTab('forYou')">For You</div>
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-logo">🎬</div>
+    <h1 class="login-title">Roller</h1>
+    <p class="login-subtitle">Apna Swad, Apna Style</p>
+    
+    <button class="login-btn phone-btn" onclick="openAuthModal('phone')">
+        📱 Continue with Phone
+    </button>
+    
+    <button class="login-btn email-btn" onclick="openAuthModal('email')">
+        ✉️ Continue with Email
+    </button>
+    
+    <button class="login-btn facebook-btn" onclick="loginWithFacebook()">
+        📘 Continue with Facebook
+    </button>
+    
+    <button class="login-btn google-btn" onclick="loginWithGoogle()">
+        🔵 Continue with Google
+    </button>
+    
+    <div class="login-divider">
+        <span>OR</span>
     </div>
+    
+    <p class="login-terms">
+        By continuing, you agree to our <a href="#">Terms of Service</a> <br>
+        and <a href="#">Privacy Policy</a>
+    </p>
+    
+    <p class="login-footer">© 2024 Roller App</p>
+</div>
 
-    <!-- Main Feed Section -->
-    <div class="app-container section active" id="feedSection">
-        <!-- Video 1 -->
-        <div class="video-container" onclick="togglePlay(this)">
-            <video loop muted playsinline poster="https://picsum.photos/400/700" id="video1">
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            </video>
-            
-            <div class="side-actions">
-                <div class="action-btn" onclick="toggleLike(this)">
-                    <div class="action-icon">❤️</div>
-                    <span class="action-count">245K</span>
-                </div>
-                <div class="action-btn" onclick="openComments()">
-                    <div class="action-icon">💬</div>
-                    <span class="action-count">1,234</span>
-                </div>
-                <div class="action-btn" onclick="shareVideo()">
-                    <div class="action-icon">↗️</div>
-                    <span class="action-count">Share</span>
-                </div>
-                <div class="action-btn">
-                    <div class="action-icon">🔄</div>
-                    <span class="action-count">2.3K</span>
-                </div>
-            </div>
-
-            <div class="video-overlay">
-                <div class="user-info">
-                    <div class="username">@rahul_official <span class="verified">✅</span></div>
-                    <div class="user-bio">Dance | Comedy | Entertainment 🎭</div>
-                    <div class="sound-info">
-                        <span class="sound-icon">🎵</span>
-                        <span>Original Sound - Rahul Official</span>
-                        <div class="sound-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 2 -->
-        <div class="video-container" onclick="togglePlay(this)">
-            <video loop muted playsinline poster="https://picsum.photos/401/701" id="video2">
-                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-            </video>
-            
-            <div class="side-actions">
-                <div class="action-btn" onclick="toggleLike(this)">
-                    <div class="action-icon">❤️</div>
-                    <span class="action-count">892K</span>
-                </div>
-                <div class="action-btn" onclick="openComments()">
-                    <div class="action-icon">💬</div>
-                    <span class="action-count">5,678</span>
-                </div>
-                <div class="action-btn" onclick="shareVideo()">
-                    <div class="action-icon">↗️</div>
-                    <span class="action-count">Share</span>
-                </div>
-                <div class="action-btn">
-                    <div class="action-icon">🔄</div>
-                    <span class="action-count">8.1K</span>
-                </div>
-            </div>
-
-            <div class="video-overlay">
-                <div class="user-info">
-                    <div class="username">@priya_dance <span class="verified">✅</span></div>
-                    <div class="user-bio">Professional Dancer 💃 | Choreographer</div>
-                    <div class="sound-info">
-                        <span class="sound-icon">🎵</span>
-                        <span>Trending Audio - Priya Dance</span>
-                        <div class="sound-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 3 -->
-        <div class="video-container" onclick="togglePlay(this)">
-            <video loop muted playsinline poster="https://picsum.photos/402/702" id="video3">
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            </video>
-            
-            <div class="side-actions">
-                <div class="action-btn" onclick="toggleLike(this)">
-                    <div class="action-icon">❤️</div>
-                    <span class="action-count">1.2M</span>
-                </div>
-                <div class="action-btn" onclick="openComments()">
-                    <div class="action-icon">💬</div>
-                    <span class="action-count">12.5K</span>
-                </div>
-                <div class="action-btn" onclick="shareVideo()">
-                    <div class="action-icon">↗️</div>
-                    <span class="action-count">Share</span>
-                </div>
-                <div class="action-btn">
-                    <div class="action-icon">🔄</div>
-                    <span class="action-count">15.2K</span>
-                </div>
-            </div>
-
-            <div class="video-overlay">
-                <div class="user-info">
-                    <div class="username">@comedy_king_ajay</div>
-                    <div class="user-bio">Making you laugh since 2020 😂 | Collab: ajay@agency.com</div>
-                    <div class="sound-info">
-                        <span class="sound-icon">🎵</span>
-                        <span>Comedy Sound - AJAY</span>
-                        <div class="sound-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 4 -->
-        <div class="video-container" onclick="togglePlay(this)">
-            <video loop muted playsinline poster="https://picsum.photos/403/703" id="video4">
-                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-            </video>
-            
-            <div class="side-actions">
-                <div class="action-btn" onclick="toggleLike(this)">
-                    <div class="action-icon">❤️</div>
-                    <span class="action-count">567K</span>
-                </div>
-                <div class="action-btn" onclick="openComments()">
-                    <div class="action-icon">💬</div>
-                    <span class="action-count">3,456</span>
-                </div>
-                <div class="action-btn" onclick="shareVideo()">
-                    <div class="action-icon">↗️</div>
-                    <span class="action-count">Share</span>
-                </div>
-                <div class="action-btn">
-                    <div class="action-icon">🔄</div>
-                    <span class="action-count">4.5K</span>
-                </div>
-            </div>
-
-            <div class="video-overlay">
-                <div class="user-info">
-                    <div class="username">@travel_with_neha</div>
-                    <div class="user-bio">Travel ✈️ | Adventure 🌄 | Content Creator</div>
-                    <div class="sound-info">
-                        <span class="sound-icon">🎵</span>
-                        <span>Travel Vlog Music</span>
-                        <div class="sound-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 5 -->
-        <div class="video-container" onclick="togglePlay(this)">
-            <video loop muted playsinline poster="https://picsum.photos/404/704" id="video5">
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            </video>
-            
-            <div class="side-actions">
-                <div class="action-btn" onclick="toggleLike(this)">
-                    <div class="action-icon">❤️</div>
-                    <span class="action-count">2.1M</span>
-                </div>
-                <div class="action-btn" onclick="openComments()">
-                    <div class="action-icon">💬</div>
-                    <span class="action-count">45.6K</span>
-                </div>
-                <div class="action-btn" onclick="shareVideo()">
-                    <div class="action-icon">↗️</div>
-                    <span class="action-count">Share</span>
-                </div>
-                <div class="action-btn">
-                    <div class="action-icon">🔄</div>
-                    <span class="action-count">32.1K</span>
-                </div>
-            </div>
-
-            <div class="video-overlay">
-                <div class="user-info">
-                    <div class="username">@chef_special <span class="verified">✅</span></div>
-                    <div class="user-bio">Indian Cuisine 🍛 | Chef | Food Blogger</div>
-                    <div class="sound-info">
-                        <span class="sound-icon">🎵</span>
-                        <span>Chef Special - Cooking Sound</span>
-                        <div class="sound-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ==================== AUTH MODAL ==================== -->
+<div class="auth-modal" id="authModal">
+    <div class="auth-header">
+        <div class="auth-back" onclick="closeAuthModal()">←</div>
+        <div class="auth-title">Sign Up</div>
+        <div class="auth-close" onclick="closeAuthModal()">✕</div>
     </div>
-
-    <!-- Profile Section -->
-    <div class="profile-section section" id="profileSection">
-        <div class="profile-header">
-            <div class="profile-avatar">R</div>
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <div class="stat-number">245</div>
-                    <div class="stat-label">Posts</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">125K</div>
-                    <div class="stat-label">Followers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">890</div>
-                                <div class="stat-label">Following</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile-bio">
-            <div class="profile-name">Rahul Kumar</div>
-            <div class="profile-username">@rahul_official</div>
-            <p style="margin-bottom: 10px; opacity: 0.9;">Dance | Comedy | Entertainment 🎭<br>Mumbai based content creator 📍<br>Business: rahul@agency.com</p>
-            <div class="profile-links">
-                <a href="#" style="color: #00f2ea; text-decoration: none; font-size: 14px;">📷 rahul_official</a>
-            </div>
-        </div>
-
-        <div class="profile-links">
-            <button class="edit-btn" style="color: white;">Edit Profile</button>
-            <button class="share-btn" style="color: white;">Share</button>
-        </div>
-
-        <!-- Suggested Users -->
-        <div class="suggested-users">
-            <div class="section-title">Suggested Users</div>
-            
-            <div class="user-item">
-                <div class="user-avatar">P</div>
-                <div class="user-details">
-                    <div class="user-name">Priya Dance <span class="verified">✅</span></div>
-                    <div class="user-bio-small">Professional Dancer</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
-            </div>
-
-            <div class="user-item">
-                <div class="user-avatar">A</div>
-                <div class="user-details">
-                    <div class="user-name">Ajay Comedy <span class="verified">✅</span></div>
-                    <div class="user-bio-small">Comedy King</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
-            </div>
-
-            <div class="user-item">
-                <div class="user-avatar">N</div>
-                <div class="user-details">
-                    <div class="user-name">Neha Travel</div>
-                    <div class="user-bio-small">Travel Vlogger</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
-            </div>
-        </div>
-
-        <!-- Profile Tabs -->
-        <div class="profile-tabs">
-            <div class="profile-tab active">Videos</div>
-            <div class="profile-tab">❤️</div>
-            <div class="profile-tab">🔒</div>
-        </div>
-
-        <!-- Video Grid -->
-        <div class="video-grid">
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 245K</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 892K</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 1.2M</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 567K</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 2.1M</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline>
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 20px;">❤️ 345K</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Discover Section -->
-    <div class="discover-section section" id="discoverSection">
-        <div class="discover-header">Discover</div>
+    
+    <div class="auth-content">
         
-        <!-- Trending Tags -->
-        <div class="trending-tags">
-            <div class="tag-chip">#trending</div>
-            <div class="tag-chip">#dance</div>
-            <div class="tag-chip">#comedy</div>
-            <div class="tag-chip">#food</div>
-            <div class="tag-chip">#travel</div>
-            <div class="tag-chip">#fashion</div>
-            <div class="tag-chip">#music</div>
-            <div class="tag-chip">#fitness</div>
-            <div class="tag-chip">#pets</div>
-            <div class="tag-chip">#diy</div>
+        <!-- Phone Login -->
+        <div id="phoneAuth" class="auth-otp-container">
+            <div class="auth-subtitle">Enter your phone number</div>
+            <div class="auth-desc">We'll send you a verification code</div>
+            
+            <div class="auth-input-group">
+                <label class="auth-label">Phone Number</label>
+                <input type="tel" class="auth-input" placeholder="+91 9876543210" id="phoneInput">
+            </div>
+            
+            <button class="auth-btn" onclick="sendOTP()">Send OTP</button>
         </div>
 
-        <!-- Suggested Users in Discover -->
-        <div class="suggested-users">
-            <div class="section-title">Suggested Users</div>
+        <!-- OTP Verification -->
+        <div id="otpAuth" class="auth-otp-container">
+            <div class="auth-subtitle">Enter verification code</div>
+            <div class="auth-desc">We sent a code to <span id="phoneDisplay">+91 ****</span></div>
             
-            <div class="user-item">
-                <div class="user-avatar">S</div>
-                <div class="user-details">
-                    <div class="user-name">Sneha Fashion <span class="verified">✅</span></div>
-                    <div class="user-bio-small">Fashion Blogger</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+            <div class="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" id="otp1">
+                <input type="text" class="otp-input" maxlength="1" id="otp2">
+                <input type="text" class="otp-input" maxlength="1" id="otp3">
+                <input type="text" class="otp-input" maxlength="1" id="otp4">
+                <input type="text" class="otp-input" maxlength="1" id="otp5">
+                <input type="text" class="otp-input" maxlength="1" id="otp6">
             </div>
-
-            <div class="user-item">
-                <div class="user-avatar">M</div>
-                <div class="user-details">
-                    <div class="user-name">Mike Fitness <span class="verified">✅</span></div>
-                    <div class="user-bio-small">Fitness Trainer</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+            
+            <button class="auth-btn" onclick="verifyOTP()">Verify & Continue</button>
+            
+            <div class="resend-otp">
+                Didn't receive code? <span onclick="resendOTP()" id="resendBtn">Resend</span>
+                <span class="otp-timer" id="otpTimer"></span>
             </div>
+        </div>
 
-            <div class="user-item">
-                <div class="user-avatar">K</div>
-                <div class="user-details">
-                    <div class="user-name">Kriti Beauty</div>
-                    <div class="user-bio-small">Makeup Artist</div>
-                </div>
-                <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+        <!-- Email Login -->
+        <div id="emailAuth" class="auth-otp-container">
+            <div class="auth-subtitle">Enter your email</div>
+            <div class="auth-desc">Login to your account</div>
+            
+            <div class="auth-input-group">
+                <label class="auth-label">Email Address</label>
+                <input type="email" class="auth-input" placeholder="you@example.com" id="emailInput">
             </div>
+            
+            <div class="auth-input-group">
+                <label class="auth-label">Password</label>
+                <input type="password" class="auth-input" placeholder="Enter password" id="passwordInput">
+            </div>
+            
+            <button class="auth-btn" onclick="loginWithEmail()">Sign In</button>
+        </div>
 
-            <div class="user-item">
+        <!-- Profile Setup -->
+        <div id="profileSetup" class="auth-otp-container">
+            <div class="auth-subtitle">Set up your profile</div>
+            <div class="auth-desc">Create your unique identity</div>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="profile-avatar" style="width: 100px; height: 100px; margin: 0 auto; font-size: 40px;" id="setupAvatar">U</div>
+                <p style="margin-top: 10px; color: #00f2ea; cursor: pointer; font-size: 14px;">Change Photo</p>
+            </div>
+            
+            <div class="auth-input-group">
+                <label class="auth-label">Username</label>
+                <input type="text" class="auth-input" placeholder="@your_username" id="usernameInput">
+            </div>
+            
+            <div class="auth-input-group">
+                <label class="auth-label">Display Name</label>
+                <input type="text" class="auth-input" placeholder="Your name" id="displayNameInput">
+            </div>
+            
+            <button class="auth-btn" onclick="completeProfile()">Get Started</button>
+        </div>
+        
+    </div>
+</div>
+
+<!-- ==================== TOP HEADER ==================== -->
+<div class="top-header" id="topHeader" style="display: none;">
+    <div class="header-tab active" onclick="switchTab('following')">Following</div>
+    <div class="header-tab" onclick="switchTab('forYou')">For You</div>
+</div>
+
+<!-- ==================== MAIN FEED SECTION ==================== -->
+<div class="app-container section active" id="feedSection" style="display: none;">
+    
+    <!-- Video 1 -->
+    <div class="video-container" onclick="togglePlay(this)">
+        <video loop muted playsinline poster="https://picsum.photos/400/700">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        
+        <div class="side-actions">
+            <div class="action-btn" onclick="toggleLike(this)">
+                <div class="action-icon">❤️</div>
+                <span class="action-count">245K</span>
+            </div>
+            <div class="action-btn" onclick="openComments()">
+                <div class="action-icon">💬</div>
+                <span class="action-count">1,234</span>
+            </div>
+            <div class="action-btn" onclick="shareVideo()">
+                <div class="action-icon">↗️</div>
+                <span class="action-count">Share</span>
+            </div>
+        </div>
+
+        <div class="video-overlay">
+            <div class="user-info">
+                <div class="username">@rahul_official <span class="verified">✅</span></div>
+                <div class="user-bio">Dance | Comedy | Entertainment 🎭</div>
+                <div class="sound-info">
+                    <span class="sound-icon">🎵</span>
+                    <span>Original Sound - Rahul Official</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video 2 -->
+    <div class="video-container" onclick="togglePlay(this)">
+        <video loop muted playsinline poster="https://picsum.photos/401/701">
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        
+        <div class="side-actions">
+            <div class="action-btn" onclick="toggleLike(this)">
+                <div class="action-icon">❤️</div>
+                <span class="action-count">892K</span>
+            </div>
+            <div class="action-btn" onclick="openComments()">
+                <div class="action-icon">💬</div>
+                <span class="action-count">5,678</span>
+            </div>
+            <div class="action-btn" onclick="shareVideo()">
+                <div class="action-icon">↗️</div>
+                <span class="action-count">Share</span>
+            </div>
+        </div>
+
+        <div class="video-overlay">
+            <div class="user-info">
+                <div class="username">@priya_dance <span class="verified">✅</span></div>
+                <div class="user-bio">Professional Dancer 💃</div>
+                <div class="sound-info">
+                    <span class="sound-icon">🎵</span>
+                    <span>Trending Audio</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video 3 -->
+    <div class="video-container" onclick="togglePlay(this)">
+        <video loop muted playsinline poster="https://picsum.photos/402/702">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        
+        <div class="side-actions">
+            <div class="action-btn" onclick="toggleLike(this)">
+                <div class="action-icon">❤️</div>
+                <span class="action-count">1.2M</span>
+            </div>
+            <div class="action-btn" onclick="openComments()">
+                <div class="action-icon">💬</div>
+                <span class="action-count">12.5K</span>
+            </div>
+            <div class="action-btn" onclick="shareVideo()">
+                <div class="action-icon">↗️</div>
+                <span class="action-count">Share</span>
+            </div>
+        </div>
+
+        <div class="video-overlay">
+            <div class="user-info">
+                <div class="username">@comedy_king_ajay</div>
+                <div class="user-bio">Making you laugh since 2020 😂</div>
+                <div class="sound-info">
+                    <span class="sound-icon">🎵</span>
+                    <span>Comedy Sound</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video 4 -->
+    <div class="video-container" onclick="togglePlay(this)">
+        <video loop muted playsinline poster="https://picsum.photos/403/703">
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        
+        <div class="side-actions">
+            <div class="action-btn" onclick="toggleLike(this)">
+                <div class="action-icon">❤️</div>
+                <span class="action-count">567K</span>
+            </div>
+            <div class="action-btn" onclick="openComments()">
+                <div class="action-icon">💬</div>
+                <span class="action-count">3,456</span>
+            </div>
+            <div class="action-btn" onclick="shareVideo()">
+                <div class="action-icon">↗️</div>
+                <span class="action-count">Share</span>
+            </div>
+        </div>
+
+        <div class="video-overlay">
+            <div class="user-info">
+                <div class="username">@travel_with_neha</div>
+                <div class="user-bio">Travel ✈️ | Adventure 🌄</div>
+                <div class="sound-info">
+                    <span class="sound-icon">🎵</span>
+                    <span>Travel Music</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ==================== PROFILE SECTION ==================== -->
+<div class="profile-section section" id="profileSection">
+    
+    <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">R</div>
+        <div class="profile-stats">
+            <div class="stat-item">
+                <div class="stat-number">245</div>
+                <div class="stat-label">Posts</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">125K</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">890</div>
+                <div class="stat-label">Following</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-bio">
+        <div class="profile-name" id="profileDisplayName">Rahul Kumar</div>
+        <div class="profile-username" id="profileUsername">@rahul_official</div>
+        <p id="profileBioText">Dance | Comedy | Entertainment 🎭</p>
+    </div>
+
+    <div class="profile-links">
+        <button class="edit-btn" onclick="editProfile()">Edit Profile</button>
+        <button class="share-btn" onclick="shareProfile()">Share</button>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">🚪 Log Out</button>
+
+    <div class="profile-tabs">
+        <div class="profile-tab active">Videos</div>
+        <div class="profile-tab">❤️</div>
+        <div class="profile-tab">🔒</div>
+    </div>
+
+    <div class="video-grid">
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 245K</span></div>
+        </div>
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 892K</span></div>
+        </div>
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 1.2M</span></div>
+        </div>
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 567K</span></div>
+        </div>
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 2.1M</span></div>
+        </div>
+        <div class="grid-item">
+            <video muted playsinline>
+                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+            </video>
+            <div class="grid-overlay"><span>❤️ 345K</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== DISCOVER SECTION ==================== -->
+<div class="discover-section section" id="discoverSection">
+    <div class="discover-header">Discover</div>
+    
+    <div class="trending-tags">
+        <div class="tag-chip" onclick="searchTag(this)">#trending</div>
+        <div class="tag-chip" onclick="searchTag(this)">#dance</div>
+        <div class="tag-chip" onclick="searchTag(this)">#comedy</div>
+        <div class="tag-chip" onclick="searchTag(this)">#food</div>
+        <div class="tag-chip" onclick="searchTag(this)">#travel</div>
+        <div class="tag-chip" onclick="searchTag(this)">#fashion</div>
+        <div class="tag-chip" onclick="searchTag(this)">#music</div>
+        <div class="tag-chip" onclick="searchTag(this)">#fitness</div>
+    </div>
+
+    <div class="suggested-users">
+        <div class="section-title">Suggested Users</div>
+        
+        <div class="user-item">
+            <div class="user-avatar">S</div>
+            <div class="user-details">
+                <div class="user-name">Sneha Fashion <span class="verified">✅</span></div>
+                <div class="user-bio-small">Fashion Blogger</div>
+            </div>
+            <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+        </div>
+
+        <div class="user-item">
+            <div class="user-avatar">M</div>
+            <div class="user-details">
+                <div class="user-name">Mike Fitness <span class="verified">✅</span></div>
+                <div class="user-bio-small">Fitness Trainer</div>
+            </div>
+            <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+        </div>
+
+        <div class="user-item">
+            <div class="user-avatar">K</div>
+            <div class="user-details">
+                <div class="user-name">Kriti Beauty</div>
+                <div class="user-bio-small">Makeup Artist</div>
+            </div>
+            <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+        </div>
+                <div class="user-item">
                 <div class="user-avatar">R</div>
                 <div class="user-details">
                     <div class="user-name">Rohan Gaming <span class="verified">✅</span></div>
@@ -1360,65 +407,33 @@
             </div>
         </div>
 
-        <!-- Trending Videos Grid -->
         <div class="section-title">Trending Videos</div>
         <div class="video-grid">
             <div class="grid-item">
                 <video muted playsinline poster="https://picsum.photos/500/500">
                     <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                 </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 5.2M</span>
-                </div>
+                <div class="grid-overlay"><span>❤️ 5.2M</span></div>
             </div>
             <div class="grid-item">
                 <video muted playsinline poster="https://picsum.photos/501/501">
                     <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
                 </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 3.8M</span>
-                </div>
+                <div class="grid-overlay"><span>❤️ 3.8M</span></div>
             </div>
             <div class="grid-item">
                 <video muted playsinline poster="https://picsum.photos/502/502">
                     <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                 </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 2.9M</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline poster="https://picsum.photos/503/503">
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 4.1M</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline poster="https://picsum.photos/504/504">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 6.7M</span>
-                </div>
-            </div>
-            <div class="grid-item">
-                <video muted playsinline poster="https://picsum.photos/505/505">
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="grid-overlay">
-                    <span style="font-size: 18px;">❤️ 1.5M</span>
-                </div>
+                <div class="grid-overlay"><span>❤️ 2.9M</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Inbox Section -->
+    <!-- ==================== INBOX SECTION ==================== -->
     <div class="inbox-section section" id="inboxSection">
         <div class="inbox-header">Inbox</div>
         
-        <!-- Message List -->
         <div class="message-list">
             <div class="message-item">
                 <div class="message-avatar">P</div>
@@ -1473,223 +488,11 @@
                 </div>
                 <div class="message-time">2d</div>
             </div>
-
-            <div class="message-item">
-                <div class="message-avatar">R</div>
-                <div class="message-info">
-                    <div class="message-name">Rohan Gaming <span class="verified">✅</span></div>
-                    <div class="message-preview">BGMI duo? 🎮</div>
-                </div>
-                <div class="message-time">3d</div>
-            </div>
-
-            <div class="message-item">
-                <div class="message-avatar">C</div>
-                <div class="message-info">
-                    <div class="message-name">Chef Special <span class="verified">✅</span></div>
-                    <div class="message-preview">Food review kab? 🍔</div>
-                </div>
-                <div class="message-time">1w</div>
-            </div>
         </div>
     </div>
 
-    <!-- Live Section -->
-    <div class="live-section section" id="liveSection">
-        <div class="live-header">Live</div>
-        
-        <div class="live-grid">
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/600/600">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">P</div>
-                        <span class="live-username">Priya Dance</span>
-                    </div>
-                    <div class="live-viewers">👁 12.5K watching</div>
-                </div>
-            </div>
-
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/601/601">
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">A</div>
-                        <span class="live-username">Ajay Comedy</span>
-                    </div>
-                    <div class="live-viewers">👁 8.2K watching</div>
-                </div>
-            </div>
-
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/602/602">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">M</div>
-                        <span class="live-username">Mike Fitness</span>
-                    </div>
-                    <div class="live-viewers">👁 5.6K watching</div>
-                </div>
-            </div>
-
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/603/603">
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">R</div>
-                        <span class="live-username">Rohan Gaming</span>
-                    </div>
-                    <div class="live-viewers">👁 15.3K watching</div>
-                </div>
-            </div>
-
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/604/604">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">S</div>
-                        <span class="live-username">Sneha Fashion</span>
-                    </div>
-                    <div class="live-viewers">👁 9.8K watching</div>
-                </div>
-            </div>
-
-            <div class="live-card">
-                <div class="live-badge">LIVE</div>
-                <video muted playsinline poster="https://picsum.photos/605/605">
-                    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-                </video>
-                <div class="live-info">
-                    <div class="live-user">
-                        <div class="live-avatar">C</div>
-                        <span class="live-username">Chef Special</span>
-                    </div>
-                    <div class="live-viewers">👁 7.1K watching</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Search Section -->
-    <div class="search-section section" id="searchSection">
-        <div class="search-header">Search</div>
-        
-        <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Search accounts and videos" id="searchInput">
-        </div>
-
-        <!-- Search History -->
-        <div class="search-history">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <div class="section-title" style="margin-bottom: 0;">Recent Searches</div>
-                <span style="color: #fe2c55; cursor: pointer; font-size: 14px;">Clear All</span>
-            </div>
-            
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">🕐</span>
-                    <span class="history-text">dance challenge</span>
-                </div>
-                <span style="opacity: 0.6;">✕</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">🕐</span>
-                    <span class="history-text">comedy videos</span>
-                </div>
-                <span style="opacity: 0.6;">✕</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">🕐</span>
-                    <span class="history-text">food recipes</span>
-                </div>
-                <span style="opacity: 0.6;">✕</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">🕐</span>
-                    <span class="history-text">travel vlog</span>
-                </div>
-                <span style="opacity: 0.6;">✕</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">🕐</span>
-                    <span class="history-text">fitness motivation</span>
-                </div>
-                <span style="opacity: 0.6;">✕</span>
-            </div>
-        </div>
-
-        <!-- Trending Searches -->
-        <div class="suggested-users">
-            <div class="section-title">Trending Searches</div>
-            
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">📈</span>
-                    <span class="history-text">#viral dance 2024</span>
-                </div>
-                <span style="opacity: 0.6;">→</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">📈</span>
-                    <span class="history-text">street food India</span>
-                </div>
-                <span style="opacity: 0.6;">→</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">📈</span>
-                    <span class="history-text">workout at home</span>
-                </div>
-                <span style="opacity: 0.6;">→</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">📈</span>
-                    <span class="history-text">comedy skits</span>
-                </div>
-                <span style="opacity: 0.6;">→</span>
-            </div>
-
-            <div class="history-item">
-                <div class="history-left">
-                    <span class="history-icon">📈</span>
-                    <span class="history-text">travel destinations</span>
-                </div>
-                <span style="opacity: 0.6;">→</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <div class="bottom-nav" id="bottomNav" style="display: none;">
         <div class="nav-item active" onclick="switchSection('feed')">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Home</div>
@@ -1699,7 +502,7 @@
             <div class="nav-label">Discover</div>
         </div>
         <div class="nav-item">
-            <div class="plus-btn">+</div>
+            <div class="plus-btn" onclick="createVideo()">+</div>
         </div>
         <div class="nav-item" onclick="switchSection('inbox')">
             <div class="nav-icon">💬</div>
@@ -1711,7 +514,7 @@
         </div>
     </div>
 
-    <!-- Comments Modal -->
+    <!-- ==================== COMMENTS MODAL ==================== -->
     <div class="overlay" id="overlay" onclick="closeComments()"></div>
     <div class="comments-modal" id="commentsModal">
         <div class="comments-header">
@@ -1771,58 +574,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="comment-item">
-                <div class="comment-avatar">N</div>
-                <div class="comment-content">
-                    <div class="comment-username">neha_travel</div>
-                    <div class="comment-text">Mumbai representation! 🙌</div>
-                    <div class="comment-actions">
-                        <span>6h</span>
-                        <span>❤️ 756</span>
-                        <span>Reply</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comment-item">
-                <div class="comment-avatar">R</div>
-                <div class="comment-content">
-                    <div class="comment-username">rohan_gaming <span class="verified">✅</span></div>
-                    <div class="comment-text">Legend! 👑</div>
-                    <div class="comment-actions">
-                        <span>7h</span>
-                        <span>❤️ 1.2K</span>
-                        <span>Reply</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comment-item">
-                <div class="comment-avatar">K</div>
-                <div class="comment-content">
-                    <div class="comment-username">kriti_beauty</div>
-                    <div class="comment-text">Can't stop watching this! 🔁</div>
-                    <div class="comment-actions">
-                        <span>8h</span>
-                        <span>❤️ 543</span>
-                        <span>Reply</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comment-item">
-                <div class="comment-avatar">C</div>
-                <div class="comment-content">
-                    <div class="comment-username">chef_special <span class="verified">✅</span></div>
-                    <div class="comment-text">Masterclass performance! 👏</div>
-                    <div class="comment-actions">
-                        <span>9h</span>
-                        <span>❤️ 2.1K</span>
-                        <span>Reply</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="comment-input-container">
@@ -1831,253 +582,10 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <!-- JavaScript Functions -->
-    <script>
-        // Video Play/Pause on Click
-        function togglePlay(container) {
-            const video = container.querySelector('video');
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        }
-
-        // Toggle Like
-        function toggleLike(btn) {
-            btn.classList.toggle('liked');
-            const countSpan = btn.querySelector('.action-count');
-            let count = countSpan.innerText.replace('K', '000').replace('M', '000000');
-            count = parseInt(count.replace(/,/g, ''));
-            
-            if (btn.classList.contains('liked')) {
-                count++;
-            } else {
-                count--;
-            }
-            
-            if (count >= 1000000) {
-                countSpan.innerText = (count / 1000000).toFixed(1) + 'M';
-            } else if (count >= 1000) {
-                countSpan.innerText = (count / 1000).toFixed(1) + 'K';
-            } else {
-                countSpan.innerText = count.toLocaleString();
-            }
-        }
-
-        // Open Comments
-        function openComments() {
-            document.getElementById('commentsModal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-
-        // Close Comments
-        function closeComments() {
-            document.getElementById('commentsModal').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-
-        // Post Comment
-        function postComment() {
-            const input = document.getElementById('commentInput');
-            const text = input.value.trim();
-            
-            if (text) {
-                const commentList = document.querySelector('.comment-list');
-                const newComment = document.createElement('div');
-                newComment.className = 'comment-item';
-                newComment.innerHTML = `
-                    <div class="comment-avatar">R</div>
-                    <div class="comment-content">
-                        <div class="comment-username">rahul_official <span class="verified">✅</span></div>
-                        <div class="comment-text">${text}</div>
-                        <div class="comment-actions">
-                            <span>Just now</span>
-                            <span>❤️ 0</span>
-                            <span>Reply</span>
-                        </div>
-                    </div>
-                `;
-                commentList.insertBefore(newComment, commentList.firstChild);
-                input.value = '';
-                
-                // Update comment count
-                const commentsTitle = document.querySelector('.comments-title');
-                let count = parseInt(commentsTitle.innerText.replace(/,/g, '').split(' ')[0]);
-                commentsTitle.innerText = (count + 1).toLocaleString() + ' Comments';
-            }
-        }
-
-        // Share Video
-        function shareVideo() {
-            showToast('Link copied to clipboard!');
-        }
-
-        // Show Toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 2000);
-        }
-
-        // Toggle Follow
-        function toggleFollow(btn) {
-            if (btn.classList.contains('following')) {
-                btn.classList.remove('following');
-                btn.innerText = 'Follow';
-            } else {
-                btn.classList.add('following');
-                btn.innerText = 'Following';
-            }
-        }
-
-        // Switch Section (Bottom Nav)
-        function switchSection(section) {
-            // Update nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(sec => {
-                sec.classList.remove('active');
-            });
-
-            // Show selected section
-            if (section === 'feed') {
-                document.getElementById('feedSection').classList.add('active');
-                document.querySelector('.top-header').style.display = 'flex';
-            } else if (section === 'discover') {
-                document.getElementById('discoverSection').classList.add('active');
-                document.querySelector('.top-header').style.display = 'none';
-            } else if (section === 'inbox') {
-                document.getElementById('inboxSection').classList.add('active');
-                document.querySelector('.top-header').style.display = 'none';
-            } else if (section === 'profile') {
-                document.getElementById('profileSection').classList.add('active');
-                document.querySelector('.top-header').style.display = 'none';
-            }
-        }
-
-        // Switch Tab (Top Header)
-        function switchTab(tab) {
-            document.querySelectorAll('.header-tab').forEach(t => {
-                t.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
-
-        // Auto-play video when scrolled into view
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const video = entry.target.querySelector('video');
-                if (entry.isIntersecting) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            });
-        }, { threshold: 0.6 });
-
-        document.querySelectorAll('.video-container').forEach(container => {
-            observer.observe(container);
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            // Add search logic here
-        });
-
-        // Tag chip click
-        document.querySelectorAll('.tag-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                const tag = this.innerText;
-                showToast('Searching ' + tag);
-            });
-        });
-
-        // History item click
-        document.querySelectorAll('.history-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const text = this.querySelector('.history-text').innerText;
-                showToast('Searching ' + text);
-            });
-        });
-
-        // Grid item hover - play video preview
-        document.querySelectorAll('.grid-item').forEach(item => {
-            const video = item.querySelector('video');
-            item.addEventListener('mouseenter', () => {
-                video.play();
-            });
-            item.addEventListener('mouseleave', () => {
-                video.pause();
-                video.currentTime = 0;
-            });
-        });
-
-        // Live card click
-        document.querySelectorAll('.live-card').forEach(card => {
-            card.addEventListener('click', function() {
-                showToast('Joining live stream...');
-            });
-        });
-
-        // Message item click
-        document.querySelectorAll('.message-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const name = this.querySelector('.message-name').innerText.split(' ')[0];
-                showToast('Opening chat with ' + name);
-            });
-        });
-
-        // Profile tab click
-        document.querySelectorAll('.profile-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.profile-tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                this.classList.add('active');
-            });
-        });
-
-        // Edit profile button
-        document.querySelector('.edit-btn')?.addEventListener('click', function() {
-            showToast('Edit profile coming soon!');
-        });
-
-        // Share button
-        document.querySelector('.share-btn')?.addEventListener('click', function() {
-            showToast('Profile link copied!');
-        });
-
-        // Plus button (create)
-        document.querySelector('.plus-btn')?.addEventListener('click', function() {
-            showToast('Create video coming soon!');
-        });
-
-        // Keyboard controls
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeComments();
-            }
-        });
-
-        // Initialize - play first video
-        window.addEventListener('load', function() {
-            const firstVideo = document.querySelector('.video-container video');
-            if (firstVideo) {
-                firstVideo.play().catch(e => console.log('Autoplay prevented'));
-            }
-        });
-    </script>
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script src="script.js"></script>
 </body>
 </html>
