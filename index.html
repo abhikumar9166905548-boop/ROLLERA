@@ -91,26 +91,32 @@
 <script src="app.js"></script>
 
 <script>
-// Error fix: check if API_URL exists before declaring
+// Error fix: check if API_URL exists before declaring to prevent crash
 if (typeof API_URL === 'undefined') {
     var API_URL = "https://rollera.onrender.com";
 }
 
 // --- NAVIGATION ---
 function showHome() {
-    document.getElementById('homeView').style.display = 'block';
-    document.getElementById('searchView').style.display = 'none';
-    document.getElementById('profileView').style.display = 'none';
+    if(document.getElementById('homeView')){
+        document.getElementById('homeView').style.display = 'block';
+        document.getElementById('searchView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'none';
+    }
 }
 function showSearch() {
-    document.getElementById('homeView').style.display = 'none';
-    document.getElementById('searchView').style.display = 'block';
-    document.getElementById('profileView').style.display = 'none';
+    if(document.getElementById('searchView')){
+        document.getElementById('homeView').style.display = 'none';
+        document.getElementById('searchView').style.display = 'block';
+        document.getElementById('profileView').style.display = 'none';
+    }
 }
 function showProfile() {
-    document.getElementById('homeView').style.display = 'none';
-    document.getElementById('searchView').style.display = 'none';
-    document.getElementById('profileView').style.display = 'block';
+    if(document.getElementById('profileView')){
+        document.getElementById('homeView').style.display = 'none';
+        document.getElementById('searchView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'block';
+    }
 }
 function openUpload() {
     document.getElementById('uploadModal').style.display = 'flex';
@@ -138,7 +144,7 @@ async function uploadPhoto(file, userId, caption) {
         } else {
             alert("Fail: " + result.error);
         }
-    } catch (e) { alert("Server Down!"); }
+    } catch (e) { alert("Server Error!"); }
 }
 
 window.startUpload = async function() {
@@ -148,8 +154,12 @@ window.startUpload = async function() {
 
     if(!file || !user) return alert("Select file or Login!");
     
-    event.target.innerText = "Uploading...";
+    const btn = event.target;
+    btn.innerText = "Uploading...";
+    btn.disabled = true;
     await uploadPhoto(file, user._id || user.username, caption);
+    btn.innerText = "Share";
+    btn.disabled = false;
 }
 </script>
 </body>
