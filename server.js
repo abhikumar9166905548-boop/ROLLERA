@@ -1,156 +1,167 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const cors = require('cors');
-const path = require('path');
-const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-require('dotenv').config();
+/* ==================== PRO-LEVEL APP LOGIC ==================== */
 
-const app = express();
+// 1. NAVIGATION LOGIC (Sections Switcher)
+function switchSection(sectionId) {
+    // सभी सेक्शन्स से 'active' क्लास हटाओ
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none';
+    });
 
-// --- 1. CLOUDINARY CONFIGURATION ---
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+    // चुने हुए सेक्शन को दिखाओ
+    const activeSection = document.getElementById(sectionId + 'Section');
+    activeSection.classList.add('active');
+    activeSection.style.display = 'block';
 
-// --- 2. CLOUDINARY STORAGE SETUP (Photos & Videos) ---
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'rollera_posts',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4'],
-    resource_type: 'auto' 
-  },
-});
+    // नेविगेशन बार के आइकॉन का कलर बदलो
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
 
-const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB Limit
-});
+    // अगर होम फीड नहीं है तो वीडियो पॉज कर दो
+    if (sectionId !== 'feed') {
+        pauseAllVideos();
+    }
+}
 
-// --- 3. MIDDLEWARES ---
-app.use(express.json());
-app.use(cors());
-app.use(express.static(path.join(__dirname))); 
+// 2. AUTHENTICATION FLOW (Login System)
+function openAuthModal(type) {
+    const modal = document.getElementById('authModal');
+    modal.classList.add('active');
+    
+    // सभी फॉर्म छुपाओ
+    document.querySelectorAll('.auth-otp-container').forEach(c => c.classList.remove('active'));
+    
+    // टाइप के हिसाब से फॉर्म दिखाओ
+    if (type === 'phone') {
+        document.getElementById('phoneAuth').classList.add('active');
+    } else if (type === 'email') {
+        document.getElementById('emailAuth').classList.add('active');
+    }
+}
 
-// --- 4. MONGODB CONNECTION ---
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Rollera DB Connected! ✅"))
-  .catch(err => console.error("DB Connection Error: ", err));
+function closeAuthModal() {
+    document.getElementById('authModal').classList.remove('active');
+}
 
-// --- 5. SCHEMAS ---
-const userSchema = new mongoose.Schema({
-    fullName: String,
-    username: { type: String, unique: true, required: true },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
-    birthday: String
-});
-const User = mongoose.model('User', userSchema);
+function sendOTP() {
+    const phone = document.getElementById('phoneInput').value;
+    if (phone.length < 10) return alert("Please enter valid number");
+    
+    document.getElementById('phoneDisplay').innerText = phone;
+    document.getElementById('phoneAuth').classList.remove('active');
+    document.getElementById('otpAuth').classList.add('active');
+    startOTPTimer();
+}
 
-const postSchema = new mongoose.Schema({
-    userId: String,
-    url: String, 
-    caption: String,
-    createdAt: { type: Date, default: Date.now }
-});
-const Post = mongoose.model('Post', postSchema);
+function verifyOTP() {
+    // सीधे प्रोफाइल सेटअप पर ले जाओ (PRO UI)
+    document.getElementById('otpAuth').classList.remove('active');
+    document.getElementById('profileSetup').classList.add('active');
+}
 
-// --- 6. ROUTES ---
+function completeProfile() {
+    // लॉगिन स्क्रीन को हटाकर मेन ऐप दिखाओ
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('authModal').classList.remove('active');
+    
+    // ऐप के एलिमेंट्स एक्टिव करो
+    document.getElementById('topHeader').style.display = 'flex';
+    document.getElementById('feedSection').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'flex';
+    
+    showToast("Welcome to Roller! 🎉");
+}
 
-// Status Check
-app.get('/status', (req, res) => res.send("Rollera Server is Running... 🚀"));
+// 3. VIDEO CONTROL (Play/Pause on Click)
+function togglePlay(container) {
+    const video = container.querySelector('video');
+    if (video.paused) {
+        pauseAllVideos();
+        video.play();
+    } else {
+        video.pause();
+    }
+}
 
-// Upload Route (Cloudinary)
-app.post('/api/upload', upload.single('file'), async (req, res) => {
-    try {
-        if (!req.file) return res.status(400).json({ error: "File nahi mili" });
-        const { userId, caption } = req.body;
-        
-        const newPost = new Post({
-            userId,
-            caption,
-            url: req.file.path // Cloudinary permanent URL
+function pauseAllVideos() {
+    document.querySelectorAll('video').forEach(video => video.pause());
+}
+
+// 4. LIKE SYSTEM (Double Tap Effect)
+function toggleLike(btn) {
+    const container = btn.closest('.action-btn');
+    container.classList.toggle('liked');
+    
+    const icon = container.querySelector('.action-icon');
+    const count = container.querySelector('.action-count');
+    
+    if (container.classList.contains('liked')) {
+        icon.innerText = "❤️";
+        icon.style.color = "#fe2c55";
+        showToast("Added to Liked Videos");
+    } else {
+        icon.innerText = "🤍";
+        icon.style.color = "white";
+    }
+}
+
+// 5. COMMENTS MODAL LOGIC
+function openComments() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('commentsModal').style.display = 'block';
+}
+
+function closeComments() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('commentsModal').style.display = 'none';
+}
+
+function postComment() {
+    const input = document.getElementById('commentInput');
+    if (input.value.trim() === "") return;
+    
+    showToast("Comment posted!");
+    input.value = "";
+}
+
+// 6. UTILS (Toast & Sharing)
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+}
+
+function shareVideo() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Roller App',
+            text: 'Check out this amazing video on Roller!',
+            url: window.location.href
         });
-
-        await newPost.save();
-        res.status(200).json({ message: "Upload Success! 🔥", post: newPost });
-    } catch (err) {
-        console.error("Upload Error:", err);
-        res.status(500).json({ error: "Server upload fail" });
+    } else {
+        showToast("Link copied to clipboard! 🔗");
     }
-});
+}
 
-// Get All Posts
-app.get('/api/posts', async (req, res) => {
-    try {
-        const posts = await Post.find().sort({ createdAt: -1 });
-        res.json(posts);
-    } catch (err) {
-        res.status(500).json({ error: "Posts load nahi ho saki" });
-    }
-});
-
-// Search Route
-app.get('/api/search', async (req, res) => {
-    try {
-        const query = req.query.q;
-        if (!query) return res.json([]);
-        const users = await User.find({
-            $or: [
-                { username: { $regex: query, $options: 'i' } },
-                { fullName: { $regex: query, $options: 'i' } }
-            ]
-        }).limit(10).select("-password");
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ message: "Search failed" });
-    }
-});
-
-// Signup Route
-app.post('/signup', async (req, res) => {
-    try {
-        const { email, fullName, username, password, birthday } = req.body;
-        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-        if (existingUser) return res.status(400).json({ message: "Email/Username pehle se hai!" });
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ email, fullName, username, password: hashedPassword, birthday });
-        await newUser.save();
-        res.status(201).json({ message: "Account Ban Gaya! 🎉" });
-    } catch (err) {
-        res.status(500).json({ message: "Signup Fail" });
-    }
-});
-
-// Login Route
-app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(400).json({ message: "Invalid Credentials" });
+// 7. OTP TIMER LOGIC
+function startOTPTimer() {
+    let timeLeft = 30;
+    const timerDisplay = document.getElementById('otpTimer');
+    const timer = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            timerDisplay.innerText = "Resend Now";
+        } else {
+            timerDisplay.innerText = `Resend in ${timeLeft}s`;
         }
-        res.json({ message: "Success", user: { _id: user._id, username: user.username } });
-    } catch (err) {
-        res.status(500).json({ message: "Server Error" });
-    }
-});
+        timeLeft -= 1;
+    }, 1000);
+}
 
-// --- 7. SERVE FRONTEND (Order is Important!) ---
-app.get('*', (req, res) => {
-    const apiPaths = ['/api', '/login', '/signup', '/status'];
-    if (apiPaths.some(p => req.path.startsWith(p))) return;
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// --- 8. SERVER START ---
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Rollera Live on Port ${PORT} 🚀`);
-});
+// Logout Function
+function logout() {
+    location.reload(); // सिंपल रीलोड से सब रीसेट हो जाएगा
+}
