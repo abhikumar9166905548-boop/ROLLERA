@@ -4,41 +4,38 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
-const fs = require('fs'); 
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 require('dotenv').config();
 
 const app = express();
 
-// --- 1. UPLOADS FOLDER SETUP ---
-const uploadDir = path.join(__dirname, 'uploads');
+// --- 1. CLOUDINARY CONFIGURATION ---
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// --- 2. MIDDLEWARES ---
-app.use(express.json());
-app.use(cors());
-
-// PEHLE: Static files (Images) serve karein
-app.use('/uploads', express.static(uploadDir)); 
-app.use(express.static(path.join(__dirname))); 
-
-// --- 3. MULTER CONFIGURATION ---
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
+// --- 2. CLOUDINARY STORAGE SETUP (Photos & Videos) ---
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'rollera_posts',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4'],
+    resource_type: 'auto' 
+  },
 });
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 } 
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB Limit
 });
+
+// --- 3. MIDDLEWARES ---
+app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname))); 
 
 // --- 4. MONGODB CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
@@ -46,7 +43,6 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error("DB Connection Error: ", err));
 
 // --- 5. SCHEMAS ---
-// (Aapka purana schema yahan rahega...)
 const userSchema = new mongoose.Schema({
     fullName: String,
     username: { type: String, unique: true, required: true },
@@ -58,7 +54,7 @@ const User = mongoose.model('User', userSchema);
 
 const postSchema = new mongoose.Schema({
     userId: String,
-    url: String, // Isme '/uploads/filename.jpg' save hoga
+    url: String, 
     caption: String,
     createdAt: { type: Date, default: Date.now }
 });
@@ -66,52 +62,95 @@ const Post = mongoose.model('Post', postSchema);
 
 // --- 6. ROUTES ---
 
-// Upload Route (FIXED URL)
+// Status Check
+app.get('/status', (req, res) => res.send("Rollera Server is Running... 🚀"));
+
+// Upload Route (Cloudinary)
 app.post('/api/upload', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "File nahi mili" });
-
         const { userId, caption } = req.body;
         
-        // Relative path save karein
         const newPost = new Post({
             userId,
             caption,
-            url: `/uploads/${req.file.filename}` 
+            url: req.file.path // Cloudinary permanent URL
         });
 
         await newPost.save();
-        res.status(200).json({ message: "Upload Success!", post: newPost });
+        res.status(200).json({ message: "Upload Success! 🔥", post: newPost });
     } catch (err) {
         console.error("Upload Error:", err);
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ error: "Server upload fail" });
     }
 });
 
-// Post fetch karne ke liye route (TAAKI FRONTEND PAR DIKHE)
+// Get All Posts
 app.get('/api/posts', async (req, res) => {
     try {
         const posts = await Post.find().sort({ createdAt: -1 });
         res.json(posts);
     } catch (err) {
-        res.status(500).json({ error: "Posts nahi mil rahi" });
+        res.status(500).json({ error: "Posts load nahi ho saki" });
     }
 });
 
-// (Signup, Login, Search routes yahan rahenge...)
-
-// --- 7. SERVE FRONTEND (FIXED LOGIC) ---
-// Isse sabse niche rakhein taaki baaki routes block na ho
-app.get('*', (req, res) => {
-    // Agar request API ya Uploads ki hai, toh index.html mat bhejo
-    if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path.startsWith('/status')) {
-        return res.status(404).json({ error: "Not Found" });
+// Search Route
+app.get('/api/search', async (req, res) => {
+    try {
+        const query = req.query.q;
+        if (!query) return res.json([]);
+        const users = await User.find({
+            $or: [
+                { username: { $regex: query, $options: 'i' } },
+                { fullName: { $regex: query, $options: 'i' } }
+            ]
+        }).limit(10).select("-password");
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: "Search failed" });
     }
+});
+
+// Signup Route
+app.post('/signup', async (req, res) => {
+    try {
+        const { email, fullName, username, password, birthday } = req.body;
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) return res.status(400).json({ message: "Email/Username pehle se hai!" });
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ email, fullName, username, password: hashedPassword, birthday });
+        await newUser.save();
+        res.status(201).json({ message: "Account Ban Gaya! 🎉" });
+    } catch (err) {
+        res.status(500).json({ message: "Signup Fail" });
+    }
+});
+
+// Login Route
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(400).json({ message: "Invalid Credentials" });
+        }
+        res.json({ message: "Success", user: { _id: user._id, username: user.username } });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+});
+
+// --- 7. SERVE FRONTEND (Order is Important!) ---
+app.get('*', (req, res) => {
+    const apiPaths = ['/api', '/login', '/signup', '/status'];
+    if (apiPaths.some(p => req.path.startsWith(p))) return;
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // --- 8. SERVER START ---
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Rollera Server live on port ${PORT} 🚀`);
+    console.log(`Rollera Live on Port ${PORT} 🚀`);
 });
