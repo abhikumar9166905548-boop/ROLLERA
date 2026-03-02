@@ -20,12 +20,9 @@
         .story-wrapper span { font-size: 11px; display: block; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 0.5px solid #262626; display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
         .bottom-nav i { font-size: 22px; cursor: pointer; color: #fff; }
-        .modal-overlay {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;}
-        #uploadModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2001; justify-content:center; align-items:center; }
+        #uploadModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; }
         .profile-stats-container { display: flex; justify-content: space-around; padding: 20px 10px; border-bottom: 1px solid #333; text-align: center; }
         .stat-item b { display: block; font-size: 18px; color: #fff; }
-        #userPostGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
-        #userPostGrid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -53,30 +50,21 @@
         <div id="reelsContainer"></div>
     </div>
 
-    <div id="searchView" style="display:none; padding: 10px 0;">
-        <div style="padding: 10px;">
-            <div style="background: #262626; border-radius: 10px; padding: 8px 15px; display: flex; align-items: center; gap: 10px;">
-                <i class="fa-solid fa-magnifying-glass" style="color: #8e8e8e; font-size: 14px;"></i>
-                <input type="text" id="search-input" placeholder="Search" style="background: transparent; border: none; margin: 0; padding: 0; width: 100%; outline: none; font-size: 16px; color: white;">
-            </div>
-        </div>
+    <div id="searchView" style="display:none; padding: 20px;">
+        <input type="text" id="search-input" placeholder="Search..." style="background:#262626;">
         <div id="searchResults"></div>
     </div>
 
-    <div id="profileView" style="display:none; padding-top: 10px;">
-        <div style="padding: 10px 20px; display: flex; align-items: center; gap: 20px;">
-            <img src="https://i.pravatar.cc/150?u=me" style="width: 77px; height: 77px; border-radius: 50%;">
-            <div>
-                <h2 id="profile-username" style="margin: 0; font-size: 20px;">user_name</h2>
-                <button onclick="handleLogout()" style="background: #363636; color: white; padding: 5px 10px; margin-top: 8px; border-radius: 4px; font-size: 12px; width: auto;">Log Out</button>
-            </div>
+    <div id="profileView" style="display:none; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <img src="https://i.pravatar.cc/150?u=me" style="width: 80px; height: 80px; border-radius: 50%;">
+            <h2 id="profile-username">User</h2>
         </div>
         <div class="profile-stats-container">
-            <div class="stat-item"><b id="post-count">0</b><span>Posts</span></div>
-            <div class="stat-item"><b>250</b><span>Followers</span></div>
-            <div class="stat-item"><b>180</b><span>Following</span></div>
+            <div class="stat-item"><b>0</b><span>Posts</span></div>
+            <div class="stat-item"><b>100</b><span>Followers</span></div>
         </div>
-        <div id="userPostGrid"></div>
+        <button onclick="handleLogout()" style="background:#333; width: auto; padding: 5px 15px;">Log Out</button>
     </div>
 
     <div class="bottom-nav">
@@ -89,10 +77,10 @@
 </div>
 
 <div id="uploadModal">
-    <div style="background:#262626; padding:20px; border-radius:12px; width:90%; max-width:400px; color:white;">
+    <div style="background:#262626; padding:20px; border-radius:12px; width:90%; max-width:400px;">
         <h3 style="text-align:center;">Create New Post</h3>
-        <input type="file" id="fileInput" accept="image/*,video/*" style="margin:10px 0;">
-        <textarea id="uploadCaption" placeholder="Write a caption..." style="width:100%; background:#333; color:white; border:none; padding:10px; border-radius:5px; height:80px; resize:none;"></textarea>
+        <input type="file" id="fileInput" accept="image/*">
+        <textarea id="uploadCaption" placeholder="Write a caption..." style="width:100%; height:80px; margin-top:10px; background:#121212; color:white; border:0.5px solid #333; padding:10px; border-radius:5px;"></textarea>
         <div style="display:flex; justify-content:space-between; margin-top:20px;">
             <button onclick="closeUpload()" style="background:#444; width:45%;">Cancel</button>
             <button onclick="startUpload()" style="background:#0095f6; width:45%;">Share</button>
@@ -103,7 +91,12 @@
 <script src="app.js"></script>
 
 <script>
-// --- NAVIGATION FUNCTIONS ---
+// Error fix: check if API_URL exists before declaring
+if (typeof API_URL === 'undefined') {
+    var API_URL = "https://rollera.onrender.com";
+}
+
+// --- NAVIGATION ---
 function showHome() {
     document.getElementById('homeView').style.display = 'block';
     document.getElementById('searchView').style.display = 'none';
@@ -114,21 +107,19 @@ function showSearch() {
     document.getElementById('searchView').style.display = 'block';
     document.getElementById('profileView').style.display = 'none';
 }
+function showProfile() {
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('searchView').style.display = 'none';
+    document.getElementById('profileView').style.display = 'block';
+}
 function openUpload() {
     document.getElementById('uploadModal').style.display = 'flex';
 }
 function closeUpload() {
     document.getElementById('uploadModal').style.display = 'none';
 }
-function showProfile() {
-    document.getElementById('homeView').style.display = 'none';
-    document.getElementById('searchView').style.display = 'none';
-    document.getElementById('profileView').style.display = 'block';
-}
 
 // --- UPLOAD LOGIC ---
-const API_URL = "https://rollera.onrender.com";
-
 async function uploadPhoto(file, userId, caption) {
     const formData = new FormData();
     formData.append('file', file);
@@ -140,37 +131,25 @@ async function uploadPhoto(file, userId, caption) {
             method: 'POST',
             body: formData
         });
-        
         const result = await response.json();
         if(response.ok) {
-            alert("Photo Upload Ho Gayi! 🔥");
-            closeUpload();
+            alert("Success! 🔥");
             location.reload();
         } else {
-            alert("Upload Fail: " + (result.error || "Server Error"));
+            alert("Fail: " + result.error);
         }
-    } catch (error) {
-        console.error("Upload Error:", error);
-        alert("Network Error: Server connect nahi ho raha.");
-    }
+    } catch (e) { alert("Server Down!"); }
 }
 
 window.startUpload = async function() {
     const file = document.getElementById('fileInput').files[0];
     const caption = document.getElementById('uploadCaption').value;
-    const user = JSON.parse(localStorage.getItem('user')); 
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    if (!file) return alert("File select karein!");
-    if (!user) return alert("Pehle Login karein!");
-
-    const btn = event.target;
-    btn.innerText = "Uploading...";
-    btn.disabled = true;
-
-    await uploadPhoto(file, user._id || user.username, caption);
+    if(!file || !user) return alert("Select file or Login!");
     
-    btn.innerText = "Share";
-    btn.disabled = false;
+    event.target.innerText = "Uploading...";
+    await uploadPhoto(file, user._id || user.username, caption);
 }
 </script>
 </body>
