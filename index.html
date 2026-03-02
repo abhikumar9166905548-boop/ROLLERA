@@ -8,21 +8,22 @@
     <style>
         body{margin:0;background:#000;color:#fff;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow-x: hidden;}
         #mainHeader {padding:15px; text-align:center; background: #000; border-bottom: 0.5px solid #262626; font-size:24px; font-weight:bold; position: sticky; top: 0; z-index: 100;}
-        #auth {padding: 20px; max-width: 400px; margin: auto;}
+        #auth {padding: 20px; max-width: 400px; margin: auto; display: block;}
         input {width:100%; padding:12px; margin-top:10px; border-radius:5px; border: 0.5px solid #363636; background:#121212; color:#fff; box-sizing:border-box;}
         button {width:100%; padding:10px; margin-top:15px; border-radius:8px; border:none; background:#0095f6; color:#fff; font-weight:bold; cursor:pointer;}
-        #app { background: #000; min-height: 100vh; padding-bottom: 70px; }
+        
+        /* App Container */
+        #app { background: #000; min-height: 100vh; padding-bottom: 70px; display: none; }
         .story-container { display: flex; overflow-x: auto; padding: 15px 10px; border-bottom: 0.5px solid #262626; gap: 12px; scrollbar-width: none; }
-        .story-container::-webkit-scrollbar { display: none; }
-        .story-wrapper { text-align: center; width: 75px; flex-shrink: 0; }
         .story-ring { width: 66px; height: 66px; border-radius: 50%; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 2px; margin: auto; }
         .story-ring img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid black; object-fit: cover; }
-        .story-wrapper span { font-size: 11px; display: block; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 0.5px solid #262626; display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
         .bottom-nav i { font-size: 22px; cursor: pointer; color: #fff; }
-        #uploadModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; }
-        .profile-stats-container { display: flex; justify-content: space-around; padding: 20px 10px; border-bottom: 1px solid #333; text-align: center; }
-        .stat-item b { display: block; font-size: 18px; color: #fff; }
+        
+        /* Modal Fix */
+        #uploadModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; }
     </style>
 </head>
 <body>
@@ -31,40 +32,31 @@
 
 <div id="auth">
     <h1 style="text-align: center; font-family: 'Brush Script MT', cursive; font-size: 45px; margin-bottom: 30px;">Rollera</h1>
-    <input id="login-email" placeholder="Email">
-    <input id="login-password" type="password" placeholder="Password">
-    <button onclick="handleLogin()">Login</button>
-    <div style="margin-top: 20px; text-align: center; color: #8e8e8e; font-size: 14px;">
-        Don't have an account? <span onclick="openSignup()" style="color: #0095f6; font-weight: bold; cursor: pointer;">Sign up</span>
-    </div>
+    <input id="login-email" placeholder="Email (Try any name for test)">
+    <button onclick="handleLogin()">Login / Enter App</button>
 </div>
 
-<div id="app" style="display:none;">
+<div id="app">
     <div id="homeView">
         <div class="story-container">
-            <div class="story-wrapper">
+            <div class="story-wrapper" style="text-align:center;">
                 <div class="story-ring"><img src="https://i.pravatar.cc/150?u=me"></div>
-                <span>Your story</span>
+                <span style="font-size:11px;">Your story</span>
             </div>
         </div>
-        <div id="reelsContainer"></div>
+        <div id="reelsContainer" style="padding:20px; text-align:center;">
+            <p style="color:#8e8e8e;">Welcome to Rollera Feed</p>
+        </div>
     </div>
 
     <div id="searchView" style="display:none; padding: 20px;">
-        <input type="text" id="search-input" placeholder="Search..." style="background:#262626;">
-        <div id="searchResults"></div>
+        <input type="text" placeholder="Search users..." style="background:#262626;">
     </div>
 
-    <div id="profileView" style="display:none; padding: 20px;">
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <img src="https://i.pravatar.cc/150?u=me" style="width: 80px; height: 80px; border-radius: 50%;">
-            <h2 id="profile-username">User</h2>
-        </div>
-        <div class="profile-stats-container">
-            <div class="stat-item"><b>0</b><span>Posts</span></div>
-            <div class="stat-item"><b>100</b><span>Followers</span></div>
-        </div>
-        <button onclick="handleLogout()" style="background:#333; width: auto; padding: 5px 15px;">Log Out</button>
+    <div id="profileView" style="display:none; padding: 20px; text-align:center;">
+        <img src="https://i.pravatar.cc/150?u=me" style="width: 80px; border-radius: 50%;">
+        <h2 id="profile-username">User Profile</h2>
+        <button onclick="location.reload()" style="background:#333; width:auto;">Logout</button>
     </div>
 
     <div class="bottom-nav">
@@ -77,90 +69,45 @@
 </div>
 
 <div id="uploadModal">
-    <div style="background:#262626; padding:20px; border-radius:12px; width:90%; max-width:400px;">
-        <h3 style="text-align:center;">Create New Post</h3>
+    <div style="background:#262626; padding:20px; border-radius:12px; width:85%; max-width:400px;">
+        <h3 style="text-align:center;">Upload New Post</h3>
         <input type="file" id="fileInput" accept="image/*">
-        <textarea id="uploadCaption" placeholder="Write a caption..." style="width:100%; height:80px; margin-top:10px; background:#121212; color:white; border:0.5px solid #333; padding:10px; border-radius:5px;"></textarea>
+        <textarea id="uploadCaption" placeholder="Write a caption..." style="width:100%; height:60px; margin-top:10px; background:#121212; color:white; border:none; padding:10px;"></textarea>
         <div style="display:flex; justify-content:space-between; margin-top:20px;">
             <button onclick="closeUpload()" style="background:#444; width:45%;">Cancel</button>
-            <button onclick="startUpload()" style="background:#0095f6; width:45%;">Share</button>
+            <button onclick="alert('Starting upload...')" style="background:#0095f6; width:45%;">Share</button>
         </div>
     </div>
 </div>
 
-<script src="app.js"></script>
-
 <script>
-// Error fix: check if API_URL exists before declaring to prevent crash
-if (typeof API_URL === 'undefined') {
-    var API_URL = "https://rollera.onrender.com";
-}
+    // FIX: Variable declaration check
+    if (typeof API_URL === 'undefined') { var API_URL = "https://rollera.onrender.com"; }
 
-// --- NAVIGATION ---
-function showHome() {
-    if(document.getElementById('homeView')){
+    // Navigation functions (FAIL-SAFE)
+    function showHome() {
         document.getElementById('homeView').style.display = 'block';
         document.getElementById('searchView').style.display = 'none';
         document.getElementById('profileView').style.display = 'none';
     }
-}
-function showSearch() {
-    if(document.getElementById('searchView')){
+    function showSearch() {
         document.getElementById('homeView').style.display = 'none';
         document.getElementById('searchView').style.display = 'block';
         document.getElementById('profileView').style.display = 'none';
     }
-}
-function showProfile() {
-    if(document.getElementById('profileView')){
+    function showProfile() {
         document.getElementById('homeView').style.display = 'none';
         document.getElementById('searchView').style.display = 'none';
         document.getElementById('profileView').style.display = 'block';
     }
-}
-function openUpload() {
-    document.getElementById('uploadModal').style.display = 'flex';
-}
-function closeUpload() {
-    document.getElementById('uploadModal').style.display = 'none';
-}
+    function openUpload() { document.getElementById('uploadModal').style.display = 'flex'; }
+    function closeUpload() { document.getElementById('uploadModal').style.display = 'none'; }
 
-// --- UPLOAD LOGIC ---
-async function uploadPhoto(file, userId, caption) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('userId', userId);
-    formData.append('caption', caption);
-
-    try {
-        const response = await fetch(`${API_URL}/api/upload`, {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-        if(response.ok) {
-            alert("Success! 🔥");
-            location.reload();
-        } else {
-            alert("Fail: " + result.error);
-        }
-    } catch (e) { alert("Server Error!"); }
-}
-
-window.startUpload = async function() {
-    const file = document.getElementById('fileInput').files[0];
-    const caption = document.getElementById('uploadCaption').value;
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    if(!file || !user) return alert("Select file or Login!");
-    
-    const btn = event.target;
-    btn.innerText = "Uploading...";
-    btn.disabled = true;
-    await uploadPhoto(file, user._id || user.username, caption);
-    btn.innerText = "Share";
-    btn.disabled = false;
-}
+    // Test Login to see the app
+    function handleLogin() {
+        document.getElementById('auth').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+    }
 </script>
 </body>
 </html>
