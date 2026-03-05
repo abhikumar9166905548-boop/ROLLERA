@@ -1,50 +1,12 @@
-/* Dashboard Specific Styles */
-.dashboard-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 2rem;
-    border-radius: 30px;
-    width: 400px;
-    text-align: center;
-    color: white;
+body {
+    display: flex; justify-content: center; align-items: center; height: 100vh;
+    background: #3498db; margin: 0; font-family: sans-serif; overflow: hidden;
 }
-
-.avatar {
-    width: 80px;
-    height: 80px;
-    background: #fff;
-    color: #3498db;
-    font-size: 40px;
-    font-weight: bold;
-    line-height: 80px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
+#character { position: absolute; font-size: 80px; }
+.login-card, .dashboard-card {
+    background: rgba(255, 255, 255, 0.2); padding: 3rem; border-radius: 20px;
+    backdrop-filter: blur(15px); text-align: center; color: white;
+    width: 320px; border: 1px solid rgba(255,255,255,0.3); visibility: hidden;
 }
-
-.stats-grid {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-    background: rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    border-radius: 15px;
-}
-
-.stat-box h3 { margin: 0; font-size: 20px; }
-.stat-box p { margin: 0; font-size: 12px; opacity: 0.8; }
-
-.menu-btn, .logout-btn {
-    width: 100%;
-    padding: 12px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.menu-btn { background: rgba(255,255,255,0.2); color: white; transition: 0.3s; }
-.menu-btn:hover { background: rgba(255,255,255,0.4); }
-
-.logout-btn { background: #e74c3c; color: white; margin-top: 15px; }
+input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+button { width: 100%; padding: 12px; background: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
