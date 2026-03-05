@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Roller - Dashboard</title>
+    <link rel="stylesheet" href=".css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-card" id="dash">
+        <div style="font-size: 50px;">👤</div>
+        <h2>Dashboard</h2>
+        <p>Welcome to Roller App!</p>
+        <button onclick="window.location.href='/'" style="background: #e74c3c; color: white;">Logout</button>
+    </div>
+    <script>
+        gsap.to("#dash", { autoAlpha: 1, y: -20, duration: 1 });
+    </script>
+</body>
+</html>
