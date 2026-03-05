@@ -4,13 +4,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ Connected to MongoDB Professionaly'))
-    .catch(err => console.error('❌ Database Connection Error:', err));
+    .then(() => console.log('✅ MongoDB Connected'))
+    .catch(err => console.log('❌ DB Error:', err));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Rollera App Server running on http://localhost:${PORT}`);
-});
-
+app.listen(process.env.PORT, () => console.log(`🚀 Server: http://localhost:${process.env.PORT}`));
