@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Roller - Login</title>
+    <title>Roller - Login & Sign Up</title>
     <link rel="stylesheet" href=".css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
@@ -10,15 +10,21 @@
     <div id="character">💼</div>
 
     <div class="login-card" id="loginCard">
-        <h2>Roller</h2>
-        <p>Apna Swad, Apna Style</p>
+        <h2 id="formTitle">Roller Login</h2>
         <input type="text" id="user" placeholder="Username">
         <input type="password" id="pass" placeholder="Password">
-        <button onclick="handleLogin()">Sign In</button>
-        <p id="msg"></p>
+        
+        <button id="mainBtn" onclick="submitForm()">Sign In</button>
+        
+        <p id="toggleText" style="margin-top:15px; cursor:pointer; font-size:13px;" onclick="toggleForm()">
+            Naya account chahiye? <b>Sign Up</b>
+        </p>
+        <p id="msg" style="margin-top:10px; font-weight:bold;"></p>
     </div>
 
     <script>
+        let isLogin = true;
+
         window.onload = () => {
             const tl = gsap.timeline();
             tl.from("#character", { x: -600, duration: 1 })
@@ -27,15 +33,33 @@
               .to("#loginCard", { autoAlpha: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" });
         };
 
-        async function handleLogin() {
-            const res = await fetch('/api/login', {
+        function toggleForm() {
+            isLogin = !isLogin;
+            document.getElementById('formTitle').innerText = isLogin ? "Roller Login" : "Roller Register";
+            document.getElementById('mainBtn').innerText = isLogin ? "Sign In" : "Create Account";
+            document.getElementById('toggleText').innerHTML = isLogin ? 
+                "Naya account chahiye? <b>Sign Up</b>" : "Pehle se account hai? <b>Login</b>";
+            document.getElementById('msg').innerText = "";
+        }
+
+        async function submitForm() {
+            const endpoint = isLogin ? '/api/login' : '/api/register';
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: user.value, password: pass.value })
             });
             const data = await res.json();
-            if(data.success) window.location.href = "/dashboard";
-            else {
+            
+            if(data.success) {
+                if(isLogin) window.location.href = "/dashboard";
+                else {
+                    msg.style.color = "lightgreen";
+                    msg.innerText = data.message;
+                    setTimeout(toggleForm, 1500);
+                }
+            } else {
+                msg.style.color = "#ff4d4d";
                 msg.innerText = data.message;
                 gsap.to("#loginCard", { x: 10, duration: 0.1, yoyo: true, repeat: 5 });
             }
