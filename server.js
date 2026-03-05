@@ -11,5 +11,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Roller App Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Rollera App Server running on http://localhost:${PORT}`);
 });
+
