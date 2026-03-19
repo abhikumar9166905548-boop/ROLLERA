@@ -393,9 +393,7 @@ async function handleCreatePost(){
 }
 
 async function getCloudName(){
-  const res=await fetch(`${API}/auth/cloudname`,{headers:{Authorization:`Bearer ${getToken()}`}});
-  const data=await res.json();
-  return data.cloudName;
+  return 'dvv4akl0j';
 }
 
 async function handleLike(postId,btn){
