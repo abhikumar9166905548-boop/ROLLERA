@@ -378,7 +378,11 @@ async function handleForgot(){
   }catch(e){showAlert(e.message||'Error')}
   finally{setLoading('forgotBtn',false)}
 }
-function handleLogout(){clearToken();showAuth()}
+function handleLogout(){
+  clearToken();
+  localStorage.clear();
+  showAuth();
+}
 
 // CREATE
 function openCreate(){document.getElementById('createOverlay').classList.add('show')}
