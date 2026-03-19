@@ -11,7 +11,7 @@ const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(express.static('public'));
 // Routes
 app.use('/api/auth', require('./routes/auth.routes'));
 
