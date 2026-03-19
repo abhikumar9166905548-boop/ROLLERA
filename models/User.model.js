@@ -23,24 +23,39 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: 6,
-      select: false, // don't return password by default
+      select: false,
     },
     isVerified: {
       type: Boolean,
       default: false,
     },
+    bio: {
+      type: String,
+      default: '',
+      maxlength: 150,
+    },
+    profilePhoto: {
+      type: String,
+      default: null,
+    },
+    savedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      }
+    ],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-notifications: [
-  {
-    type: { type: String },
-    from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
-    message: String,
-    read: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now },
-  }
-],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    notifications: [
+      {
+        type: { type: String },
+        from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+        message: String,
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now },
+      }
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
@@ -63,14 +78,11 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 // Generate password reset token
 userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
-
   this.resetPasswordToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
-
-  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
-
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   return resetToken;
 };
 

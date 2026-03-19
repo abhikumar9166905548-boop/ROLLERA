@@ -254,3 +254,54 @@ exports.getNotifications = async (req, res, next) => {
     res.status(200).json({ success: true, notifications });
   } catch (err) { next(err); }
 };
+// ─────────────────────────────────────────────
+// @route   PUT /api/auth/profile/update
+// @desc    Update bio and profile photo
+// @access  Private
+// ─────────────────────────────────────────────
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { bio, profilePhoto } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { bio, profilePhoto },
+      { new: true }
+    );
+    res.status(200).json({ success: true, user });
+  } catch (err) { next(err); }
+};
+
+// ─────────────────────────────────────────────
+// @route   PUT /api/auth/posts/:id/save
+// @desc    Save / Unsave post
+// @access  Private
+// ─────────────────────────────────────────────
+exports.savePost = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const postId = req.params.id;
+    const saved = user.savedPosts.includes(postId);
+    if (saved) {
+      user.savedPosts = user.savedPosts.filter(id => id.toString() !== postId);
+    } else {
+      user.savedPosts.push(postId);
+    }
+    await user.save();
+    res.status(200).json({ success: true, saved: !saved });
+  } catch (err) { next(err); }
+};
+
+// ─────────────────────────────────────────────
+// @route   GET /api/auth/posts/saved
+// @desc    Get saved posts
+// @access  Private
+// ─────────────────────────────────────────────
+exports.getSavedPosts = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).populate({
+      path: 'savedPosts',
+      populate: { path: 'user', select: 'name' }
+    });
+    res.status(200).json({ success: true, posts: user.savedPosts });
+  } catch (err) { next(err); }
+};

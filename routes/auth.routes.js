@@ -64,5 +64,7 @@ router.put('/reset-password/:token',
 router.get('/users', protect, searchUsers);
 router.put('/follow/:id', protect, followUser);
 router.get('/notifications', protect, getNotifications);
-
+router.put('/profile/update', protect, require('../controllers/auth.controller').updateProfile);
+router.put('/posts/:id/save', protect, require('../controllers/auth.controller').savePost);
+router.get('/posts/saved', protect, require('../controllers/auth.controller').getSavedPosts);
 module.exports = router;
