@@ -1,340 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rollera</title>
+  <title>AuthFlow</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0a0a0f; --surface: #111118; --border: rgba(255,255,255,0.07);
-      --accent: #7c6cfc; --accent2: #c084fc; --text: #f0eeff; --muted: #888;
-      --error: #f87171; --success: #4ade80; --input-bg: rgba(255,255,255,0.04);
-    }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
-    .blob1 { width: 500px; height: 500px; background: #7c6cfc; top: -120px; left: -100px; animation: drift1 12s ease-in-out infinite; }
-    .blob2 { width: 400px; height: 400px; background: #c084fc; bottom: -100px; right: -80px; animation: drift2 14s ease-in-out infinite; }
-    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,40px)} }
-    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-30px)} }
-    .app { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 16px; }
-    /* NAV */
-    nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; margin-bottom: 16px; }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-user { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; cursor: pointer; }
-    .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-    .btn-logout:hover { border-color: var(--error); color: var(--error); }
-    /* AUTH CARD */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 36px; box-shadow: 0 32px 80px rgba(0,0,0,0.5); animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1); }
-    @keyframes cardIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-    .tabs { display: flex; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px; margin-bottom: 24px; gap: 4px; }
-    .tab { flex: 1; padding: 9px; border: none; background: transparent; color: var(--muted); border-radius: 9px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
-    .tab.active { background: var(--accent); color: #fff; box-shadow: 0 4px 14px rgba(124,108,252,0.4); }
-    .form-panel { display: none; }
-    .form-panel.active { display: block; animation: fadeUp 0.3s ease; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-    .field { margin-bottom: 14px; }
-    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-    input { width: 100%; padding: 12px 14px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: all 0.2s; }
-    input:focus { border-color: var(--accent); background: rgba(124,108,252,0.06); }
-    input::placeholder { color: #444; }
-    .btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 12px; color: #fff; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: all 0.2s; box-shadow: 0 8px 24px rgba(124,108,252,0.35); }
-    .btn:hover { transform: translateY(-1px); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-    .link-row { text-align: center; margin-top: 16px; font-size: 13px; color: var(--muted); }
-    .link-row a { color: var(--accent2); text-decoration: none; cursor: pointer; }
-    .alert { padding: 11px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 14px; display: none; }
-    .alert.show { display: block; }
-    .alert.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); }
-    .alert.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); }
-    /* FEED */
-    #feedSection { display: none; }
-    #feedSection.active { display: block; }
-    .post-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 16px; }
-    .post-box textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 12px 14px; resize: none; outline: none; height: 90px; transition: all 0.2s; }
-    .post-box textarea:focus { border-color: var(--accent); }
-    .post-box textarea::placeholder { color: #444; }
-    .post-btn { padding: 10px 24px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px; float: right; transition: all 0.2s; }
-    .post-btn:hover { transform: translateY(-1px); }
-    .clearfix::after { content: ''; display: table; clear: both; }
-    .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px; margin-bottom: 14px; animation: cardIn 0.3s ease; }
-    .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .post-avatar { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; }
-    .post-name { font-weight: 600; font-size: 14px; }
-    .post-time { color: var(--muted); font-size: 12px; }
-    .post-content { font-size: 15px; line-height: 1.6; margin-bottom: 14px; }
-    .post-actions { display: flex; gap: 12px; }
-    .action-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-    .action-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .action-btn.liked { background: rgba(124,108,252,0.1); border-color: var(--accent); color: var(--accent); }
-    .action-btn.delete:hover { border-color: var(--error); color: var(--error); }
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
-    @keyframes spin { to{transform:rotate(360deg)} }
-    .empty-feed { text-align: center; color: var(--muted); padding: 40px; font-size: 15px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;--border:rgba(255,255,255,0.07);--accent:#7c6cfc;--accent2:#c084fc;--text:#f0eeff;--muted:#666;--error:#f87171;--success:#4ade80}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:70px}
+    /* BLOBS */
+    .blobs{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12}
+    .blob1{width:400px;height:400px;background:#7c6cfc;top:-100px;left:-100px;animation:drift1 12s ease-in-out infinite}
+    .blob2{width:300px;height:300px;background:#c084fc;bottom:-80px;right:-60px;animation:drift2 14s ease-in-out infinite}
+    @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,30px)}}
+    @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-20px)}}
+    /* TOPBAR */
+    .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .topbar-right{display:flex;align-items:center;gap:10px}
+    .avatar-sm{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer}
+    /* BOTTOM NAV */
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 14px;z-index:100}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--muted);font-size:11px;transition:all 0.2s;padding:4px 16px;border-radius:12px}
+    .nav-item.active{color:var(--accent)}
+    .nav-item svg
+    {width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .nav-item.active svg{stroke:var(--accent)}
+    /* PAGES */
+    .page{display:none;position:relative;z-index:1;padding:16px;animation:fadeUp 0.3s ease}
+    .page.active{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    /* AUTH */
+    #authPage{display:block;padding:20px 16px}
+    .auth-logo{text-align:center;padding:32px 0 24px}
+    .auth-logo h1{font-family:'Syne',sans-serif;font-weight:800;font-size:32px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .auth-logo p{color:var(--muted);font-size:14px;margin-top:4px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 28px;box-shadow:0 32px 80px rgba(0,0,0,0.5)}
+    .tabs{display:flex;background:rgba(255,255,255,0.04);border-radius:12px;padding:4px;margin-bottom:22px;gap:4px}
+    .tab{flex:1;padding:8px;border:none;background:transparent;color:var(--muted);border-radius:9px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+    .tab.active{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(124,108,252,0.4)}
+    .form-panel{display:none}
+    .form-panel.active{display:block}
+    h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+    .subtitle{color:var(--muted);font-size:13px;margin-bottom:20px}
+    .field{margin-bottom:13px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+    input,textarea{width:100%;padding:11px 13px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all 0.2s}
+    input:focus,textarea:focus{border-color:var(--accent);background:rgba(124,108,252,0.06)}
+    input::placeholder,textarea::placeholder{color:#333}
+    .btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:11px;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:all 0.2s;box-shadow:0 8px 24px rgba(124,108,252,0.3)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+    .link-row{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
+    .link-row a{color:var(--accent2);text-decoration:none;cursor:pointer}
+    .alert{padding:10px 13px;border-radius:10px;font-size:13px;margin-bottom:13px;display:none}
+    .alert.show{display:block}
+    .alert.error{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:var(--error)}
+    .alert.success{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--success)}
+    /* POST CREATE */
+    .post-create{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px}
+    .post-create textarea{height:80px;resize:none;border-radius:10px;font-size:14px}
+    .post-create-footer{display:flex;justify-content:flex-end;margin-top:10px}
+    .post-btn{padding:9px 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(124,108,252,0.3)}
+    .post-btn:hover{transform:translateY(-1px)}
+    /* POST CARD */
+    .post-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;animation:fadeUp 0.3s ease}
+    .post-header{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+    .post-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+    .post-name{font-weight:600;font-size:13px}
+    .post-time{color:var(--muted);font-size:11px}
+    .post-content{font-size:14px;line-height:1.6;margin-bottom:12px;color:var(--text)}
+    .post-actions{display:flex;gap:8px}
+    .action-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:8px;cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+    .action-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .action-btn.liked{background:rgba(124,108,252,0.1);border-color:var(--accent);color:var(--accent)}
+    .action-btn.delete:hover{border-color:var(--error);color:var(--error)}
+    /* SEARCH */
+    .search-bar{position:relative;margin-bottom:16px}
+    .search-bar input{padding-left:38px;background:var(--surface);border-radius:14px}
+    .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px}
+    .user-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+    .user-card .post-avatar{width:44px;height:44px;font-size:16px}
+    .user-info h4{font-size:14px;font-weight:600}
+    .user-info p{font-size:12px;color:var(--muted)}
+    /* PROFILE */
+    .profile-header{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px;text-align:center}
+    .profile-avatar{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;margin:0 auto 12px}
+    .profile-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .profile-email{color:var(--muted);font-size:13px;margin-top:2px}
+    .profile-stats{display:flex;justify-content:center;gap:32px;margin-top:16px}
+    .stat{text-align:center}
+    .stat-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .stat-label{color:var(--muted);font-size:11px}
+    .btn-outline{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:11px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.2s;margin-top:16px}
+    .btn-outline:hover{border-color:var(--error);color:var(--error)}
+    /* EMPTY */
+    .empty{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px}
+    /* SPINNER */
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:5px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px}
   </style>
 </head>
 <body>
 <div class="blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
 
-<div class="app">
-  <!-- AUTH SECTION -->
-  <div id="authSection">
-    <div style="text-align:center;padding:40px 0 24px;">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;background:linear-gradient(90deg,#7c6cfc,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Rollera</div>
-      <div style="color:var(--muted);font-size:14px;margin-top:4px;">Social platform</div>
+<!-- AUTH PAGE -->
+<div id="authPage">
+  <div class="auth-logo">
+    <h1>Rollera</h1>
+    <p>Share your world ✦</p>
+  </div>
+  <div class="card">
+    <div class="alert" id="alertBox"><span id="alertMsg"></span></div>
+    <div class="tabs" id="tabBar">
+      <button class="tab active" onclick="switchTab('login')">Login</button>
+      <button class="tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
-    <div class="card">
-      <div class="alert" id="alertBox"><span id="alertMsg"></span></div>
-      <div class="tabs" id="tabBar">
-        <button class="tab active" onclick="switchTab('login')">Login</button>
-        <button class="tab" onclick="switchTab('signup')">Sign Up</button>
-      </div>
-      <!-- LOGIN -->
-      <div class="form-panel active" id="loginPanel">
-        <h2>Welcome back</h2>
-        <p class="subtitle">Sign in to your account</p>
-        <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
-        <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"/></div>
-        <button class="btn" onclick="handleLogin()" id="loginBtn">Sign In</button>
-        <div class="link-row"><a onclick="switchTab('forgot')">Forgot password?</a></div>
-      </div>
-      <!-- SIGNUP -->
-      <div class="form-panel" id="signupPanel">
-        <h2>Create account</h2>
-        <p class="subtitle">Join Rollera today</p>
-        <div class="field"><label>Full Name</label><input type="text" id="signupName" placeholder="John Doe"/></div>
-        <div class="field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com"/></div>
-        <div class="field"><label>Password</label><input type="password" id="signupPass" placeholder="Min 6 characters"/></div>
-        <button class="btn" onclick="handleSignup()" id="signupBtn">Create Account</button>
-      </div>
-      <!-- FORGOT -->
-      <div class="form-panel" id="forgotPanel">
-        <h2>Reset password</h2>
-        <p class="subtitle">Enter your email to reset</p>
-        <div class="field"><label>Email</label><input type="email" id="forgotEmail" placeholder="you@example.com"/></div>
-        <button class="btn" onclick="handleForgot()" id="forgotBtn">Send Reset Link</button>
-        <div class="link-row"><a onclick="switchTab('login')">← Back to login</a></div>
-      </div>
+    <div class="form-panel active" id="loginPanel">
+      <h2>Welcome back</h2>
+      <p class="subtitle">Sign in to your account</p>
+      <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"/></div>
+      <button class="btn" onclick="handleLogin()" id="loginBtn">Sign In</button>
+      <div class="link-row"><a onclick="switchTab('forgot')">Forgot password?</a></div>
+    </div>
+    <div class="form-panel" id="signupPanel">
+      <h2>Create account</h2>
+      <p class="subtitle">Join Rollera today ✦</p>
+      <div class="field"><label>Full Name</label><input type="text" id="signupName" placeholder="John Doe"/></div>
+      <div class="field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input type="password" id="signupPass" placeholder="Min 6 characters"/></div>
+      <button class="btn" onclick="handleSignup()" id="signupBtn">Create Account</button>
+    </div>
+    <div class="form-panel" id="forgotPanel">
+      <h2>Reset password</h2>
+      <p class="subtitle">Enter your email</p>
+      <div class="field"><label>Email</label><input type="email" id="forgotEmail" placeholder="you@example.com"/></div>
+      <button class="btn" onclick="handleForgot()" id="forgotBtn">Send Reset Link</button>
+      <div class="link-row"><a onclick="switchTab('login')">← Back</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="logo">Rollera</div>
+    <div class="topbar-right">
+      <div class="avatar-sm" id="topAvatar">A</div>
     </div>
   </div>
 
-  <!-- FEED SECTION -->
-  <div id="feedSection">
-    <nav>
-      <div class="logo">Rollera</div>
-      <div class="nav-user">
-        <div class="avatar" id="navAvatar">A</div>
-        <span id="navName" style="font-size:14px;font-weight:500;"></span>
-        <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
-      </div>
-    </nav>
-
-    <!-- Create Post -->
-    <div class="post-box">
+  <!-- HOME PAGE -->
+  <div class="page active" id="homePage">
+    <div style="height:12px"></div>
+    <div class="post-create">
       <textarea id="postContent" placeholder="Kya soch rahe ho? Share karo..."></textarea>
-      <div class="clearfix">
+      <div class="post-create-footer">
         <button class="post-btn" onclick="handleCreatePost()" id="postBtn">Post karo ✦</button>
       </div>
     </div>
+    <div id="feedList"><div class="empty">Loading...</div></div>
+  </div>
 
-    <!-- Feed -->
-    <div id="feedList"><div class="empty-feed">Loading posts...</div></div>
+  <!-- SEARCH PAGE -->
+  <div class="page" id="searchPage">
+    <div style="height:12px"></div>
+    <div class="section-title">Search Users</div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Naam se search karo..." oninput="handleSearch(this.value)"/>
+    </div>
+    <div id="searchResults"><div class="empty">Kisi ka naam type karo 👆</div></div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div class="page" id="profilePage">
+    <div style="height:12px"></div>
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">A</div>
+      <div class="profile-name" id="profileName">User</div>
+      <div class="profile-email" id="profileEmail">user@email.com</div>
+      <div class="profile-stats">
+        <div class="stat"><div class="stat-num" id="postCount">0</div><div class="stat-label">Posts</div></div>
+        <div class="stat"><div class="stat-num" id="likeCount">0</div><div class="stat-label">Likes</div></div>
+      </div>
+      <button class="btn-outline" onclick="handleLogout()">Sign Out</button>
+    </div>
+    <div class="section-title">Mere Posts</div>
+    <div id="myPosts"><div class="empty">Loading...</div></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showPage('home')" id="nav-home">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="showPage('search')" id="nav-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+    </div>
+    <div class="nav-item" onclick="showPage('profile')" id="nav-profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </div>
   </div>
 </div>
 
 <script>
-  const API = 'https://rollera.onrender.com/api';
+const API = 'https://rollera.onrender.com/api';
+let currentUser = null;
 
-  function showAlert(msg, type='error') {
-    const box = document.getElementById('alertBox');
-    const txt = document.getElementById('alertMsg');
-    box.className = `alert show ${type}`;
-    txt.textContent = msg;
-    setTimeout(() => box.classList.remove('show'), 4000);
-  }
+// ── UTILS ──
+function saveToken(t){localStorage.setItem('authToken',t)}
+function getToken(){return localStorage.getItem('authToken')}
+function clearToken(){localStorage.removeItem('authToken')}
+function getUserId(){const t=getToken();if(!t)return null;try{return JSON.parse(atob(t.split('.')[1])).id}catch{return null}}
 
-  function setLoading(btnId, loading, text) {
-    const btn = document.getElementById(btnId);
-    btn.disabled = loading;
-    if (loading) { btn._orig = btn.innerHTML; btn.innerHTML = `<span class="spinner"></span> Please wait...`; }
-    else btn.innerHTML = btn._orig;
-  }
+function showAlert(msg,type='error'){
+  const box=document.getElementById('alertBox');
+  const txt=document.getElementById('alertMsg');
+  box.className=`alert show ${type}`;
+  txt.textContent=msg;
+  setTimeout(()=>box.classList.remove('show'),4000);
+}
 
-  function switchTab(tab) {
-    document.getElementById('alertBox').classList.remove('show');
-    ['login','signup','forgot'].forEach(t => document.getElementById(t+'Panel').classList.toggle('active', t===tab));
-    const tabs = document.querySelectorAll('.tab');
-    if(tab==='login'){tabs[0].classList.add('active');tabs[1].classList.remove('active');}
-    else if(tab==='signup'){tabs[1].classList.add('active');tabs[0].classList.remove('active');}
-    else{tabs.forEach(t=>t.classList.remove('active'));}
-    document.getElementById('tabBar').style.display = tab==='forgot'?'none':'flex';
-  }
+function setLoading(btnId,loading){
+  const btn=document.getElementById(btnId);
+  if(!btn)return;
+  btn.disabled=loading;
+  if(loading){btn._orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span>Wait...`}
+  else btn.innerHTML=btn._orig;
+}
 
-  function saveToken(t){localStorage.setItem('authToken',t);}
-  function getToken(){return localStorage.getItem('authToken');}
-  function clearToken(){localStorage.removeItem('authToken');}
+function switchTab(tab){
+  document.getElementById('alertBox').classList.remove('show');
+  ['login','signup','forgot'].forEach(t=>document.getElementById(t+'Panel').classList.toggle('active',t===tab));
+  const tabs=document.querySelectorAll('.tab');
+  if(tab==='login'){tabs[0].classList.add('active');tabs[1].classList.remove('active')}
+  else if(tab==='signup'){tabs[1].classList.add('active');tabs[0].classList.remove('active')}
+  else tabs.forEach(t=>t.classList.remove('active'));
+  document.getElementById('tabBar').style.display=tab==='forgot'?'none':'flex';
+}
 
-  function showFeed(user, token) {
-    document.getElementById('authSection').style.display = 'none';
-    document.getElementById('feedSection').classList.add('active');
-    document.getElementById('navAvatar').textContent = (user.name||'U')[0].toUpperCase();
-    document.getElementById('navName').textContent = user.name;
+// ── PAGES ──
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(page+'Page').classList.add('active');
+  document.getElementById('nav-'+page).classList.add('active');
+  if(page==='home') loadFeed();
+  if(page==='profile') loadProfile();
+}
+
+// ── SHOW APP ──
+function showApp(user,token){
+  currentUser=user;
+  document.getElementById('authPage').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  document.getElementById('topAvatar').textContent=(user.name||'U')[0].toUpperCase();
+  loadFeed();
+}
+
+function showAuth(){
+  currentUser=null;
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('authPage').style.display='block';
+  switchTab('login');
+}
+
+// ── AUTH ──
+async function handleLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPass').value;
+  if(!email||!password)return showAlert('Sabhi fields bharo');
+  setLoading('loginBtn',true);
+  try{
+    const res=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.message);
+    saveToken(data.token);
+    showApp(data.user,data.token);
+  }catch(e){showAlert(e.message||'Login failed')}
+  finally{setLoading('loginBtn',false)}
+}
+
+async function handleSignup(){
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const password=document.getElementById('signupPass').value;
+  if(!name||!email||!password)return showAlert('Sabhi fields bharo');
+  setLoading('signupBtn',true);
+  try{
+    const res=await fetch(`${API}/auth/signup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.errors?data.errors[0].msg:data.message);
+    saveToken(data.token);
+    showApp(data.user,data.token);
+  }catch(e){showAlert(e.message||'Signup failed')}
+  finally{setLoading('signupBtn',false)}
+}
+
+async function handleForgot(){
+  const email=document.getElementById('forgotEmail').value.trim();
+  if(!email)return showAlert('Email daalo');
+  setLoading('forgotBtn',true);
+  try{
+    const res=await fetch(`${API}/auth/forgot-password`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.message);
+    showAlert('Reset link bhej diya! ✉️','success');
+  }catch(e){showAlert(e.message||'Error')}
+  finally{setLoading('forgotBtn',false)}
+}
+
+function handleLogout(){clearToken();showAuth()}
+
+// ── FEED ──
+async function loadFeed(){
+  const token=getToken();
+  try{
+    const res=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    renderFeed(data.posts||[]);
+  }catch(e){document.getElementById('feedList').innerHTML='<div class="empty">Posts load nahi hue 😕</div>'}
+}
+
+function renderFeed(posts){
+  const container=document.getElementById('feedList');
+  if(!posts.length){container.innerHTML='<div class="empty">Koi post nahi — pehla post karo! ✦</div>';return}
+  const myId=getUserId();
+  container.innerHTML=posts.map(p=>{
+    const liked=p.likes&&p.likes.includes(myId);
+    const isOwner=p.user._id===myId;
+    const time=new Date(p.createdAt).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return `<div class="post-card" id="post-${p._id}">
+      <div class="post-header">
+        <div class="post-avatar">${(p.user.name||'U')[0].toUpperCase()}</div>
+        <div><div class="post-name">${p.user.name}</div><div class="post-time">${time}</div></div>
+      </div>
+      <div class="post-content">${p.content}</div>
+      <div class="post-actions">
+        <button class="action-btn ${liked?'liked':''}" onclick="handleLike('${p._id}',this)">
+          ${liked?'♥':'♡'} <span>${p.likes?p.likes.length:0}</span>
+        </button>
+        ${isOwner?`<button class="action-btn delete" onclick="handleDelete('${p._id}')">🗑 Delete</button>`:''}
+      </div>
+    </div>`
+  }).join('');
+}
+
+async function handleCreatePost(){
+  const content=document.getElementById('postContent').value.trim();
+  if(!content)return;
+  const token=getToken();
+  setLoading('postBtn',true);
+  try{
+    const res=await fetch(`${API}/posts`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({content})});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.message);
+    document.getElementById('postContent').value='';
     loadFeed();
-  }
+  }catch(e){alert(e.message)}
+  finally{setLoading('postBtn',false)}
+}
 
-  function showAuth() {
-    document.getElementById('feedSection').classList.remove('active');
-    document.getElementById('authSection').style.display = 'block';
-    switchTab('login');
-  }
+async function handleLike(postId,btn){
+  const token=getToken();
+  try{
+    const res=await fetch(`${API}/posts/${postId}/like`,{method:'PUT',headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    if(!data.success)return;
+    btn.classList.toggle('liked',data.liked);
+    btn.innerHTML=`${data.liked?'♥':'♡'} <span>${data.likes}</span>`;
+  }catch(e){}
+}
 
-  // ── AUTH ──
-  async function handleLogin() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPass').value;
-    if(!email||!password) return showAlert('Sabhi fields bharo');
-    setLoading('loginBtn', true);
-    try {
-      const res = await fetch(`${API}/auth/login`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-      const data = await res.json();
-      if(!data.success) throw new Error(data.message);
-      saveToken(data.token);
-      showFeed(data.user, data.token);
-    } catch(e){showAlert(e.message||'Login failed');}
-    finally{setLoading('loginBtn',false);}
-  }
+async function handleDelete(postId){
+  if(!confirm('Delete karna chahte ho?'))return;
+  const token=getToken();
+  try{
+    const res=await fetch(`${API}/posts/${postId}`,{method:'DELETE',headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    if(data.success)document.getElementById(`post-${postId}`).remove();
+  }catch(e){}
+}
 
-  async function handleSignup() {
-    const name=document.getElementById('signupName').value.trim();
-    const email=document.getElementById('signupEmail').value.trim();
-    const password=document.getElementById('signupPass').value;
-    if(!name||!email||!password) return showAlert('Sabhi fields bharo');
-    setLoading('signupBtn',true);
-    try {
-      const res=await fetch(`${API}/auth/signup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
-      const data=await res.json();
-      if(!data.success) throw new Error(data.errors?data.errors[0].msg:data.message);
-      saveToken(data.token);
-      showFeed(data.user,data.token);
-    } catch(e){showAlert(e.message||'Signup failed');}
-    finally{setLoading('signupBtn',false);}
-  }
-
-  async function handleForgot() {
-    const email=document.getElementById('forgotEmail').value.trim();
-    if(!email) return showAlert('Email daalo');
-    setLoading('forgotBtn',true);
-    try {
-      const res=await fetch(`${API}/auth/forgot-password`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-      const data=await res.json();
-      if(!data.success) throw new Error(data.message);
-      showAlert('Reset link bhej diya! Email check karo ✉️','success');
-    } catch(e){showAlert(e.message||'Error');}
-    finally{setLoading('forgotBtn',false);}
-  }
-
-  async function handleLogout() {
-    clearToken(); showAuth();
-  }
-
-  // ── POSTS ──
-  async function loadFeed() {
-    const token = getToken();
-    try {
-      const res = await fetch(`${API}/posts`, {headers:{Authorization:`Bearer ${token}`}});
-      const data = await res.json();
-      renderFeed(data.posts||[]);
-    } catch(e){
-      document.getElementById('feedList').innerHTML = '<div class="empty-feed">Posts load nahi hue 😕</div>';
-    }
-  }
-
-  function renderFeed(posts) {
-    const container = document.getElementById('feedList');
-    if(!posts.length){container.innerHTML='<div class="empty-feed">Koi post nahi abhi — pehla post karo! ✦</div>';return;}
-    container.innerHTML = posts.map(p => {
-      const myId = getUserId();
-      const liked = p.likes && p.likes.includes(myId);
-      const isOwner = p.user._id === myId;
-      const time = new Date(p.createdAt).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-      return `
-        <div class="post-card" id="post-${p._id}">
-          <div class="post-header">
-            <div class="post-avatar">${(p.user.name||'U')[0].toUpperCase()}</div>
-            <div>
-              <div class="post-name">${p.user.name}</div>
-              <div class="post-time">${time}</div>
-            </div>
-          </div>
-          <div class="post-content">${p.content}</div>
-          <div class="post-actions">
-            <button class="action-btn ${liked?'liked':''}" onclick="handleLike('${p._id}', this)">
-              ${liked?'♥':'♡'} <span>${p.likes?p.likes.length:0}</span>
-            </button>
-            ${isOwner?`<button class="action-btn delete" onclick="handleDelete('${p._id}')">🗑 Delete</button>`:''}
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  function getUserId() {
-    const token = getToken();
-    if(!token) return null;
-    try { return JSON.parse(atob(token.split('.')[1])).id; } catch{return null;}
-  }
-
-  async function handleCreatePost() {
-    const content = document.getElementById('postContent').value.trim();
-    if(!content) return;
-    const token = getToken();
-    setLoading('postBtn', true);
-    try {
-      const res = await fetch(`${API}/posts`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({content})});
-      const data = await res.json();
-      if(!data.success) throw new Error(data.message);
-      document.getElementById('postContent').value = '';
-      loadFeed();
-    } catch(e){alert(e.message);}
-    finally{setLoading('postBtn',false);}
-  }
-
-  async function handleLike(postId, btn) {
-    const token = getToken();
-    try {
-      const res = await fetch(`${API}/posts/${postId}/like`,{method:'PUT',headers:{Authorization:`Bearer ${token}`}});
-      const data = await res.json();
-      if(!data.success) return;
-      btn.classList.toggle('liked', data.liked);
-      btn.innerHTML = `${data.liked?'♥':'♡'} <span>${data.likes}</span>`;
-    } catch(e){}
-  }
-
-  async function handleDelete(postId) {
-    if(!confirm('Post delete karna chahte ho?')) return;
-    const token = getToken();
-    try {
-      const res = await fetch(`${API}/posts/${postId}`,{method:'DELETE',headers:{Authorization:`Bearer ${token}`}});
-      const data = await res.json();
-      if(data.success) document.getElementById(`post-${postId}`).remove();
-    } catch(e){}
-  }
-
-  // Auto login
-  (async()=>{
+// ── SEARCH ──
+let searchTimeout;
+async function handleSearch(query){
+  clearTimeout(searchTimeout);
+  if(!query.trim()){document.getElementById('searchResults').innerHTML='<div class="empty">Kisi ka naam type karo 👆</div>';return}
+  searchTimeout=setTimeout(async()=>{
     const token=getToken();
-    if(!token) return;
-    try {
-      const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+    try{
+      const res=await fetch(`${API}/auth/users?q=${encodeURIComponent(query)}`,{headers:{Authorization:`Bearer ${token}`}});
       const data=await res.json();
-      if(data.success) showFeed(data.user,token);
-      else clearToken();
-    } catch{clearToken();}
-  })();
+      if(!data.success||!data.users.length){document.getElementById('searchResults').innerHTML='<div class="empty">Koi nahi mila 😕</div>';return}
+      document.getElementById('searchResults').innerHTML=data.users.map(u=>`
+        <div class="user-card">
+          <div class="post-avatar">${(u.name||'U')[0].toUpperCase()}</div>
+          <div class="user-info"><h4>${u.name}</h4><p>${u.email}</p></div>
+        </div>`).join('');
+    }catch(e){document.getElementById('searchResults').innerHTML='<div class="empty">Search nahi ho paya 😕</div>'}
+  },400);
+}
+
+// ── PROFILE ──
+async function loadProfile(){
+  const token=getToken();
+  try{
+    const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    if(!data.success)return;
+    const u=data.user;
+    document.getElementById('profileAvatar').textContent=(u.name||'U')[0].toUpperCase();
+    document.getElementById('profileName').textContent=u.name;
+    document.getElementById('profileEmail').textContent=u.email;
+
+    // My posts
+    const postsRes=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${token}`}});
+    const postsData=await postsRes.json();
+    const myPosts=(postsData.posts||[]).filter(p=>p.user._id===getUserId());
+    document.getElementById('postCount').textContent=myPosts.length;
+    const totalLikes=myPosts.reduce((a,p)=>a+(p.likes?p.likes.length:0),0);
+    document.getElementById('likeCount').textContent=totalLikes;
+
+    if(!myPosts.length){document.getElementById('myPosts').innerHTML='<div class="empty">Abhi koi post nahi ✦</div>';return}
+    document.getElementById('myPosts').innerHTML=myPosts.map(p=>`
+      <div class="post-card">
+        <div class="post-content">${p.content}</div>
+        <div class="post-actions">
+          <button class="action-btn liked">♥ ${p.likes?p.likes.length:0}</button>
+          <button class="action-btn delete" onclick="handleDelete('${p._id}')">🗑 Delete</button>
+        </div>
+      </div>`).join('');
+  }catch(e){}
+}
+
+// ── AUTO LOGIN ──
+(async()=>{
+  const token=getToken();
+  if(!token)return;
+  try{
+    const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    if(data.success)showApp(data.user,token);
+    else clearToken();
+  }catch{clearToken()}
+})();
 </script>
 </body>
 </html>
