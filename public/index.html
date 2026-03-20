@@ -889,7 +889,7 @@ function renderFeed(posts){
       <div class="post-header">
         <div class="post-header-left">
           <div class="post-avatar">${avatarHtml}</div>
-          <div><div class="post-name">${p.user.name}</div><div class="post-time">${time}${p.edited?' (edited)':''}</div></div>
+          <div><div class="post-name">${p.user.name}${p.user.isVerifiedBadge?'<span style="background:#7c6cfc;color:#fff;border-radius:50%;width:14px;height:14px;font-size:9px;display:inline-flex;align-items:center;justify-content:center;margin-left:4px">✓</span>':''}</div><div class="post-time">${time}${p.edited?' (edited)':''}</div></div>
         </div>
       </div>
       ${p.image?`<img class="post-img" src="${p.image}" loading="lazy"/>`:''}
@@ -1178,7 +1178,7 @@ async function loadProfile(){
     const photoEl=document.getElementById('profilePhoto');
     if(u.profilePhoto)photoEl.innerHTML=`<img src="${u.profilePhoto}"/><div class="profile-photo-edit">✏️</div>`;
     else document.getElementById('profilePhotoText').textContent=(u.name||'U')[0].toUpperCase();
-    document.getElementById('profileName').textContent=u.name;
+    document.getElementById('profileName').innerHTML=u.name+(u.isVerifiedBadge?'<span style="background:#7c6cfc;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;margin-left:6px">✓</span>':'');
     document.getElementById('profileBio').textContent=u.bio||'Bio add karo ✦';
     document.getElementById('profileEmail').textContent=u.email;
     const pr=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${getToken()}`}});

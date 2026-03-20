@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isVerifiedBadge: {
+      type: Boolean,
+      default: false,
+    },
     bio: {
       type: String,
       default: '',

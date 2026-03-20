@@ -73,5 +73,6 @@ router.put('/posts/:id/save', protect, savePost);
 router.get('/posts/saved', protect, getSavedPosts);
 router.put('/block/:id', protect, blockUser);
 router.get('/suggestions', protect, require('../controllers/auth.controller').getSuggestions);
+router.put('/verify/:id', protect, require('../controllers/auth.controller').toggleVerification);
 
 module.exports = router;

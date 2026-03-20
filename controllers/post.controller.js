@@ -11,7 +11,7 @@ exports.createPost = async (req, res, next) => {
       music: req.body.music || null,
       musicName: req.body.musicName || null,
     });
-    await post.populate('user', 'name email');
+    await post.populate('user', 'name email isVerifiedBadge');
     res.status(201).json({ success: true, post });
   } catch (err) { next(err); }
 };
@@ -20,7 +20,7 @@ exports.createPost = async (req, res, next) => {
 exports.getFeed = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'name email profilePhoto')
+      .populate('user', 'name email profilePhoto isVerifiedBadge')
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, posts });
   } catch (err) { next(err); }
@@ -72,7 +72,7 @@ exports.editPost = async (req, res, next) => {
 exports.getExplore = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'name email profilePhoto')
+      .populate('user', 'name email profilePhoto isVerifiedBadge')
       .sort({ 'likes': -1, createdAt: -1 })
       .limit(20);
     res.status(200).json({ success: true, posts });

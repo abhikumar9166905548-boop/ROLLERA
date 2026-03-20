@@ -351,3 +351,23 @@ exports.getSuggestions = async (req, res, next) => {
     res.status(200).json({ success: true, suggestions });
   } catch (err) { next(err); }
 };
+// ─────────────────────────────────────────────
+// @route   PUT /api/auth/verify/:id
+// @desc    Give/Remove verification badge (admin only)
+// @access  Private
+// ─────────────────────────────────────────────
+exports.toggleVerification = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    user.isVerifiedBadge = !user.isVerifiedBadge;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      isVerifiedBadge: user.isVerifiedBadge,
+      message: user.isVerifiedBadge ? 'Verification badge diya gaya ✓' : 'Badge remove ho gaya'
+    });
+  } catch (err) { next(err); }
+};
