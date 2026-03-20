@@ -30,6 +30,19 @@ const postSchema = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    reactions: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        type: { type: String, enum: ['❤️', '😂', '🔥', '😮', '😢', '👏'] },
+      }
+    ],
+    reports: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        reason: String,
+        createdAt: { type: Date, default: Date.now },
+      }
+    ],
   },
   { timestamps: true }
 );

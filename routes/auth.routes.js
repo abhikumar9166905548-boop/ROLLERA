@@ -13,6 +13,10 @@ const {
   searchUsers,
   followUser,
   getNotifications,
+  updateProfile,
+  savePost,
+  getSavedPosts,
+  blockUser,
 } = require('../controllers/auth.controller');
 
 const { protect } = require('../middleware/auth.middleware');
@@ -64,7 +68,9 @@ router.put('/reset-password/:token',
 router.get('/users', protect, searchUsers);
 router.put('/follow/:id', protect, followUser);
 router.get('/notifications', protect, getNotifications);
-router.put('/profile/update', protect, require('../controllers/auth.controller').updateProfile);
-router.put('/posts/:id/save', protect, require('../controllers/auth.controller').savePost);
-router.get('/posts/saved', protect, require('../controllers/auth.controller').getSavedPosts);
+router.put('/profile/update', protect, updateProfile);
+router.put('/posts/:id/save', protect, savePost);
+router.get('/posts/saved', protect, getSavedPosts);
+router.put('/block/:id', protect, blockUser);
+
 module.exports = router;

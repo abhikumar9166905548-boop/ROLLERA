@@ -18,7 +18,7 @@ exports.createPost = async (req, res, next) => {
 exports.getFeed = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'name email')
+      .populate('user', 'name email profilePhoto')
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, posts });
   } catch (err) { next(err); }
@@ -70,9 +70,44 @@ exports.editPost = async (req, res, next) => {
 exports.getExplore = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'name email')
+      .populate('user', 'name email profilePhoto')
       .sort({ 'likes': -1, createdAt: -1 })
       .limit(20);
     res.status(200).json({ success: true, posts });
+  } catch (err) { next(err); }
+};
+
+// React to post
+exports.reactPost = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+    const { type } = req.body;
+    const existingReaction = post.reactions.find(r => r.user.toString() === req.user.id);
+    if (existingReaction) {
+      if (existingReaction.type === type) {
+        post.reactions = post.reactions.filter(r => r.user.toString() !== req.user.id);
+      } else {
+        existingReaction.type = type;
+      }
+    } else {
+      post.reactions.push({ user: req.user.id, type });
+    }
+    await post.save();
+    res.status(200).json({ success: true, reactions: post.reactions });
+  } catch (err) { next(err); }
+};
+
+// Report post
+exports.reportPost = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+    const alreadyReported = post.reports.find(r => r.user.toString() === req.user.id);
+    if (alreadyReported)
+      return res.status(400).json({ success: false, message: 'Aap pehle se report kar chuke hain' });
+    post.reports.push({ user: req.user.id, reason: req.body.reason || 'Inappropriate content' });
+    await post.save();
+    res.status(200).json({ success: true, message: 'Post report ho gaya' });
   } catch (err) { next(err); }
 };

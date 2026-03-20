@@ -44,6 +44,19 @@ const userSchema = new mongoose.Schema(
         ref: 'Post',
       }
     ],
+    blockedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }
+    ],
+    reportedPosts: [
+      {
+        post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+        reason: String,
+        createdAt: { type: Date, default: Date.now },
+      }
+    ],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     notifications: [
@@ -62,7 +75,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(12);
@@ -70,12 +82,10 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare entered password with hashed password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Generate password reset token
 userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
   this.resetPasswordToken = crypto

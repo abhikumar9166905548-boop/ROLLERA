@@ -305,3 +305,25 @@ exports.getSavedPosts = async (req, res, next) => {
     res.status(200).json({ success: true, posts: user.savedPosts });
   } catch (err) { next(err); }
 };
+// ─────────────────────────────────────────────
+// @route   PUT /api/auth/block/:id
+// @desc    Block / Unblock user
+// @access  Private
+// ─────────────────────────────────────────────
+exports.blockUser = async (req, res, next) => {
+  try {
+    if (req.params.id === req.user.id)
+      return res.status(400).json({ success: false, message: 'Aap khud ko block nahi kar sakte' });
+
+    const currentUser = await User.findById(req.user.id);
+    const isBlocked = currentUser.blockedUsers.includes(req.params.id);
+
+    if (isBlocked) {
+      await User.findByIdAndUpdate(req.user.id, { $pull: { blockedUsers: req.params.id } });
+      res.status(200).json({ success: true, blocked: false, message: 'Unblock ho gaya' });
+    } else {
+      await User.findByIdAndUpdate(req.user.id, { $push: { blockedUsers: req.params.id } });
+      res.status(200).json({ success: true, blocked: true, message: 'Block ho gaya' });
+    }
+  } catch (err) { next(err); }
+};
