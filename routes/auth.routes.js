@@ -72,5 +72,6 @@ router.put('/profile/update', protect, updateProfile);
 router.put('/posts/:id/save', protect, savePost);
 router.get('/posts/saved', protect, getSavedPosts);
 router.put('/block/:id', protect, blockUser);
+router.get('/suggestions', protect, require('../controllers/auth.controller').getSuggestions);
 
 module.exports = router;

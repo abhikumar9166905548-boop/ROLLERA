@@ -20,6 +20,14 @@ const postSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    music: {
+      type: String,
+      default: null,
+    },
+    musicName: {
+      type: String,
+      default: null,
+    },
     edited: {
       type: Boolean,
       default: false,

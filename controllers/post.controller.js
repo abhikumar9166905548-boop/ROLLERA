@@ -8,6 +8,8 @@ exports.createPost = async (req, res, next) => {
       content: req.body.content || '',
       image: req.body.image || null,
       video: req.body.video || null,
+      music: req.body.music || null,
+      musicName: req.body.musicName || null,
     });
     await post.populate('user', 'name email');
     res.status(201).json({ success: true, post });

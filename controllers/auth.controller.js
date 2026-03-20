@@ -327,3 +327,27 @@ exports.blockUser = async (req, res, next) => {
     }
   } catch (err) { next(err); }
 };
+// ─────────────────────────────────────────────
+// @route   GET /api/auth/suggestions
+// @desc    Get friend suggestions
+// @access  Private
+// ─────────────────────────────────────────────
+exports.getSuggestions = async (req, res, next) => {
+  try {
+    const currentUser = await User.findById(req.user.id);
+    const following = currentUser.following || [];
+    const blocked = currentUser.blockedUsers || [];
+
+    // Find users not followed and not blocked
+    const suggestions = await User.find({
+      _id: {
+        $ne: req.user.id,
+        $nin: [...following, ...blocked]
+      }
+    })
+    .select('name profilePhoto bio followers')
+    .limit(10);
+
+    res.status(200).json({ success: true, suggestions });
+  } catch (err) { next(err); }
+};
