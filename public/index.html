@@ -1200,10 +1200,16 @@ async function handleSearch(q){
       const res=await fetch(`${API}/auth/users?q=${encodeURIComponent(q)}`,{headers:{Authorization:`Bearer ${getToken()}`}});
       const data=await res.json();
       if(!data.success||!data.users.length){document.getElementById('searchResults').innerHTML='<div class="empty">Koi nahi mila 😕</div>';return}
-      document.getElementById('searchResults').innerHTML=data.users.map(u=>`
+      const seen=new Set();
+      const unique=data.users.filter(u=>{
+        if(seen.has(u.email))return false;
+        seen.add(u.email);
+        return true;
+      });
+      document.getElementById('searchResults').innerHTML=unique.map(u=>`
         <div class="user-card">
-          <div class="user-card-left">
-            <div class="post-avatar">${(u.name||'U')[0].toUpperCase()}</div>
+          <div class="user-card-left" onclick="openUserProfile('${u._id}','${u.name}')">
+            <div class="post-avatar">${u.profilePhoto?`<img src="${u.profilePhoto}"/>`:(u.name||'U')[0].toUpperCase()}</div>
             <div class="user-info"><h4>${u.name}</h4><p>${u.email}</p></div>
           </div>
           <div style="display:flex;gap:8px">
