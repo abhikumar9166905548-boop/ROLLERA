@@ -106,8 +106,6 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
-    if (!user.isVerified)
-      return res.status(401).json({ success: false, message: 'Pehle email verify karo!' });
     sendTokenResponse(user, 200, res, 'Login successful');
   } catch (err) { next(err); }
 };
