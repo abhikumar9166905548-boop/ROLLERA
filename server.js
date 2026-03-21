@@ -19,7 +19,17 @@ app.set('trust proxy', 1);
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+// ✅ FIX: Cache band kiya
+app.use(express.static('public', {
+  etag: false,
+  maxAge: 0,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+}));
 
 // Routes
 app.use('/api/auth', require('./routes/auth.routes'));
@@ -27,8 +37,9 @@ app.use('/api/posts', require('./routes/post.routes'));
 app.use('/api/stories', require('./routes/story.routes'));
 app.use('/api/messages', require('./routes/message.routes'));
 
-// Health check
+// Serve index.html
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(__dirname + '/public/index.html');
 });
 
