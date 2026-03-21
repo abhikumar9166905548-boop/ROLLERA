@@ -965,6 +965,7 @@ function renderFeed(posts){
       </div>
     </div>`
   }).join('');
+  setTimeout(initVideoAutoPlay, 100);
 }
 
 async function handleLike(postId,btn){
@@ -1243,6 +1244,24 @@ async function loadProfile(){
         </div>
       </div>`).join('');
   }catch(e){}
+}
+// AUTO PLAY VIDEO ON SCROLL
+function initVideoAutoPlay(){
+  const videos=document.querySelectorAll('.post-video');
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const video=entry.target;
+      if(entry.isIntersecting&&entry.intersectionRatio>=0.6){
+        video.currentTime=0;
+        video.play().catch(()=>{});
+        video.muted=true;
+      } else {
+        video.pause();
+        video.currentTime=0;
+      }
+    });
+  },{threshold:0.6});
+  videos.forEach(v=>observer.observe(v));
 }
 
 // AUTO LOGIN
