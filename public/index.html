@@ -1083,12 +1083,18 @@ async function loadExplore(){
     const data=await res.json();
     const grid=document.getElementById('exploreGrid');
     if(!data.posts||!data.posts.length){grid.innerHTML='<div class="empty" style="grid-column:span 2">Koi post nahi</div>';return}
-    grid.innerHTML=data.posts.map(p=>`
-      <div class="explore-item">
+    
+    // Trending = likes ke basis pe sort karo
+    const trending = (data.posts).sort((a,b)=>(b.likes?.length||0)-(a.likes?.length||0));
+    
+    grid.innerHTML=trending.map(p=>`
+      <div class="explore-item" onclick="openExplorePost('${p._id}')">
         ${p.image?`<img src="${p.image}" loading="lazy"/>`:''}
-        ${p.video?`<video src="${p.video}"></video>`:''}
+        ${p.video?`<video src="${p.video}" muted playsinline></video>`:''}
         ${!p.image&&!p.video?`<div style="padding:12px;font-size:13px">${p.content}</div>`:''}
-        <div class="explore-item-overlay"><div class="explore-likes">❤️ ${p.likes?p.likes.length:0}</div></div>
+        <div class="explore-item-overlay">
+          <div class="explore-likes">❤️ ${p.likes?p.likes.length:0} &nbsp; 🔥 Trending</div>
+        </div>
       </div>`).join('');
   }catch(e){}
 }
@@ -1320,6 +1326,7 @@ function openFullscreen(video){
     else{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
   }catch{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
 })();
+
 async function openUserProfile(userId, userName) {
   // Apni profile ho toh profile page kholo
   if (userId === getUserId()) {
@@ -1369,6 +1376,38 @@ async function openUserProfile(userId, userName) {
       </div>
     `;
   } catch(e) {}
+}
+
+async function openExplorePost(postId) {
+  const res = await fetch(`${API}/posts`, {headers:{Authorization:`Bearer ${getToken()}`}});
+  const data = await res.json();
+  const p = (data.posts||[]).find(x => x._id === postId);
+  if(!p) return;
+
+  const sheet = document.createElement('div');
+  sheet.className = 'sheet-overlay show';
+  sheet.innerHTML = `
+    <div class="sheet" style="padding-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer" onclick="openUserProfile('${p.user._id}','${p.user.name}')">
+        <div class="post-avatar">${p.user.profilePhoto?`<img src="${p.user.profilePhoto}"/>`:(p.user.name||'U')[0].toUpperCase()}</div>
+        <div>
+          <div style="font-weight:700;font-size:14px">${p.user.name}</div>
+          <div style="color:var(--muted);font-size:11px">${new Date(p.createdAt).toLocaleString('en-IN',{day:'numeric',month:'short'})}</div>
+        </div>
+      </div>
+      ${p.image?`<img src="${p.image}" style="width:100%;border-radius:14px;max-height:400px;object-fit:cover;display:block;margin-bottom:10px"/>`:''}
+      ${p.video?`<video src="${p.video}" controls playsinline style="width:100%;border-radius:14px;max-height:400px;background:#000;display:block;margin-bottom:10px"></video>`:''}
+      ${p.content?`<div style="font-size:14px;line-height:1.6;margin-bottom:10px">${p.content}</div>`:''}
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="action-btn ${p.likes?.includes(getUserId())?'liked':''}" onclick="handleLike('${p._id}',this)">
+          ${p.likes?.includes(getUserId())?'❤️':'🤍'} <span>${p.likes?.length||0}</span>
+        </button>
+        <span style="color:var(--muted);font-size:13px">🔥 Trending</span>
+      </div>
+    </div>
+  `;
+  sheet.onclick = (e) => { if(e.target===sheet) sheet.remove(); };
+  document.body.appendChild(sheet);
 }
 </script>
 </body>
