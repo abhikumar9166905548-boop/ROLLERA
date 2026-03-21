@@ -40,7 +40,6 @@
     .page{display:none;position:relative;z-index:1;animation:fadeUp 0.3s ease}
     .page.active{display:block}
     @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    /* AUTH - IMPROVED */
     #authPage{display:none;min-height:100vh;position:relative;z-index:1;overflow:hidden}
     .auth-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,108,252,0.15),rgba(192,132,252,0.1));z-index:0}
     .auth-content{position:relative;z-index:1;padding:20px 16px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
@@ -71,8 +70,6 @@
     .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
     .link-row{text-align:center;margin-top:16px;font-size:13px;color:var(--muted)}
     .link-row a{color:var(--accent2);text-decoration:none;cursor:pointer;font-weight:500}
-    .divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px}
-    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
     .alert{padding:10px 13px;border-radius:10px;font-size:13px;margin-bottom:13px;display:none;align-items:center;gap:8px}
     .alert.show{display:flex}
     .alert.error{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:var(--error)}
@@ -98,7 +95,6 @@
     /* FEED */
     #homePage{padding:0}
     .feed-wrap{padding:0 16px 12px}
-    /* SUGGESTIONS */
     .suggestions-wrap{padding:0 16px 12px}
     .suggestions-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px}
     .suggestions-scroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
@@ -131,6 +127,20 @@
     .music-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .music-sub{font-size:10px;color:var(--muted)}
     .music-play-btn{width:28px;height:28px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    /* GLOBAL MINI MUSIC PLAYER */
+    .mini-player{position:fixed;bottom:70px;left:0;right:0;max-width:480px;margin:0 auto;background:rgba(17,17,24,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(124,108,252,0.3);padding:10px 16px;display:none;align-items:center;gap:12px;z-index:99;transition:all 0.3s}
+    .mini-player.show{display:flex}
+    body.light .mini-player{background:rgba(245,245,255,0.97)}
+    .mini-player-disc{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;animation:spin-slow 4s linear infinite paused;flex-shrink:0}
+    .mini-player-disc.playing{animation-play-state:running}
+    .mini-player-info{flex:1;min-width:0}
+    .mini-player-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mini-player-sub{font-size:10px;color:var(--muted)}
+    .mini-player-controls{display:flex;gap:8px;align-items:center}
+    .mini-ctrl-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+    .mini-ctrl-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+    .mini-player-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.1)}
+    .mini-player-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width 0.5s linear}
     .post-actions{display:flex;gap:8px;padding:8px 14px 14px;flex-wrap:wrap}
     .action-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;gap:5px}
     .action-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -206,14 +216,40 @@
     .chat-input-wrap{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:var(--surface)}
     .chat-input-wrap input{flex:1;padding:10px 14px;border-radius:12px;font-size:14px}
     .chat-send{padding:10px 16px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#fff;font-size:14px;cursor:pointer;font-weight:600}
+    /* EXPLORE */
     #explorePage{padding:0}
     .explore-wrap{padding:12px 16px}
+    .explore-tabs{display:flex;gap:8px;margin-bottom:14px}
+    .explore-tab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s}
+    .explore-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
     .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
     .explore-item{border-radius:14px;overflow:hidden;aspect-ratio:1;background:var(--surface);border:1px solid var(--border);cursor:pointer;position:relative}
     .explore-item img,.explore-item video{width:100%;height:100%;object-fit:cover}
-    .explore-item-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:flex-end;padding:8px;opacity:0;transition:opacity 0.2s}
+    .explore-item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);display:flex;align-items:flex-end;padding:8px;opacity:0;transition:opacity 0.2s}
     .explore-item:hover .explore-item-overlay{opacity:1}
     .explore-likes{font-size:12px;color:#fff}
+    /* REELS */
+    #reelsPage{padding:0;height:calc(100vh - 130px);overflow:hidden}
+    .reels-container{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+    .reels-container::-webkit-scrollbar{display:none}
+    .reel-item{height:calc(100vh - 130px);scroll-snap-align:start;position:relative;background:#000;display:flex;align-items:center;justify-content:center}
+    .reel-video{width:100%;height:100%;object-fit:cover}
+    .reel-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 50%)}
+    .reel-actions{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;gap:16px;align-items:center}
+    .reel-action-btn{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;cursor:pointer;background:none;border:none}
+    .reel-action-btn span:first-child{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.2s}
+    .reel-action-btn:active span:first-child{transform:scale(0.9)}
+    .reel-action-count{font-size:12px;font-weight:600}
+    .reel-info{position:absolute;bottom:20px;left:12px;right:70px;color:#fff}
+    .reel-user{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+    .reel-user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid #fff;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+    .reel-user-avatar img{width:100%;height:100%;object-fit:cover}
+    .reel-username{font-size:14px;font-weight:700}
+    .reel-caption{font-size:13px;line-height:1.5;opacity:0.9}
+    .reel-music-bar{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;opacity:0.8}
+    .reel-music-disc{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));animation:spin-slow 3s linear infinite}
+    .reel-loading{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:14px}
+    /* SEARCH */
     #searchPage{padding:0}
     .search-wrap{padding:12px 16px}
     .search-bar{position:relative;margin-bottom:16px}
@@ -265,15 +301,13 @@
   </style>
 </head>
 <body>
-<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-logo">Rollera</div>
   <div class="splash-sub">Share your world ✦</div>
 </div>
-
 <div class="blobs"><div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div></div>
 
-<!-- AUTH PAGE - IMPROVED -->
+<!-- AUTH PAGE -->
 <div id="authPage">
   <div class="auth-bg"></div>
   <div class="auth-content">
@@ -284,7 +318,7 @@
     </div>
     <div class="auth-features">
       <div class="auth-feature"><span>📸</span><span>Photos</span></div>
-      <div class="auth-feature"><span>🎬</span><span>Videos</span></div>
+      <div class="auth-feature"><span>🎬</span><span>Reels</span></div>
       <div class="auth-feature"><span>🎵</span><span>Music</span></div>
       <div class="auth-feature"><span>💬</span><span>Chat</span></div>
     </div>
@@ -308,23 +342,14 @@
         <div class="field"><label>Password</label><div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="signupPass" placeholder="Min 6 characters"/></div></div>
         <button class="btn" onclick="handleSignup()" id="signupBtn">Create Account ✦</button>
       </div>
-      <!-- OTP PANEL -->
-<div class="form-panel" id="otpPanel">
-  <h2>OTP Verify karo ✦</h2>
-  <p class="subtitle">Email pe 6 digit OTP bheja gaya hai</p>
-  <p style="font-size:13px;color:var(--accent);margin-bottom:16px;text-align:center" id="otpEmailShow"></p>
-  <div class="field">
-    <label>OTP Code</label>
-    <div class="input-wrap">
-      <span class="input-icon">🔐</span>
-      <input type="text" id="otpInput" placeholder="000000" maxlength="6" style="letter-spacing:8px;text-align:center;font-size:20px;font-weight:700"/>
-    </div>
-  </div>
-  <button class="btn" onclick="handleVerifyOtp()" id="otpBtn">Verify karo ✦</button>
-  <div class="link-row">
-    <a onclick="handleResendOtp()">OTP nahi aaya? Resend karo</a>
-  </div>
-</div>
+      <div class="form-panel" id="otpPanel">
+        <h2>OTP Verify karo ✦</h2>
+        <p class="subtitle">Email pe 6 digit OTP bheja gaya hai</p>
+        <p style="font-size:13px;color:var(--accent);margin-bottom:16px;text-align:center" id="otpEmailShow"></p>
+        <div class="field"><label>OTP Code</label><div class="input-wrap"><span class="input-icon">🔐</span><input type="text" id="otpInput" placeholder="000000" maxlength="6" style="letter-spacing:8px;text-align:center;font-size:20px;font-weight:700"/></div></div>
+        <button class="btn" onclick="handleVerifyOtp()" id="otpBtn">Verify karo ✦</button>
+        <div class="link-row"><a onclick="handleResendOtp()">OTP nahi aaya? Resend karo</a></div>
+      </div>
       <div class="form-panel" id="forgotPanel">
         <h2>Reset password</h2><p class="subtitle">Email pe reset link bhejenge</p>
         <div class="field"><label>Email</label><div class="input-wrap"><span class="input-icon">📧</span><input type="email" id="forgotEmail" placeholder="you@example.com"/></div></div>
@@ -364,10 +389,22 @@
     <div class="feed-wrap"><div id="feedList"><div class="empty">Loading...</div></div></div>
   </div>
 
+  <!-- REELS PAGE -->
+  <div class="page" id="reelsPage">
+    <div class="reels-container" id="reelsContainer">
+      <div class="reel-loading">🎬 Reels load ho rahe hain...</div>
+    </div>
+  </div>
+
   <!-- EXPLORE -->
   <div class="page" id="explorePage">
     <div class="explore-wrap">
       <div class="section-title">Explore ✦</div>
+      <div class="explore-tabs">
+        <div class="explore-tab active" onclick="switchExploreTab('trending',this)">🔥 Trending</div>
+        <div class="explore-tab" onclick="switchExploreTab('photos',this)">📸 Photos</div>
+        <div class="explore-tab" onclick="switchExploreTab('videos',this)">🎬 Videos</div>
+      </div>
       <div id="exploreGrid" class="explore-grid"></div>
     </div>
   </div>
@@ -423,6 +460,20 @@
   </div>
 
   <button class="fab" onclick="openCreate()">+</button>
+
+  <!-- GLOBAL MINI MUSIC PLAYER -->
+  <div class="mini-player" id="miniPlayer">
+    <div class="mini-player-disc" id="miniDisc">🎵</div>
+    <div class="mini-player-info">
+      <div class="mini-player-name" id="miniName">No music</div>
+      <div class="mini-player-sub">Now Playing</div>
+    </div>
+    <div class="mini-player-controls">
+      <button class="mini-ctrl-btn" onclick="miniPlayerPlayPause()" id="miniPlayBtn">⏸</button>
+      <button class="mini-ctrl-btn" onclick="miniPlayerClose()">✕</button>
+    </div>
+    <div class="mini-player-progress"><div class="mini-player-progress-bar" id="miniProgressBar"></div></div>
+  </div>
 
   <!-- CREATE POST -->
   <div class="sheet-overlay" id="createOverlay" onclick="closeSheetOutside(event,'createOverlay',closeCreate)">
@@ -525,6 +576,10 @@
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </div>
+    <div class="nav-item" onclick="showPage('reels')" id="nav-reels">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+      <span>Reels</span>
+    </div>
     <div class="nav-item" onclick="showPage('explore')" id="nav-explore">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <span>Explore</span>
@@ -532,10 +587,6 @@
     <div class="nav-item" onclick="showPage('search')" id="nav-search">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       <span>Search</span>
-    </div>
-    <div class="nav-item" onclick="showPage('dm')" id="nav-dm">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      <span>DM</span>
     </div>
     <div class="nav-item" onclick="showPage('profile')" id="nav-profile">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -551,6 +602,7 @@ const PRESET='rollera_preset';
 let currentUser=null,isDark=true,currentChatUser=null,editingPostId=null;
 let mediaType='image',allPosts=[],deferredPrompt=null,activeHashtag=null,socket=null;
 let currentAudio=null,currentMusicBtn=null,currentMusicIcon=null,postMusicUrl=null,postMusicName=null;
+let currentExplorePosts=[];
 
 // SPLASH
 setTimeout(()=>{
@@ -587,7 +639,7 @@ function switchTab(tab){
   if(tab==='login'){tabs[0].classList.add('active');tabs[1].classList.remove('active')}
   else if(tab==='signup'){tabs[1].classList.add('active');tabs[0].classList.remove('active')}
   else tabs.forEach(t=>t.classList.remove('active'));
- document.getElementById('tabBar').style.display=(tab==='forgot'||tab==='otp')?'none':'flex';
+  document.getElementById('tabBar').style.display=(tab==='forgot'||tab==='otp')?'none':'flex';
 }
 function toggleTheme(){
   isDark=!isDark;document.body.classList.toggle('light',!isDark);
@@ -602,11 +654,84 @@ function showPage(page){
   if(page==='home'){loadFeed();loadStories();loadSuggestions()}
   if(page==='profile')loadProfile();
   if(page==='explore')loadExplore();
+  if(page==='reels')loadReels();
   if(page==='dm')loadInbox();
 }
 function closeSheetOutside(e,id,fn){if(e.target===document.getElementById(id))fn()}
 
-// SOCKET
+// ===================== MINI MUSIC PLAYER =====================
+function showMiniPlayer(audioUrl, name){
+  document.getElementById('miniName').textContent=name||'Music';
+  document.getElementById('miniPlayer').classList.add('show');
+  document.getElementById('miniDisc').classList.add('playing');
+  document.getElementById('miniPlayBtn').textContent='⏸';
+  updateMiniProgress();
+}
+function hideMiniPlayer(){
+  document.getElementById('miniPlayer').classList.remove('show');
+  document.getElementById('miniDisc').classList.remove('playing');
+}
+function miniPlayerPlayPause(){
+  if(!currentAudio)return;
+  if(currentAudio.paused){
+    currentAudio.play();
+    document.getElementById('miniPlayBtn').textContent='⏸';
+    document.getElementById('miniDisc').classList.add('playing');
+  } else {
+    currentAudio.pause();
+    document.getElementById('miniPlayBtn').textContent='▶';
+    document.getElementById('miniDisc').classList.remove('playing');
+  }
+}
+function miniPlayerClose(){
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  if(currentMusicBtn)currentMusicBtn.textContent='▶';
+  if(currentMusicIcon)currentMusicIcon.classList.remove('playing');
+  hideMiniPlayer();
+  currentMusicBtn=null;currentMusicIcon=null;
+}
+function updateMiniProgress(){
+  if(!currentAudio||currentAudio.paused)return;
+  if(currentAudio.duration){
+    const pct=(currentAudio.currentTime/currentAudio.duration)*100;
+    document.getElementById('miniProgressBar').style.width=pct+'%';
+  }
+  requestAnimationFrame(updateMiniProgress);
+}
+
+function toggleMusic(audioUrl,name,btn,iconEl){
+  if(currentAudio&&currentMusicBtn&&currentMusicBtn!==btn){
+    currentAudio.pause();currentAudio=null;
+    currentMusicBtn.textContent='▶';
+    if(currentMusicIcon)currentMusicIcon.classList.remove('playing');
+  }
+  if(!currentAudio||currentAudio.src!==audioUrl){
+    currentAudio=new Audio(audioUrl);
+    currentAudio.onended=()=>{
+      btn.textContent='▶';
+      if(iconEl)iconEl.classList.remove('playing');
+      hideMiniPlayer();
+    };
+    currentAudio.play();
+    btn.textContent='⏸';
+    if(iconEl)iconEl.classList.add('playing');
+    currentMusicBtn=btn;currentMusicIcon=iconEl;
+    showMiniPlayer(audioUrl,name);
+  } else if(currentAudio.paused){
+    currentAudio.play();btn.textContent='⏸';
+    if(iconEl)iconEl.classList.add('playing');
+    document.getElementById('miniPlayBtn').textContent='⏸';
+    document.getElementById('miniDisc').classList.add('playing');
+    updateMiniProgress();
+  } else {
+    currentAudio.pause();btn.textContent='▶';
+    if(iconEl)iconEl.classList.remove('playing');
+    document.getElementById('miniPlayBtn').textContent='▶';
+    document.getElementById('miniDisc').classList.remove('playing');
+  }
+}
+
+// ===================== SOCKET =====================
 function initSocket(userId){
   try{
     socket=io('https://rollera.onrender.com');
@@ -651,7 +776,7 @@ function showAuth(){
   localStorage.clear();switchTab('login');
 }
 
-// AUTH
+// ===================== AUTH =====================
 async function handleLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const password=document.getElementById('loginPass').value;
@@ -675,14 +800,12 @@ async function handleSignup(){
     const res=await fetch(`${API}/auth/signup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
     const data=await res.json();
     if(!data.success)throw new Error(data.errors?data.errors[0].msg:data.message);
-    // Show OTP panel
     window._pendingEmail=email;
     document.getElementById('otpEmailShow').textContent=email;
     switchTab('otp');
   }catch(e){showAlert(e.message||'Signup failed')}
   finally{setLoading('signupBtn',false)}
 }
-
 async function handleVerifyOtp(){
   const otp=document.getElementById('otpInput').value.trim();
   if(!otp||otp.length!==6)return showAlert('6 digit OTP daalo');
@@ -695,7 +818,6 @@ async function handleVerifyOtp(){
   }catch(e){showAlert(e.message||'OTP verify failed')}
   finally{setLoading('otpBtn',false)}
 }
-
 async function handleResendOtp(){
   try{
     const res=await fetch(`${API}/auth/resend-otp`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:window._pendingEmail})});
@@ -718,14 +840,14 @@ async function handleForgot(){
 }
 function handleLogout(){showAuth()}
 
-// UPLOAD
+// ===================== UPLOAD =====================
 async function uploadToCloudinary(file,type='image'){
   const fd=new FormData();fd.append('file',file);fd.append('upload_preset',PRESET);
   const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/${type}/upload`,{method:'POST',body:fd});
   const d=await r.json();return d.secure_url;
 }
 
-// PROFILE PHOTO
+// ===================== PROFILE =====================
 async function handleProfilePhoto(input){
   const file=input.files[0];if(!file)return;
   try{
@@ -751,7 +873,7 @@ async function submitEditProfile(){
   finally{setLoading('editProfileBtn',false)}
 }
 
-// HASHTAGS
+// ===================== HASHTAGS =====================
 function extractHashtags(text){return[...new Set(text.match(/#\w+/g)||[])]}
 function renderHashtagsInContent(text){return text.replace(/#(\w+)/g,'<span class="hashtag" onclick="filterByHashtag(\'#$1\',null)">#$1</span>')}
 function updateHashtagBar(posts){
@@ -765,7 +887,7 @@ function filterByHashtag(tag,el){
   renderFeed(tag?allPosts.filter(p=>(p.content||'').includes(tag)):allPosts);
 }
 
-// MUSIC
+// ===================== MUSIC PICK =====================
 function handleMusicPick(input){
   const file=input.files[0];if(!file)return;
   postMusicName=file.name.replace(/\.[^/.]+$/,'');
@@ -778,25 +900,7 @@ function handleMusicPick(input){
   reader.readAsDataURL(file);
 }
 
-function toggleMusic(audioUrl,name,btn,iconEl){
-  if(currentAudio&&currentMusicBtn&&currentMusicBtn!==btn){
-    currentAudio.pause();currentAudio=null;
-    currentMusicBtn.textContent='▶';
-    if(currentMusicIcon)currentMusicIcon.classList.remove('playing');
-  }
-  if(!currentAudio||currentAudio.src!==audioUrl){
-    currentAudio=new Audio(audioUrl);
-    currentAudio.onended=()=>{btn.textContent='▶';if(iconEl)iconEl.classList.remove('playing')};
-    currentAudio.play();btn.textContent='⏸';if(iconEl)iconEl.classList.add('playing');
-    currentMusicBtn=btn;currentMusicIcon=iconEl;
-  } else if(currentAudio.paused){
-    currentAudio.play();btn.textContent='⏸';if(iconEl)iconEl.classList.add('playing');
-  } else {
-    currentAudio.pause();btn.textContent='▶';if(iconEl)iconEl.classList.remove('playing');
-  }
-}
-
-// CREATE POST
+// ===================== CREATE POST =====================
 function openCreate(){document.getElementById('createOverlay').classList.add('show')}
 function closeCreate(){
   document.getElementById('createOverlay').classList.remove('show');
@@ -838,7 +942,7 @@ async function handleCreatePost(){
   finally{setLoading('postBtn',false)}
 }
 
-// STORIES
+// ===================== STORIES =====================
 function openStoryCreate(){document.getElementById('storyOverlay').classList.add('show')}
 function closeStoryCreate(){
   document.getElementById('storyOverlay').classList.remove('show');
@@ -861,17 +965,13 @@ async function handleCreateStory(){
     const url=await uploadToCloudinary(file,'image');
     const musFile=document.getElementById('storyMusicInput').files[0];
     let musicUrl=null,musicName=null;
-    if(musFile){
-      musicUrl=await uploadToCloudinary(musFile,'video');
-      musicName=musFile.name.replace(/\.[^/.]+$/,'');
-    }
+    if(musFile){musicUrl=await uploadToCloudinary(musFile,'video');musicName=musFile.name.replace(/\.[^/.]+$/,'');}
     const res=await fetch(`${API}/stories`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${getToken()}`},body:JSON.stringify({image:url,music:musicUrl,musicName})});
     const data=await res.json();if(!data.success)throw new Error(data.message);
     closeStoryCreate();loadStories();
   }catch(e){alert(e.message)}
   finally{setLoading('storyBtn',false)}
 }
-
 function handleStoryMusicPick(input){
   const file=input.files[0];if(!file)return;
   document.getElementById('storyMusicPreviewName').textContent=file.name.replace(/\.[^/.]+$/,'');
@@ -904,7 +1004,76 @@ function viewStory(id,img,name,time){
 }
 function closeStoryViewer(){document.getElementById('storyViewer').classList.remove('show')}
 
-// SUGGESTIONS
+// ===================== REELS =====================
+async function loadReels(){
+  const container=document.getElementById('reelsContainer');
+  container.innerHTML='<div class="reel-loading">🎬 Reels load ho rahe hain...</div>';
+  try{
+    const res=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${getToken()}`}});
+    const data=await res.json();
+    // Sirf video posts ko reels mein dikhao
+    const reels=(data.posts||[]).filter(p=>p.video);
+    if(!reels.length){container.innerHTML='<div class="reel-loading">Koi reel nahi — video post karo! 🎬</div>';return}
+    container.innerHTML=reels.map(p=>{
+      const liked=p.likes&&p.likes.includes(getUserId());
+      const avatarHtml=p.user.profilePhoto?`<img src="${p.user.profilePhoto}"/>`:(p.user.name||'U')[0].toUpperCase();
+      return `
+      <div class="reel-item" id="reel-${p._id}">
+        <video class="reel-video" src="${p.video}" loop playsinline muted preload="none" onclick="toggleReelPlay(this)"></video>
+        <div class="reel-overlay"></div>
+        <div class="reel-actions">
+          <button class="reel-action-btn" onclick="handleLike('${p._id}',this)">
+            <span>${liked?'❤️':'🤍'}</span>
+            <span class="reel-action-count" id="reel-likes-${p._id}">${p.likes?.length||0}</span>
+          </button>
+          <button class="reel-action-btn" onclick="toggleComments('${p._id}')">
+            <span>💬</span>
+            <span class="reel-action-count">Comment</span>
+          </button>
+          <button class="reel-action-btn" onclick="sharePost('${p._id}')">
+            <span>🔗</span>
+            <span class="reel-action-count">Share</span>
+          </button>
+          ${p.music?`<button class="reel-action-btn" onclick="toggleMusic('${p.music}','${p.musicName||'Music'}',this,null)">
+            <span>🎵</span>
+            <span class="reel-action-count">Music</span>
+          </button>`:''}
+        </div>
+        <div class="reel-info">
+          <div class="reel-user" onclick="openUserProfile('${p.user._id}','${p.user.name}')">
+            <div class="reel-user-avatar">${avatarHtml}</div>
+            <span class="reel-username">@${p.user.name}</span>
+          </div>
+          ${p.content?`<div class="reel-caption">${p.content}</div>`:''}
+          ${p.music?`<div class="reel-music-bar"><div class="reel-music-disc"></div> 🎵 ${p.musicName||'Original Sound'}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+    initReelAutoPlay();
+  }catch(e){container.innerHTML='<div class="reel-loading">Reels load nahi hue 😕</div>'}
+}
+
+function toggleReelPlay(video){
+  if(video.paused)video.play();else video.pause();
+}
+
+function initReelAutoPlay(){
+  const videos=document.querySelectorAll('.reel-video');
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const video=entry.target;
+      if(entry.isIntersecting&&entry.intersectionRatio>=0.7){
+        video.play().catch(()=>{});
+      } else {
+        video.pause();
+        video.currentTime=0;
+      }
+    });
+  },{threshold:0.7});
+  videos.forEach(v=>observer.observe(v));
+}
+
+// ===================== SUGGESTIONS =====================
 async function loadSuggestions(){
   try{
     const res=await fetch(`${API}/auth/suggestions`,{headers:{Authorization:`Bearer ${getToken()}`}});
@@ -912,11 +1081,11 @@ async function loadSuggestions(){
     if(!data.suggestions||!data.suggestions.length){document.getElementById('suggestionsWrap').style.display='none';return}
     document.getElementById('suggestionsWrap').style.display='block';
     document.getElementById('suggestionsList').innerHTML=data.suggestions.map(u=>`
-      <div class="suggestion-card">
+      <div class="suggestion-card" onclick="openUserProfile('${u._id}','${u.name}')">
         <div class="suggestion-avatar">${u.profilePhoto?`<img src="${u.profilePhoto}"/>`:(u.name||'U')[0].toUpperCase()}</div>
         <div class="suggestion-name">${u.name}</div>
         <div class="suggestion-bio">${u.bio||'Rollera user'}</div>
-        <button class="suggestion-follow-btn" id="sug-${u._id}" onclick="handleSugFollow('${u._id}',this)">Follow</button>
+        <button class="suggestion-follow-btn" id="sug-${u._id}" onclick="event.stopPropagation();handleSugFollow('${u._id}',this)">Follow</button>
       </div>`).join('');
   }catch(e){}
 }
@@ -930,7 +1099,7 @@ async function handleSugFollow(userId,btn){
   }catch(e){}
 }
 
-// FEED
+// ===================== FEED =====================
 async function loadFeed(){
   try{
     const res=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${getToken()}`}});
@@ -958,11 +1127,11 @@ function renderFeed(posts){
         </div>
       </div>
       ${p.image?`<img class="post-img" src="${p.image}" loading="lazy"/>`:''}
-      ${p.video?`<video class="post-video" src="${p.video}" controls playsinline onclick="openFullscreen(this)" ondblclick="handleLike('${p._id}',this.closest('.post-card').querySelector('.action-btn'))"></video>`:''}
+      ${p.video?`<video class="post-video" src="${p.video}" controls playsinline onclick="openFullscreen(this)"></video>`:''}
       ${p.content?`<div class="post-content">${renderHashtagsInContent(p.content)}</div>`:''}
       ${p.music?`<div class="post-music" onclick="toggleMusic('${p.music}','${p.musicName||'Music'}',document.getElementById('mplay-${p._id}'),document.getElementById('micon-${p._id}'))">
         <div class="music-icon" id="micon-${p._id}">🎵</div>
-        <div class="music-info"><div class="music-name">${p.musicName||'Music'}</div><div class="music-sub">Tap to play</div></div>
+        <div class="music-info"><div class="music-name">${p.musicName||'Music'}</div><div class="music-sub">Tap to play ✦</div></div>
         <button class="music-play-btn" id="mplay-${p._id}">▶</button>
       </div>`:''}
       <div class="reactions-bar">
@@ -988,7 +1157,7 @@ function renderFeed(posts){
       </div>
     </div>`
   }).join('');
-  setTimeout(initVideoAutoPlay, 100);
+  setTimeout(initVideoAutoPlay,100);
 }
 
 async function handleLike(postId,btn){
@@ -996,6 +1165,9 @@ async function handleLike(postId,btn){
     const res=await fetch(`${API}/posts/${postId}/like`,{method:'PUT',headers:{Authorization:`Bearer ${getToken()}`}});
     const data=await res.json();if(!data.success)return;
     btn.classList.toggle('liked',data.liked);btn.innerHTML=`${data.liked?'❤️':'🤍'} <span>${data.likes}</span>`;
+    // Reels like count bhi update karo
+    const reelCount=document.getElementById(`reel-likes-${postId}`);
+    if(reelCount)reelCount.textContent=data.likes;
   }catch(e){}
 }
 async function handleReact(postId,type,btn){
@@ -1015,7 +1187,7 @@ async function handleDelete(postId){
   if(!confirm('Delete karna chahte ho?'))return;
   try{
     const res=await fetch(`${API}/posts/${postId}`,{method:'DELETE',headers:{Authorization:`Bearer ${getToken()}`}});
-    const data=await res.json();if(data.success)document.getElementById(`post-${postId}`).remove();
+    const data=await res.json();if(data.success){const el=document.getElementById(`post-${postId}`);if(el)el.remove();}
   }catch(e){}
 }
 async function handleReport(postId){
@@ -1034,7 +1206,7 @@ async function handleBlock(userId,name){
 }
 function sharePost(postId){navigator.clipboard.writeText(`${window.location.origin}?post=${postId}`).then(()=>alert('Link copy ho gaya! 🔗'))}
 
-// EDIT POST
+// ===================== EDIT POST =====================
 function openEdit(postId,content){editingPostId=postId;document.getElementById('editContent').value=content;document.getElementById('editOverlay').classList.add('show')}
 function closeEdit(){document.getElementById('editOverlay').classList.remove('show');editingPostId=null}
 async function submitEdit(){
@@ -1048,7 +1220,7 @@ async function submitEdit(){
   finally{setLoading('editBtn',false)}
 }
 
-// COMMENTS
+// ===================== COMMENTS =====================
 async function toggleComments(postId){
   const s=document.getElementById(`comments-${postId}`);s.classList.toggle('open');
   if(s.classList.contains('open'))loadComments(postId);
@@ -1076,30 +1248,42 @@ async function submitComment(postId){
   }catch(e){}
 }
 
-// EXPLORE
+// ===================== EXPLORE =====================
+let exploreTabActive='trending';
+function switchExploreTab(tab,el){
+  exploreTabActive=tab;
+  document.querySelectorAll('.explore-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderExplore();
+}
 async function loadExplore(){
   try{
     const res=await fetch(`${API}/posts/explore`,{headers:{Authorization:`Bearer ${getToken()}`}});
     const data=await res.json();
-    const grid=document.getElementById('exploreGrid');
-    if(!data.posts||!data.posts.length){grid.innerHTML='<div class="empty" style="grid-column:span 2">Koi post nahi</div>';return}
-    
-    // Trending = likes ke basis pe sort karo
-    const trending = (data.posts).sort((a,b)=>(b.likes?.length||0)-(a.likes?.length||0));
-    
-    grid.innerHTML=trending.map(p=>`
-      <div class="explore-item" onclick="openExplorePost('${p._id}')">
-        ${p.image?`<img src="${p.image}" loading="lazy"/>`:''}
-        ${p.video?`<video src="${p.video}" muted playsinline></video>`:''}
-        ${!p.image&&!p.video?`<div style="padding:12px;font-size:13px">${p.content}</div>`:''}
-        <div class="explore-item-overlay">
-          <div class="explore-likes">❤️ ${p.likes?p.likes.length:0} &nbsp; 🔥 Trending</div>
-        </div>
-      </div>`).join('');
+    currentExplorePosts=data.posts||[];
+    renderExplore();
   }catch(e){}
 }
+function renderExplore(){
+  const grid=document.getElementById('exploreGrid');
+  if(!currentExplorePosts.length){grid.innerHTML='<div class="empty" style="grid-column:span 2">Koi post nahi</div>';return}
+  let filtered=currentExplorePosts;
+  if(exploreTabActive==='photos')filtered=currentExplorePosts.filter(p=>p.image);
+  else if(exploreTabActive==='videos')filtered=currentExplorePosts.filter(p=>p.video);
+  else filtered=[...currentExplorePosts].sort((a,b)=>(b.likes?.length||0)-(a.likes?.length||0));
 
-// NOTIFICATIONS
+  grid.innerHTML=filtered.map(p=>`
+    <div class="explore-item" onclick="openExplorePost('${p._id}')">
+      ${p.image?`<img src="${p.image}" loading="lazy"/>`:''}
+      ${p.video?`<video src="${p.video}" muted playsinline></video>`:''}
+      ${!p.image&&!p.video?`<div style="padding:12px;font-size:13px">${p.content}</div>`:''}
+      <div class="explore-item-overlay">
+        <div class="explore-likes">❤️ ${p.likes?p.likes.length:0}${exploreTabActive==='trending'?' 🔥':''}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ===================== NOTIFICATIONS =====================
 async function loadNotifCount(){
   try{
     const res=await fetch(`${API}/auth/notifications`,{headers:{Authorization:`Bearer ${getToken()}`}});
@@ -1125,7 +1309,7 @@ async function openNotifs(){
   }catch(e){}
 }
 
-// DM
+// ===================== DM =====================
 async function loadDMCount(){
   try{
     const res=await fetch(`${API}/messages/unread`,{headers:{Authorization:`Bearer ${getToken()}`}});
@@ -1190,7 +1374,7 @@ async function sendChatMessage(){
   }catch(e){}
 }
 
-// SEARCH
+// ===================== SEARCH =====================
 let st;
 async function handleSearch(q){
   clearTimeout(st);
@@ -1238,7 +1422,7 @@ async function handleFollow(userId,btn){
   }catch(e){}
 }
 
-// PROFILE
+// ===================== PROFILE PAGE =====================
 function switchProfileTab(tab,el){
   document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   document.getElementById('myPosts').style.display=tab==='posts'?'block':'none';
@@ -1289,119 +1473,92 @@ async function loadProfile(){
       </div>`).join('');
   }catch(e){}
 }
-// AUTO PLAY VIDEO ON SCROLL
+
+// ===================== VIDEO AUTOPLAY =====================
 function initVideoAutoPlay(){
   const videos=document.querySelectorAll('.post-video');
   const observer=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       const video=entry.target;
       if(entry.isIntersecting&&entry.intersectionRatio>=0.6){
-        video.currentTime=0;
-        video.play().catch(()=>{});
-        video.muted=true;
+        video.currentTime=0;video.play().catch(()=>{});video.muted=true;
       } else {
-        video.pause();
-        video.currentTime=0;
+        video.pause();video.currentTime=0;
       }
     });
   },{threshold:0.6});
   videos.forEach(v=>observer.observe(v));
 }
-// DOUBLE TAP TO LIKE
+
+// ===================== DOUBLE TAP LIKE =====================
 function handleDoubleTapLike(e,postId){
   if(e.target.closest('.action-btn')||e.target.closest('.comment-input-wrap')||e.target.closest('.reactions-bar'))return;
   const btn=document.querySelector(`#post-${postId} .action-btn.liked, #post-${postId} .action-btn:first-child`);
   handleLike(postId,btn);
-  // Heart animation
   const heart=document.createElement('div');
   heart.innerHTML='❤️';
   heart.style.cssText=`position:absolute;font-size:60px;top:${e.offsetY-30}px;left:${e.offsetX-30}px;pointer-events:none;animation:heartPop 0.8s ease forwards;z-index:99`;
   const card=document.getElementById(`post-${postId}`);
-  card.style.position='relative';
-  card.appendChild(heart);
+  card.style.position='relative';card.appendChild(heart);
   setTimeout(()=>heart.remove(),800);
 }
-// FULLSCREEN VIDEO
+
 function openFullscreen(video){
   if(video.requestFullscreen)video.requestFullscreen();
   else if(video.webkitRequestFullscreen)video.webkitRequestFullscreen();
   else if(video.mozRequestFullScreen)video.mozRequestFullScreen();
 }
 
-// AUTO LOGIN
-(async()=>{
-  const saved=localStorage.getItem('theme');
-  if(saved==='light'){isDark=false;document.body.classList.add('light');document.getElementById('themeBtn').textContent='☀️'}
-  const token=getToken();
-  if(!token){setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000);return}
-  try{
-    const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
-    const data=await res.json();
-    if(data.success)showApp(data.user);
-    else{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
-  }catch{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
-})();
-
+// ===================== USER PROFILE =====================
 async function openUserProfile(userId, userName) {
-  // Apni profile ho toh profile page kholo
-  if (userId === getUserId()) {
-    showPage('profile');
-    return;
-  }
-  
-  // Dusre user ki profile
-  const sheet = document.createElement('div');
-  sheet.className = 'sheet-overlay show';
-  sheet.innerHTML = `
-    <div class="sheet">
-      <h3>👤 ${userName}</h3>
-      <div id="userProfileContent"><div class="empty">Loading...</div></div>
-    </div>
-  `;
-  sheet.onclick = (e) => { if (e.target === sheet) sheet.remove(); };
+  if(userId===getUserId()){showPage('profile');return;}
+  const sheet=document.createElement('div');
+  sheet.className='sheet-overlay show';
+  sheet.innerHTML=`<div class="sheet"><h3>👤 ${userName}</h3><div id="userProfileContent"><div class="empty">Loading...</div></div></div>`;
+  sheet.onclick=(e)=>{if(e.target===sheet)sheet.remove();};
   document.body.appendChild(sheet);
-
-  try {
-    const res = await fetch(`${API}/posts`, { headers: { Authorization: `Bearer ${getToken()}` } });
-    const data = await res.json();
-    const userPosts = (data.posts || []).filter(p => p.user._id === userId);
-    
-    const userRes = await fetch(`${API}/auth/suggestions`, { headers: { Authorization: `Bearer ${getToken()}` } });
-    const userData = await userRes.json();
-    const userInfo = (userData.suggestions || []).find(u => u._id === userId);
-
-    document.getElementById('userProfileContent').innerHTML = `
+  try{
+    const [postsRes,meRes]=await Promise.all([
+      fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${getToken()}`}}),
+      fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${getToken()}`}})
+    ]);
+    const postsData=await postsRes.json();
+    const meData=await meRes.json();
+    const userPosts=(postsData.posts||[]).filter(p=>p.user._id===userId);
+    const myFollowing=meData.user?.following||[];
+    const isFollowing=myFollowing.includes(userId);
+    const userInfo=userPosts[0]?.user||{};
+    document.getElementById('userProfileContent').innerHTML=`
       <div style="text-align:center;margin-bottom:16px">
         <div style="width:70px;height:70px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;margin:0 auto 10px;overflow:hidden">
-          ${userInfo?.profilePhoto ? `<img src="${userInfo.profilePhoto}" style="width:100%;height:100%;object-fit:cover"/>` : userName[0].toUpperCase()}
+          ${userInfo.profilePhoto?`<img src="${userInfo.profilePhoto}" style="width:100%;height:100%;object-fit:cover"/>`:(userName[0]||'U').toUpperCase()}
         </div>
         <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700">${userName}</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:4px">${userInfo?.bio || 'Rollera user'}</div>
         <div style="display:flex;justify-content:center;gap:20px;margin:12px 0">
-          <div style="text-align:center"><div style="font-weight:700">${userInfo?.followers?.length || 0}</div><div style="color:var(--muted);font-size:11px">Followers</div></div>
+          <div style="text-align:center"><div style="font-weight:700">${userInfo.followers?.length||0}</div><div style="color:var(--muted);font-size:11px">Followers</div></div>
           <div style="text-align:center"><div style="font-weight:700">${userPosts.length}</div><div style="color:var(--muted);font-size:11px">Posts</div></div>
         </div>
-        <button onclick="handleFollow('${userId}', this)" style="padding:8px 24px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;font-size:14px">Follow</button>
+        <button id="profileFollowBtn" onclick="handleFollow('${userId}',this)"
+          style="padding:8px 24px;background:${isFollowing?'rgba(124,108,252,0.15)':'linear-gradient(135deg,var(--accent),var(--accent2))'};border:${isFollowing?'1px solid var(--accent)':'none'};border-radius:10px;color:${isFollowing?'var(--accent)':'#fff'};font-weight:700;cursor:pointer;font-size:14px">
+          ${isFollowing?'Following':'Follow'}
+        </button>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${userPosts.map(p => `
+        ${userPosts.map(p=>`
           <div style="border-radius:12px;overflow:hidden;aspect-ratio:1;background:var(--surface);border:1px solid var(--border)">
-            ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover"/>` : `<div style="padding:10px;font-size:12px">${p.content || ''}</div>`}
-          </div>`).join('') || '<div class="empty" style="grid-column:span 2">Koi post nahi</div>'}
-      </div>
-    `;
-  } catch(e) {}
+            ${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover"/>`:`<div style="padding:10px;font-size:12px">${p.content||''}</div>`}
+          </div>`).join('')||'<div class="empty" style="grid-column:span 2">Koi post nahi</div>'}
+      </div>`;
+  }catch(e){}
 }
 
-async function openExplorePost(postId) {
-  const res = await fetch(`${API}/posts`, {headers:{Authorization:`Bearer ${getToken()}`}});
-  const data = await res.json();
-  const p = (data.posts||[]).find(x => x._id === postId);
-  if(!p) return;
-
-  const sheet = document.createElement('div');
-  sheet.className = 'sheet-overlay show';
-  sheet.innerHTML = `
+// ===================== EXPLORE POST =====================
+async function openExplorePost(postId){
+  const p=currentExplorePosts.find(x=>x._id===postId);
+  if(!p)return;
+  const sheet=document.createElement('div');
+  sheet.className='sheet-overlay show';
+  sheet.innerHTML=`
     <div class="sheet" style="padding-bottom:20px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer" onclick="openUserProfile('${p.user._id}','${p.user.name}')">
         <div class="post-avatar">${p.user.profilePhoto?`<img src="${p.user.profilePhoto}"/>`:(p.user.name||'U')[0].toUpperCase()}</div>
@@ -1419,11 +1576,24 @@ async function openExplorePost(postId) {
         </button>
         <span style="color:var(--muted);font-size:13px">🔥 Trending</span>
       </div>
-    </div>
-  `;
-  sheet.onclick = (e) => { if(e.target===sheet) sheet.remove(); };
+    </div>`;
+  sheet.onclick=(e)=>{if(e.target===sheet)sheet.remove();};
   document.body.appendChild(sheet);
 }
+
+// ===================== AUTO LOGIN =====================
+(async()=>{
+  const saved=localStorage.getItem('theme');
+  if(saved==='light'){isDark=false;document.body.classList.add('light');document.getElementById('themeBtn').textContent='☀️'}
+  const token=getToken();
+  if(!token){setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000);return}
+  try{
+    const res=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    if(data.success)showApp(data.user);
+    else{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
+  }catch{clearToken();setTimeout(()=>{document.getElementById('authPage').style.display='block'},2000)}
+})();
 </script>
 </body>
 </html>
