@@ -314,6 +314,11 @@
     .follow-list-item:last-child{border-bottom:none}
     .stat{text-align:center;cursor:pointer;padding:4px;border-radius:8px;transition:all 0.2s}
     .stat:hover{background:rgba(124,108,252,0.1)}
+    .profile-highlight{margin:12px 16px;background:linear-gradient(135deg,rgba(124,108,252,0.15),rgba(192,132,252,0.1));border:1px solid rgba(124,108,252,0.3);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px}
+    .profile-highlight-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .profile-highlight-text{font-size:12px;color:#9b8ffd}
+    .profile-highlight-title{font-size:14px;font-weight:600;margin-bottom:2px}
+    .profile-username{color:var(--muted);font-size:13px;margin-top:2px;margin-bottom:6px}
   </style>
 </head>
 <body>
@@ -447,33 +452,56 @@
 
   <!-- PROFILE -->
   <div class="page" id="profilePage">
-    <div class="profile-wrap">
-      <!-- Cover Photo -->
-      <div class="profile-cover" id="profileCover" onclick="document.getElementById('coverPhotoInput').click()">
-        <button class="profile-cover-edit">📷 Cover change karo</button>
-      </div>
-      <input type="file" id="coverPhotoInput" accept="image/*" style="display:none" onchange="handleCoverPhoto(this)"/>
-      <div class="profile-header">
+    <div class="profile-cover" id="profileCover" onclick="document.getElementById('coverPhotoInput').click()">
+      <button class="profile-cover-edit">📷 Cover</button>
+    </div>
+    <input type="file" id="coverPhotoInput" accept="image/*" style="display:none" onchange="handleCoverPhoto(this)"/>
+
+    <div class="profile-info-section" style="padding:0 16px 16px;background:var(--surface);border-bottom:1px solid var(--border)">
+      <div class="profile-photo-wrap" style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-44px;margin-bottom:12px">
         <div class="profile-photo" id="profilePhoto" onclick="document.getElementById('profilePhotoInput').click()">
           <span id="profilePhotoText">A</span>
           <div class="profile-photo-edit">✏️</div>
         </div>
         <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)"/>
-        <div class="profile-name" id="profileName">User</div>
-        <div class="profile-bio" id="profileBio"></div>
-        <div class="profile-email" id="profileEmail">user@email.com</div>
-        <a id="profileLink" href="#" target="_blank" style="display:none;align-items:center;gap:6px;margin-top:4px;font-size:13px;color:var(--accent);text-decoration:none">🔗 <span id="profileLinkText"></span></a>
-        <div class="profile-stats">
-          <div class="stat" onclick="showFollowList('followers')"><div class="stat-num" id="postCount">0</div><div class="stat-label">Posts</div></div>
-          <div class="stat" onclick="showFollowList('followers')"><div class="stat-num" id="followerCount">0</div><div class="stat-label">Followers</div></div>
-          <div class="stat" onclick="showFollowList('following')"><div class="stat-num" id="followingCount">0</div><div class="stat-label">Following</div></div>
-          <div class="stat"><div class="stat-num" id="likeCount">0</div><div class="stat-label">Likes</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-edit-profile" onclick="openEditProfile()" style="margin-top:0;width:auto;padding:8px 16px">✏️ Edit</button>
+          <button class="btn-outline" onclick="handleLogout()" style="margin-top:0;width:auto;padding:8px 16px;font-size:12px">Sign Out</button>
         </div>
-        <button class="btn-edit-profile" onclick="openEditProfile()">✏️ Profile Edit karo</button>
-        <button class="btn-outline" onclick="handleLogout()">Sign Out</button>
       </div>
-  <button class="fab" onclick="openCreate()">+</button>
 
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+        <div class="profile-name" id="profileName">User</div>
+      </div>
+      <div class="profile-username" id="profileEmail">user@email.com</div>
+      <div class="profile-bio" id="profileBio" style="color:var(--text);font-size:14px;line-height:1.6;margin-bottom:8px"></div>
+      <a id="profileLink" href="#" target="_blank" style="display:none;align-items:center;gap:6px;margin-bottom:12px;font-size:13px;color:var(--accent);text-decoration:none">🔗 <span id="profileLinkText"></span></a>
+
+      <div class="profile-stats" style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:14px;gap:0">
+        <div class="stat"><div class="stat-num" id="postCount">0</div><div class="stat-label">Posts</div></div>
+        <div class="stat" onclick="showFollowList('followers')"><div class="stat-num" id="followerCount">0</div><div class="stat-label">Followers</div></div>
+        <div class="stat" onclick="showFollowList('following')"><div class="stat-num" id="followingCount">0</div><div class="stat-label">Following</div></div>
+        <div class="stat"><div class="stat-num" id="likeCount">0</div><div class="stat-label">Likes</div></div>
+      </div>
+    </div>
+
+    <div class="profile-highlight" id="profileHighlight" style="display:none">
+      <div class="profile-highlight-icon">🏆</div>
+      <div>
+        <div class="profile-highlight-title">Top Creator</div>
+        <div class="profile-highlight-text">Top creator on Rollera ✦</div>
+      </div>
+    </div>
+
+    <div class="profile-tabs">
+      <div class="profile-tab active" onclick="switchProfileTab('posts',this)">⊞ Posts</div>
+      <div class="profile-tab" onclick="switchProfileTab('reels',this)">🎬 Reels</div>
+      <div class="profile-tab" onclick="switchProfileTab('saved',this)">🔖 Saved</div>
+    </div>
+    <div id="myPosts"></div>
+    <div id="myReels" style="display:none"></div>
+    <div id="savedPosts" style="display:none"></div>
+  </div>
   <!-- GLOBAL MINI MUSIC PLAYER -->
   <div class="mini-player" id="miniPlayer">
     <div class="mini-player-disc" id="miniDisc">🎵</div>
@@ -1495,10 +1523,28 @@ async function handleFollow(userId,btn){
 
 // ===================== PROFILE PAGE =====================
 function switchProfileTab(tab,el){
-  document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
   document.getElementById('myPosts').style.display=tab==='posts'?'block':'none';
+  document.getElementById('myReels').style.display=tab==='reels'?'block':'none';
   document.getElementById('savedPosts').style.display=tab==='saved'?'block':'none';
   if(tab==='saved')loadSavedPosts();
+  if(tab==='reels')loadMyReels();
+}
+
+async function loadMyReels(){
+  const c=document.getElementById('myReels');
+  try{
+    const res=await fetch(`${API}/posts`,{headers:{Authorization:`Bearer ${getToken()}`}});
+    const pd=await res.json();
+    const myReels=(pd.posts||[]).filter(p=>p.user._id===getUserId()&&p.video);
+    if(!myReels.length){c.innerHTML='<div class="empty">Koi reel nahi ✦</div>';return}
+    c.innerHTML=`<div class="posts-grid">${myReels.map(p=>`
+      <div class="grid-post">
+        <video src="${p.video}" muted></video>
+        <div class="grid-post-overlay">▶ ${p.likes?.length||0}</div>
+      </div>`).join('')}</div>`;
+  }catch(e){}
 }
 async function loadSavedPosts(){
   try{
