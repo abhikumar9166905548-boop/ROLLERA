@@ -304,7 +304,7 @@
     @keyframes dot1{0%,100%{transform:translateY(0);opacity:0.4}33%{transform:translateY(-8px);opacity:1}}
     @keyframes dot2{0%,100%{transform:translateY(0);opacity:0.4}50%{transform:translateY(-8px);opacity:1}}
     @keyframes dot3{0%,100%{transform:translateY(0);opacity:0.4}66%{transform:translateY(-8px);opacity:1}}
-   /* PROFILE IMPROVEMENTS */
+  /* PROFILE IMPROVEMENTS */
     .profile-cover{width:100%;height:130px;background:linear-gradient(135deg,var(--accent),var(--accent2));position:relative;cursor:pointer;overflow:hidden;border-radius:0 0 20px 20px}
     .profile-cover img{width:100%;height:100%;object-fit:cover}
     .profile-cover-edit{position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,0.5);border:none;color:#fff;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px}
@@ -322,6 +322,10 @@
     .profile-highlight-text{font-size:12px;color:#9b8ffd}
     .profile-highlight-title{font-size:14px;font-weight:600;margin-bottom:2px}
     .profile-username{color:var(--muted);font-size:13px;margin-top:2px;margin-bottom:6px}
+    .share-opt-btn{padding:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;cursor:pointer;font-weight:600;transition:all 0.2s;text-align:center}
+    .share-opt-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .share-opt-btn.danger{background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.3);color:#f87171}
+    .share-opt-btn.danger:hover{background:rgba(248,113,113,0.15)}
   </style>
 </head>
 <body>
@@ -697,9 +701,16 @@ function switchTab(tab){
   document.getElementById('tabBar').style.display=(tab==='forgot'||tab==='otp')?'none':'flex';
 }
 function toggleTheme(){
-  isDark=!isDark;document.body.classList.toggle('light',!isDark);
+  isDark=!isDark;
+  document.body.classList.toggle('light',!isDark);
   document.getElementById('themeBtn').textContent=isDark?'🌙':'☀️';
   localStorage.setItem('theme',isDark?'dark':'light');
+  // Theme change toast
+  const toast=document.createElement('div');
+  toast.textContent=isDark?'🌙 Dark Mode':'☀️ Light Mode';
+  toast.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),1500);
 }
 function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1108,9 +1119,9 @@ async function loadReels(){
             <span>💬</span>
             <span class="reel-action-count">Comment</span>
           </button>
-          <button class="reel-action-btn" onclick="sharePost('${p._id}')">
-            <span>🔗</span>
-            <span class="reel-action-count">Share</span>
+          <button class="reel-action-btn" onclick="openShareSheet('${p._id}','${p.user._id===getUserId()}','${p.user._id}','${p.user.name}')">
+            <span>•••</span>
+            <span class="reel-action-count">More</span>
           </button>
           ${p.music?`<button class="reel-action-btn" onclick="toggleMusic('${p.music}','${p.musicName||'Music'}',this,null)">
             <span>🎵</span>
@@ -1267,14 +1278,9 @@ function renderFeed(posts){
       </div>
       <div class="post-actions">
         <button class="action-btn ${liked?'liked':''}" onclick="handleLike('${p._id}',this)">${liked?'❤️':'🤍'} <span>${p.likes?p.likes.length:0}</span></button>
-        <button class="action-btn" onclick="toggleComments('${p._id}')">💬</button>
+        <button class="action-btn" onclick="toggleComments('${p._id}')">💬 <span>${p.comments?.length||0}</span></button>
         <button class="action-btn" onclick="handleSave('${p._id}',this)">🔖</button>
-        <button class="action-btn" onclick="openDMTo('${p.user._id}','${p.user.name}')">✉️</button>
-        <button class="action-btn" onclick="sharePost('${p._id}')">🔗</button>
-        ${!isOwner?`<button class="action-btn" onclick="handleReport('${p._id}')">🚩</button>`:''}
-        ${!isOwner?`<button class="action-btn" onclick="handleBlock('${p.user._id}','${p.user.name}')">🚫</button>`:''}
-        ${isOwner?`<button class="action-btn" onclick="openEdit('${p._id}','${(p.content||'').replace(/'/g,"\\'")}')">✏️</button>`:''}
-        ${isOwner?`<button class="action-btn delete" onclick="handleDelete('${p._id}')">🗑</button>`:''}
+        <button class="action-btn" onclick="openShareSheet('${p._id}','${isOwner}','${p.user._id}','${p.user.name}')">••• </button>
       </div>
       <div class="comments-section" id="comments-${p._id}">
         <div id="comment-list-${p._id}"></div>
@@ -1690,6 +1696,97 @@ async function showFollowList(type){
       </div>`).join('');
   }catch(e){document.getElementById('followListContent').innerHTML='<div class="empty">Load nahi hua 😕</div>'}
 }
+
+function openShareSheet(postId,isOwner,userId,userName){
+  const p=allPosts.find(x=>x._id===postId);
+  const url=`${window.location.origin}?post=${postId}`;
+  const sheet=document.createElement('div');
+  sheet.className='sheet-overlay show';
+  sheet.innerHTML=`
+    <div class="sheet">
+      <h3>Options ✦</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <button class="share-opt-btn" onclick="navigator.clipboard.writeText('${url}').then(()=>{alert('Link copy ho gaya! 🔗');this.closest('.sheet-overlay').remove()})">📋 Link Copy</button>
+        <button class="share-opt-btn" onclick="navigator.share&&navigator.share({title:'Rollera',url:'${url}'});this.closest('.sheet-overlay').remove()">📤 Share</button>
+        <button class="share-opt-btn" onclick="window.open('https://wa.me/?text=${encodeURIComponent(url)}','_blank');this.closest('.sheet-overlay').remove()">💬 WhatsApp</button>
+        <button class="share-opt-btn" onclick="shareToStory('${postId}');this.closest('.sheet-overlay').remove()">📖 Story pe lagao</button>
+        <button class="share-opt-btn" onclick="this.closest('.sheet-overlay').remove();openSendToUser('${postId}')">✉️ User ko bhejo</button>
+        <button class="share-opt-btn" onclick="copyAsReel('${postId}');this.closest('.sheet-overlay').remove()">🎬 Reel mein add</button>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${isOwner==='true'?`
+        <button class="share-opt-btn" onclick="this.closest('.sheet-overlay').remove();openEdit('${postId}','${(p?.content||'').replace(/'/g,"\\'").replace(/\n/g,' ')}')">✏️ Edit</button>
+        <button class="share-opt-btn danger" onclick="this.closest('.sheet-overlay').remove();handleDelete('${postId}')">🗑 Delete</button>
+        `:`
+        <button class="share-opt-btn danger" onclick="this.closest('.sheet-overlay').remove();handleReport('${postId}')">🚩 Report</button>
+        <button class="share-opt-btn danger" onclick="this.closest('.sheet-overlay').remove();handleBlock('${userId}','${userName}')">🚫 Block</button>
+        `}
+      </div>
+    </div>`;
+  sheet.onclick=(e)=>{if(e.target===sheet)sheet.remove()};
+  document.body.appendChild(sheet);
+}
+
+async function shareToStory(postId){
+  const p=allPosts.find(x=>x._id===postId);
+  if(!p?.image)return alert('Sirf image post ko story pe laga sakte ho!');
+  try{
+    const res=await fetch(`${API}/stories`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${getToken()}`},body:JSON.stringify({image:p.image})});
+    const data=await res.json();
+    if(data.success)alert('Story pe laga diya! ✦');
+    else alert(data.message);
+  }catch(e){alert('Error!')}
+}
+
+async function openSendToUser(postId){
+  const p=allPosts.find(x=>x._id===postId);
+  const url=`${window.location.origin}?post=${postId}`;
+  const sheet=document.createElement('div');
+  sheet.className='sheet-overlay show';
+  sheet.innerHTML=`
+    <div class="sheet">
+      <h3>User ko bhejo ✉️</h3>
+      <div class="search-bar" style="margin-bottom:12px">
+        <span class="search-icon-pos">🔍</span>
+        <input type="text" placeholder="User dhundo..." oninput="searchUsersToSend(this.value,'${postId}')" style="padding-left:38px"/>
+      </div>
+      <div id="sendUserList"><div class="empty">Naam type karo 👆</div></div>
+    </div>`;
+  sheet.onclick=(e)=>{if(e.target===sheet)sheet.remove()};
+  document.body.appendChild(sheet);
+}
+
+async function searchUsersToSend(q,postId){
+  if(!q.trim()){document.getElementById('sendUserList').innerHTML='<div class="empty">Naam type karo 👆</div>';return}
+  try{
+    const res=await fetch(`${API}/auth/users?q=${encodeURIComponent(q)}`,{headers:{Authorization:`Bearer ${getToken()}`}});
+    const data=await res.json();
+    if(!data.users?.length){document.getElementById('sendUserList').innerHTML='<div class="empty">Koi nahi mila</div>';return}
+    const url=`${window.location.origin}?post=${postId}`;
+    document.getElementById('sendUserList').innerHTML=data.users.slice(0,5).map(u=>`
+      <div class="conv-item" onclick="sendPostToUser('${u._id}','${u.name}','${url}')">
+        <div class="post-avatar">${(u.name||'U')[0].toUpperCase()}</div>
+        <div class="conv-info"><div class="conv-name">${u.name}</div><div class="conv-last">${u.email}</div></div>
+        <span style="color:var(--accent);font-size:12px">Send ✦</span>
+      </div>`).join('');
+  }catch(e){}
+}
+
+async function sendPostToUser(userId,userName,url){
+  try{
+    await fetch(`${API}/messages/send`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${getToken()}`},body:JSON.stringify({receiverId:userId,content:`Post dekho: ${url}`})});
+    alert(`${userName} ko bhej diya! ✦`);
+    document.querySelector('.sheet-overlay')?.remove();
+  }catch(e){alert('Error!')}
+}
+
+function copyAsReel(postId){
+  const p=allPosts.find(x=>x._id===postId);
+  if(!p?.video)return alert('Sirf video post ko reel mein add kar sakte ho!');
+  alert('Ye post already reels mein dikh raha hai! 🎬');
+}
+
+function sharePost(postId){openShareSheet(postId,'false','','')}
 
 // ===================== USER PROFILE =====================
 async function openUserProfile(userId, userName) {
