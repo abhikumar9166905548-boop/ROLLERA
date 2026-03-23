@@ -494,58 +494,786 @@
     </div>
   </div>
 
-  <!-- PROFILE -->
-  <div class="page" id="profilePage">
-    <div class="profile-cover" id="profileCover" onclick="document.getElementById('coverPhotoInput').click()">
-      <button class="profile-cover-edit">📷 Cover</button>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>mr.abhi_01_ • Instagram</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111111;
+  --bg3:#1a1a1a;
+  --bg4:#222222;
+  --border:rgba(255,255,255,.1);
+  --border2:rgba(255,255,255,.06);
+  --text:#f5f5f5;
+  --sub:#a0a0a0;
+  --muted:#555;
+  --acc1:#ff6b35;
+  --acc2:#ff3d71;
+  --acc3:#7b5ea7;
+  --acc4:#00d4aa;
+  --grad:linear-gradient(135deg,#f9c74f,#f3722c,#f94144,#c77dff);
+  --grad-ig:linear-gradient(135deg,#405de6,#5851db,#833ab4,#c13584,#e1306c,#fd1d1d);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  font-family:'Outfit',sans-serif;
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--text);
+}
+
+/* noise overlay */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;
+}
+
+/* ───── TOP BAR ───── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 12px;
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,10,10,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+.topbar-left{display:flex;align-items:center;gap:8px}
+.topbar-username{
+  font-family:'Space Mono',monospace;
+  font-size:15px;font-weight:700;
+  color:var(--text);letter-spacing:-.3px;
+}
+.lock-icon{
+  width:18px;height:18px;
+  background:rgba(255,255,255,.07);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+}
+.lock-icon svg{width:10px;height:10px;color:var(--sub)}
+.topbar-actions{display:flex;gap:6px}
+.tb-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--sub);transition:.2s;
+  position:relative;
+}
+.tb-btn:hover{background:var(--bg4);color:var(--text);transform:scale(1.05)}
+.tb-btn:active{transform:scale(.95)}
+.tb-btn svg{width:16px;height:16px}
+.notif-dot{
+  position:absolute;top:5px;right:5px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--acc2);border:2px solid var(--bg);
+  animation:pulse-dot 2s infinite;
+}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(255,61,113,.4)}50%{box-shadow:0 0 0 4px rgba(255,61,113,0)}}
+
+/* ───── PROFILE HEADER ───── */
+.profile-header{
+  padding:22px 18px 0;
+  animation:fadeUp .45s ease both;
+}
+.header-top{display:flex;align-items:center;gap:22px;margin-bottom:18px}
+
+/* Avatar */
+.avatar-area{flex-shrink:0;position:relative;cursor:pointer}
+.av-ring{
+  width:92px;height:92px;border-radius:50%;
+  padding:2.5px;
+  background:conic-gradient(#f9c74f 0deg,#f3722c 90deg,#f94144 180deg,#c77dff 270deg,#f9c74f 360deg);
+  animation:ringRotate 6s linear infinite;
+  transition:.2s;
+}
+.avatar-area:hover .av-ring{transform:scale(1.04)}
+@keyframes ringRotate{to{filter:hue-rotate(360deg)}}
+.av-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--bg);
+  overflow:hidden;
+  border:3px solid var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.av-inner img{width:100%;height:100%;object-fit:cover;display:none}
+.av-initials-txt{
+  font-family:'Space Mono',monospace;
+  font-size:26px;font-weight:700;
+  background:var(--grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.av-online{
+  position:absolute;bottom:4px;right:4px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--acc4);
+  border:3px solid var(--bg);
+  box-shadow:0 0 10px rgba(0,212,170,.7);
+  animation:onlinePulse 3s ease-in-out infinite;
+}
+@keyframes onlinePulse{0%,100%{box-shadow:0 0 6px rgba(0,212,170,.6)}50%{box-shadow:0 0 14px rgba(0,212,170,.9)}}
+
+/* Stats */
+.header-stats{flex:1;display:flex;justify-content:space-around;align-items:center}
+.stat-item{text-align:center;cursor:pointer;padding:6px 8px;border-radius:12px;transition:.2s}
+.stat-item:hover{background:rgba(255,255,255,.04)}
+.stat-item:active{transform:scale(.95)}
+.stat-val{
+  font-family:'Space Mono',monospace;
+  font-size:18px;font-weight:700;
+  color:var(--text);line-height:1;margin-bottom:4px;
+  transition:.2s;
+}
+.stat-item:hover .stat-val{color:#f9c74f}
+.stat-lbl{font-size:11.5px;color:var(--muted);font-weight:400;letter-spacing:.2px}
+
+/* ───── META ───── */
+.profile-meta{
+  padding:0 18px 18px;
+  animation:fadeUp .45s .08s ease both;
+}
+.profile-fullname{
+  font-size:15.5px;font-weight:700;color:var(--text);
+  margin-bottom:3px;
+  display:flex;align-items:center;gap:7px;
+}
+.verified-badge{
+  width:17px;height:17px;
+  background:var(--grad-ig);
+  border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.verified-badge svg{width:9px;height:9px;color:#fff}
+
+.profile-bio{
+  font-size:13.5px;color:var(--sub);
+  line-height:1.75;margin-bottom:6px;
+}
+.bio-tag{
+  color:#c084fc;font-weight:600;
+  background:rgba(192,132,252,.08);
+  padding:1px 5px;border-radius:5px;
+  transition:.2s;cursor:default;
+}
+.bio-tag:hover{background:rgba(192,132,252,.18);color:#e879f9}
+.bio-highlight{color:#7dd3fc;font-weight:500}
+.bio-quote{
+  color:#fde68a;font-style:italic;
+  border-left:2px solid rgba(253,230,138,.3);
+  padding-left:8px;display:block;margin-top:4px;
+}
+
+.profile-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13px;color:#60a5fa;
+  text-decoration:none;
+  background:rgba(96,165,250,.07);
+  padding:4px 10px;border-radius:20px;
+  border:1px solid rgba(96,165,250,.15);
+  transition:.2s;margin-top:4px;
+}
+.profile-link:hover{background:rgba(96,165,250,.13);color:#93c5fd;border-color:rgba(96,165,250,.3)}
+.profile-link svg{width:12px;height:12px}
+
+/* ───── ACTION BUTTONS ───── */
+.action-btns{
+  display:flex;gap:8px;padding:0 18px 20px;
+  animation:fadeUp .45s .14s ease both;
+}
+.abtn{
+  flex:1;padding:9.5px 12px;border-radius:11px;
+  font-size:13.5px;font-weight:600;
+  font-family:'Outfit',sans-serif;
+  cursor:pointer;transition:.2s;
+  text-align:center;border:none;
+}
+.abtn:active{transform:scale(.96)}
+.abtn-primary{
+  background:var(--grad-ig);color:#fff;
+  box-shadow:0 4px 18px rgba(193,53,132,.3);
+}
+.abtn-primary:hover{box-shadow:0 6px 26px rgba(193,53,132,.5);transform:translateY(-1px)}
+.abtn-secondary{
+  background:var(--bg3);color:var(--text);
+  border:1px solid var(--border) !important;
+}
+.abtn-secondary:hover{background:var(--bg4)}
+.abtn-icon{
+  width:40px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);
+  border:1px solid var(--border) !important;
+  border-radius:11px;cursor:pointer;color:var(--sub);transition:.2s;
+}
+.abtn-icon:hover{background:var(--bg4);color:var(--text)}
+.abtn-icon svg{width:16px;height:16px}
+
+/* ───── STORY HIGHLIGHTS ───── */
+.highlights-section{
+  padding:0 0 16px;
+  animation:fadeUp .45s .2s ease both;
+}
+.highlights-scroll{
+  display:flex;gap:0;overflow-x:auto;
+  padding:4px 18px 10px;scrollbar-width:none;
+}
+.highlights-scroll::-webkit-scrollbar{display:none}
+.highlight-item{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  flex-shrink:0;width:76px;cursor:pointer;
+  transition:.2s;
+}
+.highlight-item:hover{transform:translateY(-2px)}
+.highlight-item:active{transform:scale(.94)}
+.hl-ring{
+  width:62px;height:62px;border-radius:50%;
+  padding:2px;
+  background:linear-gradient(135deg,#f9c74f,#f3722c,#f94144);
+  transition:.2s;
+}
+.hl-ring.purple{background:linear-gradient(135deg,#c77dff,#7b5ea7)}
+.hl-ring.add-ring{background:var(--bg3);border:2px dashed rgba(255,255,255,.15)}
+.highlight-item:hover .hl-ring{filter:brightness(1.15)}
+.hl-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--bg2);
+  overflow:hidden;
+  border:2.5px solid var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.hl-ring.add-ring .hl-inner{background:var(--bg3)}
+.hl-ring.add-ring .hl-inner svg{width:20px;height:20px;color:var(--muted)}
+.hl-label{
+  font-size:11px;color:var(--sub);
+  text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  width:100%;
+}
+
+/* ───── TABS ───── */
+.tabs-bar{
+  display:flex;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  position:sticky;top:62px;z-index:40;
+  background:rgba(10,10,10,.92);
+  backdrop-filter:blur(14px);
+}
+.tab-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:13px 0;cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:.2s;color:var(--muted);
+}
+.tab-btn svg{width:21px;height:21px}
+.tab-btn.active{color:var(--text);border-bottom-color:var(--text)}
+.tab-btn:hover:not(.active){color:#666}
+
+/* ───── POSTS GRID ───── */
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.post-cell{
+  aspect-ratio:1;
+  overflow:hidden;position:relative;cursor:pointer;
+  transition:.2s;
+}
+.post-cell:active{opacity:.8}
+.post-bg{
+  width:100%;height:100%;
+  transition:.3s;
+}
+.post-cell:hover .post-bg{transform:scale(1.06)}
+.post-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.52);
+  opacity:0;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:16px;
+}
+.post-cell:hover .post-overlay{opacity:1}
+.post-stat{
+  display:flex;align-items:center;gap:5px;
+  color:#fff;font-size:13px;font-weight:700;
+  font-family:'Space Mono',monospace;
+}
+.post-stat svg{width:14px;height:14px}
+.reel-badge{
+  position:absolute;top:8px;right:8px;
+}
+.reel-badge svg{width:17px;height:17px;filter:drop-shadow(0 1px 5px rgba(0,0,0,.9))}
+.multi-badge{
+  position:absolute;top:8px;right:8px;
+  color:white;
+}
+.multi-badge svg{width:17px;height:17px;filter:drop-shadow(0 1px 5px rgba(0,0,0,.9))}
+
+/* shimmer loading */
+.shimmer{
+  animation:shimmer 1.8s ease-in-out infinite;
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+}
+@keyframes shimmer{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* ───── EMPTY STATES ───── */
+.empty-tab{padding:60px 30px;text-align:center}
+.et-icon{
+  width:66px;height:66px;border-radius:50%;
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;color:var(--muted);
+}
+.et-icon svg{width:28px;height:28px}
+.et-title{font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px}
+.et-sub{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ───── MODAL ───── */
+.modal-bg{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(14px);
+  z-index:200;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:.25s;
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal-sheet{
+  background:#111;
+  border:1px solid var(--border2);
+  border-radius:24px 24px 0 0;
+  padding:8px 20px 48px;
+  width:100%;max-width:480px;
+  transform:translateY(105%);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  max-height:90vh;overflow-y:auto;
+}
+.modal-bg.open .modal-sheet{transform:translateY(0)}
+.drag-handle{
+  width:38px;height:4px;border-radius:2px;
+  background:var(--border);
+  margin:14px auto 22px;
+}
+.modal-title{
+  font-size:18px;font-weight:700;
+  color:var(--text);margin-bottom:22px;
+}
+.field{margin-bottom:16px}
+.field-lbl{
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--muted);
+  font-weight:600;margin-bottom:7px;
+}
+.field-inp{
+  width:100%;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:12px 14px;
+  color:var(--text);font-size:14px;
+  font-family:'Outfit',sans-serif;
+  outline:none;transition:.2s;resize:none;
+}
+.field-inp::placeholder{color:var(--muted)}
+.field-inp:focus{
+  border-color:rgba(193,53,132,.5);
+  background:rgba(193,53,132,.04);
+  box-shadow:0 0 0 3px rgba(193,53,132,.1);
+}
+.save-btn{
+  width:100%;padding:13px;
+  background:var(--grad-ig);
+  border-radius:12px;border:none;
+  color:#fff;font-size:15px;font-weight:700;
+  font-family:'Outfit',sans-serif;
+  cursor:pointer;margin-top:10px;transition:.2s;
+  box-shadow:0 4px 20px rgba(193,53,132,.4);
+}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(193,53,132,.55)}
+.save-btn:active{transform:scale(.97)}
+.cancel-lnk{
+  display:block;text-align:center;padding:13px;
+  color:var(--muted);font-size:13px;cursor:pointer;margin-top:2px;transition:.2s;
+}
+.cancel-lnk:hover{color:var(--sub)}
+
+/* ───── TOAST ───── */
+.toast{
+  position:fixed;bottom:30px;left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:rgba(30,30,30,.95);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:100px;
+  padding:10px 24px;
+  color:var(--text);font-size:13px;font-weight:500;
+  font-family:'Outfit',sans-serif;
+  z-index:500;opacity:0;transition:.3s;
+  white-space:nowrap;
+  backdrop-filter:blur(10px);
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ───── ANIMATIONS ───── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.profile-header{animation:fadeUp .45s ease both}
+.profile-meta{animation:fadeUp .45s .08s ease both}
+.action-btns{animation:fadeUp .45s .14s ease both}
+.highlights-section{animation:fadeUp .45s .2s ease both}
+.posts-grid{animation:fadeUp .5s .3s ease both}
+</style>
+</head>
+<body>
+
+<!-- ════ TOP BAR ════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
     </div>
-    <input type="file" id="coverPhotoInput" accept="image/*" style="display:none" onchange="handleCoverPhoto(this)"/>
-
-    <div class="profile-info-section" style="padding:0 16px 16px;background:var(--surface);border-bottom:1px solid var(--border)">
-      <div class="profile-photo-wrap" style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-44px;margin-bottom:12px">
-        <div class="profile-photo" id="profilePhoto" onclick="document.getElementById('profilePhotoInput').click()">
-          <span id="profilePhotoText">A</span>
-          <div class="profile-photo-edit">✏️</div>
-        </div>
-        <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)"/>
-        <div style="display:flex;gap:8px">
-          <button class="btn-edit-profile" onclick="openEditProfile()" style="margin-top:0;width:auto;padding:8px 16px">✏️ Edit</button>
-          <button class="btn-outline" onclick="handleLogout()" style="margin-top:0;width:auto;padding:8px 16px;font-size:12px">Sign Out</button>
-        </div>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-        <div class="profile-name" id="profileName">User</div>
-      </div>
-      <div class="profile-username" id="profileEmail">user@email.com</div>
-      <div class="profile-bio" id="profileBio" style="color:var(--text);font-size:14px;line-height:1.6;margin-bottom:8px"></div>
-      <a id="profileLink" href="#" target="_blank" style="display:none;align-items:center;gap:6px;margin-bottom:12px;font-size:13px;color:var(--accent);text-decoration:none">🔗 <span id="profileLinkText"></span></a>
-
-      <div class="profile-stats" style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:14px;gap:0">
-        <div class="stat"><div class="stat-num" id="postCount">0</div><div class="stat-label">Posts</div></div>
-        <div class="stat" onclick="showFollowList('followers')"><div class="stat-num" id="followerCount">0</div><div class="stat-label">Followers</div></div>
-        <div class="stat" onclick="showFollowList('following')"><div class="stat-num" id="followingCount">0</div><div class="stat-label">Following</div></div>
-        <div class="stat"><div class="stat-num" id="likeCount">0</div><div class="stat-label">Likes</div></div>
-      </div>
-    </div>
-
-    <div class="profile-highlight" id="profileHighlight" style="display:none">
-      <div class="profile-highlight-icon">🏆</div>
-      <div>
-        <div class="profile-highlight-title">Top Creator</div>
-        <div class="profile-highlight-text">Top creator on Rollera ✦</div>
-      </div>
-    </div>
-
-    <div class="profile-tabs">
-      <div class="profile-tab active" onclick="switchProfileTab('posts',this)">⊞ Posts</div>
-      <div class="profile-tab" onclick="switchProfileTab('reels',this)">🎬 Reels</div>
-      <div class="profile-tab" onclick="switchProfileTab('saved',this)">🔖 Saved</div>
-    </div>
-    <div id="myPosts"></div>
-    <div id="myReels" style="display:none"></div>
-    <div id="savedPosts" style="display:none"></div>
+    <span class="topbar-username" id="topUsername">mr.abhi_01_</span>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
+  <div class="topbar-actions">
+    <div class="tb-btn" onclick="showToast('Add post / reel')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="tb-btn" onclick="showToast('3 new notifications')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="tb-btn" onclick="showToast('Menu')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PROFILE HEADER ════ -->
+<div class="profile-header">
+  <div class="header-top">
+    <!-- Avatar -->
+    <div class="avatar-area" onclick="document.getElementById('avInput').click()" title="Change photo">
+      <div class="av-ring">
+        <div class="av-inner">
+          <img id="avImg" alt="Profile photo"/>
+          <span class="av-initials-txt" id="avInit">AK</span>
+        </div>
+      </div>
+      <div class="av-online" title="Active now"></div>
+    </div>
+    <input type="file" id="avInput" accept="image/*" style="display:none" onchange="setAvatar(this)"/>
+
+    <!-- Stats -->
+    <div class="header-stats">
+      <div class="stat-item">
+        <div class="stat-val" id="sPosts">25</div>
+        <div class="stat-lbl">posts</div>
+      </div>
+      <div class="stat-item" onclick="showToast('Followers list')">
+        <div class="stat-val" id="sFollowers">565</div>
+        <div class="stat-lbl">followers</div>
+      </div>
+      <div class="stat-item" onclick="showToast('Following list')">
+        <div class="stat-val" id="sFollowing">222</div>
+        <div class="stat-lbl">following</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PROFILE META ════ -->
+<div class="profile-meta">
+  <div class="profile-fullname">
+    <span id="dispName">Abhishek Kumar</span>
+    <span>🌿</span>
+    <div class="verified-badge" title="Verified">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+  </div>
+  <div class="profile-bio" id="dispBio">
+    <span class="bio-tag">#student</span> 📚📄
+    &nbsp;<span class="bio-tag">#shekhawatiuniversity</span> 🏛️<br>
+    <span class="bio-tag">#sikar</span> 📍<br>
+    <span class="bio-quote">"Life's a <span class="bio-highlight">#journey</span>, not a <span class="bio-highlight">#destination</span> 🌍🚶"</span>
+  </div>
+  <a id="dispLink" class="profile-link" href="https://instagram.com/mr.abhi_01_" target="_blank">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    <span id="dispLinkTxt">instagram.com/mr.abhi_01_</span>
+  </a>
+</div>
+
+<!-- ════ ACTION BUTTONS ════ -->
+<div class="action-btns">
+  <button class="abtn abtn-primary" onclick="openModal()">Edit profile</button>
+  <button class="abtn abtn-secondary" onclick="showToast('Archive opened')">View archive</button>
+  <div class="abtn-icon" onclick="showToast('Add to profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </div>
+</div>
+
+<!-- ════ STORY HIGHLIGHTS ════ -->
+<div class="highlights-section">
+  <div class="highlights-scroll">
+    <div class="highlight-item" onclick="showToast('Add new highlight')">
+      <div class="hl-ring add-ring">
+        <div class="hl-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <span class="hl-label">New</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('Story: ...')">
+      <div class="hl-ring purple"><div class="hl-inner">🌙</div></div>
+      <span class="hl-label">...</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('Highlights')">
+      <div class="hl-ring"><div class="hl-inner">⭐</div></div>
+      <span class="hl-label">Highlights</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('RIP jaan 💔')">
+      <div class="hl-ring"><div class="hl-inner">🕊️</div></div>
+      <span class="hl-label">RIP jaan😢</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('Highlights')">
+      <div class="hl-ring"><div class="hl-inner">🔥</div></div>
+      <span class="hl-label">Highlights</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('Katrathal 📍')">
+      <div class="hl-ring purple"><div class="hl-inner">🏔️</div></div>
+      <span class="hl-label">Katrathal📍</span>
+    </div>
+    <div class="highlight-item" onclick="showToast('🩸 Blood Donation')">
+      <div class="hl-ring"><div class="hl-inner">🩸</div></div>
+      <span class="hl-label">blood donati...</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TABS ════ -->
+<div class="tabs-bar">
+  <div class="tab-btn active" onclick="switchTab('grid',this)" title="Posts">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+  </div>
+  <div class="tab-btn" onclick="switchTab('reels',this)" title="Reels">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+  </div>
+  <div class="tab-btn" onclick="switchTab('saved',this)" title="Saved">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+  </div>
+  <div class="tab-btn" onclick="switchTab('tagged',this)" title="Tagged">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </div>
+</div>
+
+<!-- ════ POSTS GRID ════ -->
+<div id="tabGrid">
+  <div class="posts-grid" id="postsGrid"></div>
+</div>
+
+<div id="tabReels" style="display:none">
+  <div class="empty-tab">
+    <div class="et-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+    <div class="et-title">No Reels Yet</div>
+    <div class="et-sub">Create your first reel and<br>share it with the world.</div>
+  </div>
+</div>
+
+<div id="tabSaved" style="display:none">
+  <div class="empty-tab">
+    <div class="et-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+    <div class="et-title">Save Posts</div>
+    <div class="et-sub">Save photos and videos<br>you want to see again.</div>
+  </div>
+</div>
+
+<div id="tabTagged" style="display:none">
+  <div class="empty-tab">
+    <div class="et-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="et-title">Photos of You</div>
+    <div class="et-sub">When people tag you,<br>photos appear here.</div>
+  </div>
+</div>
+
+<!-- ════ EDIT MODAL ════ -->
+<div class="modal-bg" id="editModal" onclick="bgClose(event)">
+  <div class="modal-sheet">
+    <div class="drag-handle"></div>
+    <div class="modal-title">Edit Profile</div>
+    <div class="field">
+      <div class="field-lbl">Full Name</div>
+      <input class="field-inp" id="inpName" type="text" value="Abhishek Kumar" placeholder="Your name"/>
+    </div>
+    <div class="field">
+      <div class="field-lbl">Username</div>
+      <input class="field-inp" id="inpUser" type="text" value="mr.abhi_01_" placeholder="@username"/>
+    </div>
+    <div class="field">
+      <div class="field-lbl">Bio</div>
+      <textarea class="field-inp" id="inpBio" rows="4" placeholder="Write something about you…">#student 📚📄 #shekhawatiuniversity 🏛️
+#sikar 📍
+"Life's a #journey, not a #destination 🌍🚶"</textarea>
+    </div>
+    <div class="field">
+      <div class="field-lbl">Website / Link</div>
+      <input class="field-inp" id="inpLink" type="text" value="instagram.com/mr.abhi_01_" placeholder="Your website or link"/>
+    </div>
+    <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+    <span class="cancel-lnk" onclick="closeModal()">Cancel</span>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Tab switch ──
+const panels = {grid:'tabGrid',reels:'tabReels',saved:'tabSaved',tagged:'tabTagged'};
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  Object.values(panels).forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById(panels[name]).style.display = '';
+}
+
+// ── Avatar upload ──
+function setAvatar(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const img = document.getElementById('avImg');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('avInit').style.display = 'none';
+  };
+  r.readAsDataURL(f);
+}
+
+// ── Modal ──
+function openModal() { document.getElementById('editModal').classList.add('open'); }
+function closeModal() { document.getElementById('editModal').classList.remove('open'); }
+function bgClose(e) { if (e.target === document.getElementById('editModal')) closeModal(); }
+
+// ── Save profile ──
+function saveProfile() {
+  const name = document.getElementById('inpName').value.trim();
+  const user = document.getElementById('inpUser').value.trim();
+  const bio  = document.getElementById('inpBio').value.trim();
+  const link = document.getElementById('inpLink').value.trim();
+
+  if (name) {
+    document.getElementById('dispName').textContent = name;
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    document.getElementById('avInit').textContent = initials;
+  }
+  if (user) {
+    document.getElementById('topUsername').textContent = user;
+  }
+  if (bio) {
+    const html = bio
+      .replace(/\n/g, '<br>')
+      .replace(/(#\w+)/g, '<span class="bio-tag">$1</span>');
+    document.getElementById('dispBio').innerHTML = html;
+  }
+  if (link) {
+    document.getElementById('dispLinkTxt').textContent = link;
+    document.getElementById('dispLink').href = link.startsWith('http') ? link : 'https://' + link;
+  }
+  closeModal();
+  showToast('✓ Profile updated successfully');
+}
+
+// ── Toast ──
+let toastTimer;
+function showToast(msg) {
+  clearTimeout(toastTimer);
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Build posts grid ──
+const postConfigs = [
+  { type:'img', likes:'1.2K', bg:['#1a1a2e','#16213e','#0f3460'], emoji:'🌅' },
+  { type:'img', likes:'843',  bg:['#0f2027','#203a43','#2c5364'], emoji:'🏔️' },
+  { type:'reel',likes:'2.1K', views:'18K', bg:['#200122','#6f0000','#a00000'], emoji:'🎬' },
+  { type:'img', likes:'567',  bg:['#1f1c2c','#928dab','#6b63ff'], emoji:'✨' },
+  { type:'reel',likes:'1.8K', views:'22K', bg:['#0a0a0a','#1a1a1a','#2a2a2a'], emoji:'🎵' },
+  { type:'img', likes:'934',  bg:['#141e30','#243b55','#1a3a5c'], emoji:'🌃' },
+  { type:'multi',likes:'412', bg:['#16222a','#3a6073','#52a3c1'], emoji:'📸' },
+  { type:'img', likes:'1.5K', bg:['#0d0d0d','#1a1a1a','#1a0a0a'], emoji:'🌿' },
+  { type:'reel',likes:'3.2K', views:'45K', bg:['#0f0c29','#302b63','#5a52a0'], emoji:'🎭' },
+  { type:'img', likes:'721',  bg:['#1a0a1a','#3a1a3a','#6f2f6f'], emoji:'💜' },
+  { type:'img', likes:'289',  bg:['#0a1a0a','#1a3a1a','#2a5a2a'], emoji:'🌱' },
+  { type:'reel',likes:'1.1K', views:'9.5K', bg:['#1a1a0a','#3a3a1a','#5a5a2a'], emoji:'🌟' },
+];
+
+const grid = document.getElementById('postsGrid');
+postConfigs.forEach((p, i) => {
+  const [c1,c2,c3] = p.bg;
+  const cell = document.createElement('div');
+  cell.className = 'post-cell';
+
+  // Gradient background div
+  const bg = document.createElement('div');
+  bg.className = 'post-bg';
+  bg.style.cssText = `
+    width:100%;height:100%;
+    background:linear-gradient(145deg,${c1},${c2},${c3});
+    display:flex;align-items:center;justify-content:center;
+    font-size:32px;
+  `;
+  bg.textContent = p.emoji;
+
+  // Overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'post-overlay';
+  overlay.innerHTML = `
+    <div class="post-stat">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      ${p.likes}
+    </div>
+    ${p.views ? `<div class="post-stat"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>${p.views}</div>` : ''}
+  `;
+
+  cell.appendChild(bg);
+  cell.appendChild(overlay);
+
+  if (p.type === 'reel') {
+    const badge = document.createElement('div');
+    badge.className = 'reel-badge';
+    badge.innerHTML = `<svg viewBox="0 0 24 24" fill="white" width="17" height="17"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>`;
+    cell.appendChild(badge);
+  } else if (p.type === 'multi') {
+    const badge = document.createElement('div');
+    badge.className = 'multi-badge';
+    badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="17" height="17"><rect x="7" y="3" width="14" height="14" rx="2"/><path d="M3 7v11a2 2 0 002 2h11"/></svg>`;
+    cell.appendChild(badge);
+  }
+
+  cell.onclick = () => {
+    if (p.type === 'reel') showToast('▶ Playing reel…');
+    else showToast('📸 Opening post…');
+  };
+
+  grid.appendChild(cell);
+  document.getElementById('sPosts').textContent = postConfigs.length;
+});
+</script>
+</body>
+</html>
   <!-- GLOBAL MINI MUSIC PLAYER -->
   <div class="mini-player" id="miniPlayer">
     <div class="mini-player-disc" id="miniDisc">🎵</div>
