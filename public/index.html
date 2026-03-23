@@ -1886,18 +1886,88 @@ function sharePost(postId){openShareSheet(postId,'false','','')}
 async function openUserProfile(userId, userName) {
   if(userId===getUserId()){showPage('profile');return;}
 
-  // Pro level overlay
   const sheet=document.createElement('div');
-  sheet.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:600;display:flex;flex-direction:column;backdrop-filter:blur(10px)';
+  sheet.style.cssText='position:fixed;inset:0;background:#04030a;z-index:600;display:flex;flex-direction:column;font-family:Inter,sans-serif;overflow:hidden';
   sheet.innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border)">
-      <button onclick="this.closest('[style]').remove()" style="background:none;border:none;color:var(--text);font-size:22px;cursor:pointer">←</button>
-      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">${userName}</span>
-      <div style="width:30px"></div>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap');
+      .up-back{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:40px;padding:7px 16px 7px 11px;color:#a09ccc;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;letter-spacing:0.2px;font-family:'Inter',sans-serif}
+      .up-back:hover{background:rgba(120,80,255,0.12);border-color:rgba(120,80,255,0.35);color:#c4aaff}
+      .up-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;background:linear-gradient(90deg,#7b5cff,#c46bff,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+      .up-tib{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:50%;cursor:pointer;color:#5a5478;transition:all 0.2s}
+      .up-tib:hover{background:rgba(120,80,255,0.1);border-color:rgba(120,80,255,0.3);color:#a080ff}
+      .up-p{position:absolute;border-radius:50%;animation:upfloat linear infinite}
+      @keyframes upfloat{0%{transform:translateY(0);opacity:0}20%{opacity:1}80%{opacity:0.6}100%{transform:translateY(-160px);opacity:0}}
+      .up-av-ring{width:90px;height:90px;border-radius:26px;padding:2.5px;background:linear-gradient(135deg,#7b5cff,#c46bff,#ff6b9d,#5ac8fa);box-shadow:0 0 28px rgba(120,80,255,0.4);flex-shrink:0}
+      .up-av{width:100%;height:100%;border-radius:23px;background:linear-gradient(145deg,#1a0a3a,#2d1060);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;border:2.5px solid #04030a;letter-spacing:-1px;overflow:hidden}
+      .up-btn-follow{border:none;border-radius:40px;padding:10px 22px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.4px;font-family:'Inter',sans-serif;background:linear-gradient(135deg,#6b3aff,#a555ff,#c46bff);box-shadow:0 6px 24px rgba(107,58,255,0.4),inset 0 1px 0 rgba(255,255,255,0.15);transition:all 0.2s}
+      .up-btn-follow:hover{box-shadow:0 8px 32px rgba(107,58,255,0.6);transform:translateY(-1px)}
+      .up-btn-following{border:1px solid rgba(120,80,255,0.4);border-radius:40px;padding:10px 22px;color:#a080ff;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.4px;font-family:'Inter',sans-serif;background:rgba(120,80,255,0.1);transition:all 0.2s}
+      .up-btn-following:hover{background:rgba(120,80,255,0.18)}
+      .up-ib{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04)}
+      .up-ib:hover{transform:scale(1.1)}
+      .up-ib svg{width:15px;height:15px}
+      .up-ib.msg{color:#9d7aff;border-color:rgba(157,122,255,0.25);background:rgba(157,122,255,0.07)}
+      .up-ib.msg:hover{background:rgba(157,122,255,0.15)}
+      .up-ib.hrt{color:#ff507a;border-color:rgba(255,80,122,0.25);background:rgba(255,80,122,0.07)}
+      .up-ib.hrt.active{color:#22d47e;border-color:rgba(34,212,126,0.3);background:rgba(34,212,126,0.08)}
+      .up-ib.hrt:hover{background:rgba(255,80,122,0.15)}
+      .up-sc{border-radius:14px;padding:12px 8px;text-align:center;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);transition:all 0.2s;cursor:default}
+      .up-sc:hover{background:rgba(120,80,255,0.07);border-color:rgba(120,80,255,0.2)}
+      .up-sn{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1;margin-bottom:5px}
+      .up-sl{font-size:9.5px;color:#3f3b5a;text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+      .up-post-item{aspect-ratio:1;overflow:hidden;background:rgba(255,255,255,0.03);border-radius:4px;cursor:pointer;position:relative}
+      .up-post-item img,.up-post-item video{width:100%;height:100%;object-fit:cover}
+      .up-post-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s}
+      .up-post-item:hover .up-post-overlay{opacity:1}
+      .up-spinner{width:30px;height:30px;border-radius:50%;border:2px solid rgba(107,58,255,0.2);border-top-color:#7b5cff;animation:upspin 0.8s linear infinite}
+      @keyframes upspin{to{transform:rotate(360deg)}}
+      .up-badge{width:18px;height:18px;background:linear-gradient(135deg,#6b3aff,#c46bff);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:6px;vertical-align:middle;flex-shrink:0}
+      .up-badge svg{width:10px;height:10px;color:#fff}
+    </style>
+
+    <!-- TOPBAR -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(4,3,10,0.85);border-bottom:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;flex-shrink:0">
+      <button class="up-back" onclick="this.closest('div[style*=fixed]').remove()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </button>
+      <div class="up-title">${userName}</div>
+      <div style="display:flex;gap:6px">
+        <div class="up-tib">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="up-tib">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </div>
+      </div>
     </div>
-    <div style="flex:1;overflow-y:auto" id="userProfileContent">
-      <div class="empty">Loading...</div>
+
+    <!-- SCROLLABLE CONTENT -->
+    <div style="flex:1;overflow-y:auto;background:#04030a">
+
+      <!-- BANNER -->
+      <div style="height:175px;position:relative;overflow:hidden;background:#07050f;flex-shrink:0">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 100% at 60% 0%,rgba(90,40,200,0.5),rgba(40,10,100,0.3) 50%,transparent 75%)"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 10% 50%,rgba(200,60,255,0.15),transparent 70%)"></div>
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(130,80,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(130,80,255,0.06) 1px,transparent 1px);background-size:40px 40px"></div>
+        <div class="up-p" style="width:3px;height:3px;background:#9d6fff;left:15%;bottom:0;animation-duration:5s"></div>
+        <div class="up-p" style="width:2px;height:2px;background:#ff7ac6;left:40%;bottom:0;animation-duration:7s;animation-delay:1s"></div>
+        <div class="up-p" style="width:3px;height:3px;background:#5ac8fa;left:65%;bottom:0;animation-duration:6s;animation-delay:0.5s"></div>
+        <div class="up-p" style="width:2px;height:2px;background:#c46bff;left:80%;bottom:0;animation-duration:8s;animation-delay:2s"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(180,120,255,0.5),rgba(255,100,180,0.3),transparent)"></div>
+      </div>
+
+      <!-- PROFILE BODY -->
+      <div style="padding:0 20px 32px" id="userProfileContent">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px">
+          <div class="up-spinner"></div>
+          <div style="font-size:13px;color:#3f3b5a;letter-spacing:0.5px">Loading profile...</div>
+        </div>
+      </div>
+
     </div>`;
+
   document.body.appendChild(sheet);
 
   try{
@@ -1916,76 +1986,83 @@ async function openUserProfile(userId, userName) {
     const totalLikes=userPosts.reduce((a,p)=>a+(p.likes?.length||0),0);
 
     document.getElementById('userProfileContent').innerHTML=`
-      <!-- COVER + AVATAR -->
-      <div style="position:relative;margin-bottom:50px">
-        <div style="height:120px;background:linear-gradient(135deg,var(--accent),var(--accent2));position:relative;overflow:hidden">
-          <div style="position:absolute;inset:0;opacity:0.3;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.1) 10px,rgba(255,255,255,0.1) 20px)"></div>
+
+      <!-- AVATAR + ACTIONS ROW -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-44px;margin-bottom:16px">
+        <div class="up-av-ring">
+          <div class="up-av">
+            ${userInfo.profilePhoto
+              ? `<img src="${userInfo.profilePhoto}" style="width:100%;height:100%;object-fit:cover"/>`
+              : (userName[0]||'U').toUpperCase()
+            }
+          </div>
         </div>
-        <div style="position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:80px;height:80px;border-radius:24px;border:3px solid #000;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700">
-          ${userInfo.profilePhoto?`<img src="${userInfo.profilePhoto}" style="width:100%;height:100%;object-fit:cover"/>`:( userName[0]||'U').toUpperCase()}
+        <div style="display:flex;gap:8px;align-items:center;padding-bottom:4px">
+          <button id="profileFollowBtn"
+            class="${isFollowing?'up-btn-following':'up-btn-follow'}"
+            onclick="handleFollow('${userId}',this);this.className=this.className.includes('up-btn-follow ')?'up-btn-following':'up-btn-follow';this.innerHTML=this.innerHTML.includes('Following')?'+ Follow':'&#10003; Following'">
+            ${isFollowing?'✓ Following':'+ Follow'}
+          </button>
+          <div class="up-ib msg" onclick="openChat('${userId}','${userName}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="up-ib hrt ${isCloseFriend?'active':''}" onclick="toggleCloseFriendProfile('${userId}',this);this.classList.toggle('active')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
         </div>
       </div>
 
-      <!-- NAME + BADGE + BIO -->
-      <div style="text-align:center;padding:0 16px 16px">
-        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700">
-          ${userName}
-          ${userInfo.isVerifiedBadge?'<span style="background:#7c6cfc;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;margin-left:4px">✓</span>':''}
-        </div>
-        ${userInfo.bio?`<div style="color:var(--muted);font-size:13px;margin-top:4px">${userInfo.bio}</div>`:''}
+      <!-- NAME + HANDLE + BIO -->
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+        <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;letter-spacing:-0.3px">${userName}</div>
+        ${userInfo.isVerifiedBadge?`<div class="up-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>`:''}
+      </div>
+      <div style="font-size:13px;color:#3f3b5a;margin-bottom:${userInfo.bio?'8px':'14px'}">@${userName.toLowerCase().replace(/\s+/g,'')} · Rollera</div>
+      ${userInfo.bio?`<div style="font-size:13.5px;color:#7a76a0;line-height:1.7;margin-bottom:14px;max-width:300px">${userInfo.bio}</div>`:''}
 
-        <!-- STATS -->
-        <div style="display:flex;justify-content:center;gap:24px;margin:16px 0;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px">
-          <div style="text-align:center">
-            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent)">${userPosts.length}</div>
-            <div style="color:var(--muted);font-size:11px">Posts</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent)">${userInfo.followers?.length||0}</div>
-            <div style="color:var(--muted);font-size:11px">Followers</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent)">${userInfo.following?.length||0}</div>
-            <div style="color:var(--muted);font-size:11px">Following</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent)">${totalLikes}</div>
-            <div style="color:var(--muted);font-size:11px">Likes</div>
-          </div>
-        </div>
-
-        <!-- ACTION BUTTONS -->
-        <div style="display:flex;gap:10px;justify-content:center">
-          <button id="profileFollowBtn" onclick="handleFollow('${userId}',this);this.textContent=this.textContent==='Follow'?'Following':'Follow'"
-            style="flex:1;padding:10px;background:${isFollowing?'rgba(124,108,252,0.15)':'linear-gradient(135deg,var(--accent),var(--accent2))'};border:${isFollowing?'1px solid var(--accent)':'none'};border-radius:12px;color:${isFollowing?'var(--accent)':'#fff'};font-weight:700;cursor:pointer;font-size:14px;font-family:'Syne',sans-serif">
-            ${isFollowing?'✓ Following':'Follow'}
-          </button>
-          <button onclick="openChat('${userId}','${userName}')"
-            style="padding:10px 16px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;color:var(--text);cursor:pointer;font-size:16px">
-            💬
-          </button>
-          <button onclick="toggleCloseFriendProfile('${userId}',this)"
-            style="padding:10px 16px;background:${isCloseFriend?'rgba(74,222,128,0.15)':'rgba(255,255,255,0.06)'};border:1px solid ${isCloseFriend?'#4ade80':'var(--border)'};border-radius:12px;color:${isCloseFriend?'#4ade80':'var(--muted)'};cursor:pointer;font-size:16px">
-            💚
-          </button>
-        </div>
+      <!-- STATS -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+        <div class="up-sc"><div class="up-sn">${userPosts.length}</div><div class="up-sl">Posts</div></div>
+        <div class="up-sc"><div class="up-sn">${userInfo.followers?.length||0}</div><div class="up-sl">Followers</div></div>
+        <div class="up-sc"><div class="up-sn">${userInfo.following?.length||0}</div><div class="up-sl">Following</div></div>
+        <div class="up-sc"><div class="up-sn">${totalLikes}</div><div class="up-sl">Likes</div></div>
       </div>
 
-      <!-- POSTS GRID -->
-      <div style="padding:0 16px 16px">
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;color:var(--muted)">POSTS</div>
+      <!-- DIVIDER -->
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin-bottom:18px"></div>
+
+      <!-- POSTS SECTION -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:600;color:#3f3b5a;letter-spacing:2px;text-transform:uppercase">Posts</div>
+        <div style="font-size:12px;color:#3f3b5a">${userPosts.length} posts</div>
+      </div>
+
+      ${userPosts.length?`
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px">
-          ${userPosts.length?userPosts.map(p=>`
-            <div style="aspect-ratio:1;overflow:hidden;background:var(--surface);position:relative;cursor:pointer" onclick="openPostDetail('${p._id}')">
-              ${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover"/>`:''}
-              ${p.video?`<video src="${p.video}" style="width:100%;height:100%;object-fit:cover"></video>`:''}
-              ${!p.image&&!p.video?`<div style="padding:8px;font-size:11px;color:var(--text)">${p.content||''}</div>`:''}
-              <div style="position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
-                <span style="color:#fff;font-size:13px">❤️ ${p.likes?.length||0}</span>
+          ${userPosts.map(p=>`
+            <div class="up-post-item" onclick="openPostDetail('${p._id}')">
+              ${p.image?`<img src="${p.image}" loading="lazy"/>`:''}
+              ${p.video?`<video src="${p.video}" muted></video>`:''}
+              ${!p.image&&!p.video?`<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:8px;font-size:11px;color:#7a76a0;line-height:1.4">${p.content||''}</div>`:''}
+              <div class="up-post-overlay">
+                <span style="color:#fff;font-size:13px;display:flex;align-items:center;gap:4px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                  ${p.likes?.length||0}
+                </span>
               </div>
-            </div>`).join(''):'<div style="grid-column:span 3;text-align:center;color:var(--muted);padding:30px;font-size:14px">Koi post nahi ✦</div>'}
+            </div>
+          `).join('')}
         </div>
-      </div>`;
+      `:`
+        <div style="display:flex;flex-direction:column;align-items:center;padding:32px 20px;gap:12px">
+          <div style="width:58px;height:58px;border-radius:18px;background:rgba(107,58,255,0.08);border:1px solid rgba(107,58,255,0.14);display:flex;align-items:center;justify-content:center;color:#5c3dbf">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#c8c3e8">Koi post nahi abhi tak</div>
+          <div style="font-size:13px;color:#302d4a;text-align:center;line-height:1.6;max-width:200px">Is user ne abhi kuch share nahi kiya.</div>
+        </div>
+      `}
+    `;
   }catch(e){}
 }
 
