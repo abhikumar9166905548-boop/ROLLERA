@@ -84,5 +84,8 @@ router.delete('/admin/posts/:id', protect, require('../controllers/auth.controll
 router.put('/close-friends/:id', protect, require('../controllers/auth.controller').toggleCloseFriend);
 router.put('/location', protect, require('../controllers/auth.controller').updateLocation);
 router.get('/nearby', protect, require('../controllers/auth.controller').getNearbyUsers);
-
+router.post('/admin/users',           protect, require('../controllers/auth.controller').adminCreateUser);
+router.put('/admin/users/:id',        protect, require('../controllers/auth.controller').adminUpdateUser);
+router.put('/admin/users/:id/status', protect, require('../controllers/auth.controller').adminUpdateStatus);
+router.get('/admin/stats',            protect, require('../controllers/auth.controller').adminGetStats);
 module.exports = router;

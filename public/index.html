@@ -1780,13 +1780,25 @@ async function showFollowList(type){
     const ids=type==='followers'?(data.user.followers||[]):(data.user.following||[]);
     if(!ids.length){document.getElementById('followListContent').innerHTML='<div class="empty">Koi nahi hai abhi</div>';return}
     const myFollowing=data.user.following||[];
-    document.getElementById('followListContent').innerHTML=ids.map(id=>`
+    // Har user ki details fetch karo
+    const userDetails=await Promise.all(ids.map(id=>
+      fetch(`${API}/auth/users?q=`,{headers:{Authorization:`Bearer ${getToken()}`}})
+      .then(r=>r.json()).then(d=>(d.users||[]).find(u=>u._id===id)||{_id:id,name:'User'})
+      .catch(()=>({_id:id,name:'User'}))
+    ));
+    document.getElementById('followListContent').innerHTML=userDetails.map(u=>`
       <div class="follow-list-item">
-        <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="this.closest('.sheet-overlay').remove();openUserProfile('${id}','User')">
-          <div class="post-avatar">${id[0]?.toUpperCase()||'U'}</div>
-          <div style="font-weight:600;font-size:14px">User</div>
+        <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="this.closest('.sheet-overlay').remove();openUserProfile('${u._id}','${u.name}')">
+          <div class="post-avatar">${u.profilePhoto?`<img src="${u.profilePhoto}"/>`:(u.name||'U')[0].toUpperCase()}</div>
+          <div>
+            <div style="font-weight:600;font-size:14px">${u.name}</div>
+            <div style="font-size:12px;color:var(--muted)">${u.bio||u.email||''}</div>
+          </div>
         </div>
-        ${id!==getUserId()?`<button class="follow-btn ${myFollowing.includes(id)?'following':''}" onclick="handleFollow('${id}',this)">${myFollowing.includes(id)?'Following':'Follow'}</button>`:''}
+        <div style="display:flex;gap:6px">
+          <button onclick="this.closest('.sheet-overlay').remove();openChat('${u._id}','${u.name}')" style="padding:5px 10px;background:rgba(124,108,252,0.1);border:1px solid var(--accent);border-radius:8px;color:var(--accent);font-size:11px;cursor:pointer">✉️</button>
+          ${u._id!==getUserId()?`<button class="follow-btn ${myFollowing.includes(u._id)?'following':''}" onclick="handleFollow('${u._id}',this)">${myFollowing.includes(u._id)?'Following':'Follow'}</button>`:''}
+        </div>
       </div>`).join('');
   }catch(e){document.getElementById('followListContent').innerHTML='<div class="empty">Load nahi hua 😕</div>'}
 }
@@ -1925,7 +1937,7 @@ async function openUserProfile(userId, userName) {
       .up-badge{width:18px;height:18px;background:linear-gradient(135deg,#6b3aff,#c46bff);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:6px;vertical-align:middle;flex-shrink:0}
       .up-badge svg{width:10px;height:10px;color:#fff}
     </style>
-
+    
     <!-- TOPBAR -->
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(4,3,10,0.85);border-bottom:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;flex-shrink:0">
       <button class="up-back" onclick="this.closest('div[style*=fixed]').remove()">
@@ -1999,8 +2011,8 @@ async function openUserProfile(userId, userName) {
         </div>
         <div style="display:flex;gap:8px;align-items:center;padding-bottom:4px">
           <button id="profileFollowBtn"
-            class="${isFollowing?'up-btn-following':'up-btn-follow'}"
-            onclick="handleFollow('${userId}',this);this.className=this.className.includes('up-btn-follow ')?'up-btn-following':'up-btn-follow';this.innerHTML=this.innerHTML.includes('Following')?'+ Follow':'&#10003; Following'">
+            <button onclick="this.closest('.sheet-overlay').remove();openChat('${userId}','${userName}')" style="padding:8px 20px;background:rgba(124,108,252,0.1);border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-weight:700;cursor:pointer;font-size:14px;margin-right:8px">✉️ Message</button>
+            );this.className=this.className.includes('up-btn-follow ')?'up-btn-following':'up-btn-follow';this.innerHTML=this.innerHTML.includes('Following')?'+ Follow':'&#10003; Following'">
             ${isFollowing?'✓ Following':'+ Follow'}
           </button>
           <div class="up-ib msg" onclick="openChat('${userId}','${userName}')">
@@ -2033,7 +2045,7 @@ async function openUserProfile(userId, userName) {
 
       <!-- POSTS SECTION -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div style="font-size:10px;font-weight:600;color:#3f3b5a;letter-spacing:2px;text-transform:uppercase">Posts</div>
+        <div style="font-size:10ponclick="handleFollow('${userId}',thisx;font-weight:600;color:#3f3b5a;letter-spacing:2px;text-transform:uppercase">Posts</div>
         <div style="font-size:12px;color:#3f3b5a">${userPosts.length} posts</div>
       </div>
 
