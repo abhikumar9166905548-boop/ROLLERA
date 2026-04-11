@@ -117,4 +117,22 @@ router.put('/admin/users/:id', protect, adminUpdateUser);
 router.put('/admin/users/:id/status', protect, adminUpdateStatus);
 router.get('/admin/stats', protect, adminGetStats);
 
+// 🔥 TEMP FIX (taaki server crash na ho)
+exports.getSuggestions = (req,res)=>res.json({msg:"ok"});
+exports.toggleVerification = (req,res)=>res.json({msg:"ok"});
+exports.verifyOtp = (req,res)=>res.json({msg:"ok"});
+exports.resendOtp = (req,res)=>res.json({msg:"ok"});
+exports.googleLogin = (req,res)=>res.json({msg:"ok"});
+exports.adminGetUsers = (req,res)=>res.json({msg:"ok"});
+exports.adminDeleteUser = (req,res)=>res.json({msg:"ok"});
+exports.adminGetPosts = (req,res)=>res.json({msg:"ok"});
+exports.adminDeletePost = (req,res)=>res.json({msg:"ok"});
+exports.toggleCloseFriend = (req,res)=>res.json({msg:"ok"});
+exports.updateLocation = (req,res)=>res.json({msg:"ok"});
+exports.getNearbyUsers = (req,res)=>res.json({msg:"ok"});
+exports.adminCreateUser = (req,res)=>res.json({msg:"ok"});
+exports.adminUpdateUser = (req,res)=>res.json({msg:"ok"});
+exports.adminUpdateStatus = (req,res)=>res.json({msg:"ok"});
+exports.adminGetStats = (req,res)=>res.json({msg:"ok"});
+
 module.exports = router;
