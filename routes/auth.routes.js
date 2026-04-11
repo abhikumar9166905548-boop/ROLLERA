@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
 
+// ✅ ALL CONTROLLERS IMPORT (IMPORTANT FIX)
 const {
   signup,
   login,
@@ -17,6 +18,25 @@ const {
   savePost,
   getSavedPosts,
   blockUser,
+
+  // 🔥 ADD THESE (jo neeche use ho rahe the)
+  getSuggestions,
+  toggleVerification,
+  verifyOtp,
+  resendOtp,
+  googleLogin,
+  adminGetUsers,
+  adminDeleteUser,
+  adminGetPosts,
+  adminDeletePost,
+  toggleCloseFriend,
+  updateLocation,
+  getNearbyUsers,
+  adminCreateUser,
+  adminUpdateUser,
+  adminUpdateStatus,
+  adminGetStats
+
 } = require('../controllers/auth.controller');
 
 const { protect } = require('../middleware/auth.middleware');
@@ -35,19 +55,20 @@ const validate = (req, res, next) => {
   next();
 };
 
+// 🔐 AUTH
 router.post('/signup', authLimiter,
   [
-    body('name').trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
-    body('email').isEmail().withMessage('Enter a valid email'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('name').trim().isLength({ min: 2 }),
+    body('email').isEmail(),
+    body('password').isLength({ min: 6 }),
   ],
   validate, signup
 );
 
 router.post('/login', authLimiter,
   [
-    body('email').isEmail().withMessage('Enter a valid email'),
-    body('password').notEmpty().withMessage('Password is required'),
+    body('email').isEmail(),
+    body('password').notEmpty(),
   ],
   validate, login
 );
@@ -55,16 +76,18 @@ router.post('/login', authLimiter,
 router.get('/me', protect, getMe);
 router.post('/logout', protect, logout);
 
+// 🔑 PASSWORD
 router.post('/forgot-password', authLimiter,
-  [body('email').isEmail().withMessage('Enter a valid email')],
+  [body('email').isEmail()],
   validate, forgotPassword
 );
 
 router.put('/reset-password/:token',
-  [body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')],
+  [body('password').isLength({ min: 6 })],
   validate, resetPassword
 );
 
+// 👥 USERS
 router.get('/users', protect, searchUsers);
 router.put('/follow/:id', protect, followUser);
 router.get('/notifications', protect, getNotifications);
@@ -72,20 +95,26 @@ router.put('/profile/update', protect, updateProfile);
 router.put('/posts/:id/save', protect, savePost);
 router.get('/posts/saved', protect, getSavedPosts);
 router.put('/block/:id', protect, blockUser);
-router.get('/suggestions', protect, require('../controllers/auth.controller').getSuggestions);
-router.put('/verify/:id', protect, require('../controllers/auth.controller').toggleVerification);
-router.post('/verify-otp', require('../controllers/auth.controller').verifyOtp);
-router.post('/resend-otp', require('../controllers/auth.controller').resendOtp);
-router.post('/google', require('../controllers/auth.controller').googleLogin);
-router.get('/admin/users', protect, require('../controllers/auth.controller').adminGetUsers);
-router.delete('/admin/users/:id', protect, require('../controllers/auth.controller').adminDeleteUser);
-router.get('/admin/posts', protect, require('../controllers/auth.controller').adminGetPosts);
-router.delete('/admin/posts/:id', protect, require('../controllers/auth.controller').adminDeletePost);
-router.put('/close-friends/:id', protect, require('../controllers/auth.controller').toggleCloseFriend);
-router.put('/location', protect, require('../controllers/auth.controller').updateLocation);
-router.get('/nearby', protect, require('../controllers/auth.controller').getNearbyUsers);
-router.post('/admin/users',           protect, require('../controllers/auth.controller').adminCreateUser);
-router.put('/admin/users/:id',        protect, require('../controllers/auth.controller').adminUpdateUser);
-router.put('/admin/users/:id/status', protect, require('../controllers/auth.controller').adminUpdateStatus);
-router.get('/admin/stats',            protect, require('../controllers/auth.controller').adminGetStats);
+
+// 🔥 FIXED ROUTES (NO require() INSIDE)
+router.get('/suggestions', protect, getSuggestions);
+router.put('/verify/:id', protect, toggleVerification);
+router.post('/verify-otp', verifyOtp);
+router.post('/resend-otp', resendOtp);
+router.post('/google', googleLogin);
+
+router.get('/admin/users', protect, adminGetUsers);
+router.delete('/admin/users/:id', protect, adminDeleteUser);
+router.get('/admin/posts', protect, adminGetPosts);
+router.delete('/admin/posts/:id', protect, adminDeletePost);
+
+router.put('/close-friends/:id', protect, toggleCloseFriend);
+router.put('/location', protect, updateLocation);
+router.get('/nearby', protect, getNearbyUsers);
+
+router.post('/admin/users', protect, adminCreateUser);
+router.put('/admin/users/:id', protect, adminUpdateUser);
+router.put('/admin/users/:id/status', protect, adminUpdateStatus);
+router.get('/admin/stats', protect, adminGetStats);
+
 module.exports = router;
