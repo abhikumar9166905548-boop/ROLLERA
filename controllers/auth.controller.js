@@ -398,3 +398,22 @@ exports.getNearbyUsers = async (req, res, next) => {
     res.status(200).json({ success: true, users });
   } catch (err) { next(err); }
 };
+// Placeholder admin functions taaki error na aaye
+exports.adminCreateUser = async (req, res, next) => {
+    res.status(200).json({ success: true, message: "Work in progress" });
+};
+
+exports.adminUpdateUser = async (req, res, next) => {
+    res.status(200).json({ success: true, message: "Work in progress" });
+};
+
+exports.adminUpdateStatus = async (req, res, next) => {
+    res.status(200).json({ success: true, message: "Work in progress" });
+};
+
+exports.adminGetStats = async (req, res, next) => {
+    try {
+        const totalUsers = await User.countDocuments();
+        res.status(200).json({ success: true, stats: { totalUsers } });
+    } catch (err) { next(err); }
+};
