@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema(
   {
-    // 🔥 Post + Reel dono support
     post: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Post',
     },
+
     reel: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Reel',
@@ -21,10 +21,10 @@ const commentSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
+      trim: true,
       maxlength: 500,
     },
 
-    // ❤️ Like system
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,7 +32,6 @@ const commentSchema = new mongoose.Schema(
       },
     ],
 
-    // 🔁 Reply system
     parentComment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
