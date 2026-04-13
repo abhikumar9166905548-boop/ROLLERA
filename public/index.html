@@ -731,7 +731,7 @@ const API='https://rollera.onrender.com/api';
 const CLOUD='dvv4akl0j';
 const PRESET='rollera_preset';
 let currentUser=null,isDark=true,currentChatUser=null,editingPostId=null;
-let mediaType='image',allPosts=[],deferredPrompt=null,activeHashtag=null,socket=null;
+let mediaType='image',allPosts=[],deferredPrompt=null,activeHashtag=null;
 let currentAudio=null,currentMusicBtn=null,currentMusicIcon=null,postMusicUrl=null,postMusicName=null;
 let currentExplorePosts=[];
 
@@ -1446,33 +1446,102 @@ async function submitEdit(){
 }
 
 // ===================== COMMENTS =====================
-async function toggleComments(postId){
-  const s=document.getElementById(`comments-${postId}`);s.classList.toggle('open');
-  if(s.classList.contains('open'))loadComments(postId);
+
+const joinedPosts = new Set();
+
+function toggleComments(postId){
+  const s = document.getElementById(`comments-${postId}`);
+  s.classList.toggle('open');
+
+  if(s.classList.contains('open')){
+    if(!joinedPosts.has(postId)){
+      socket.emit("joinPost", postId);
+      joinedPosts.add(postId);
+    }
+    loadComments(postId);
+  }
 }
+
+
+// 🔥 LOAD COMMENTS (same)
 async function loadComments(postId){
   try{
-    const res=await fetch(`${API}/posts/${postId}/comments`,{headers:{Authorization:`Bearer ${getToken()}`}});
-    const data=await res.json();
-    const list=document.getElementById(`comment-list-${postId}`);
-    if(!data.comments.length){list.innerHTML='<div style="padding:8px 0;color:var(--muted);font-size:13px">Koi comment nahi</div>';return}
-    list.innerHTML=data.comments.map(c=>`
+    const res = await fetch(`${API}/posts/${postId}/comments`, {
+      headers:{ Authorization:`Bearer ${getToken()}` }
+    });
+
+    const data = await res.json();
+    const list = document.getElementById(`comment-list-${postId}`);
+
+    if(!data.comments.length){
+      list.innerHTML = '<div style="padding:8px 0;color:var(--muted);font-size:13px">Koi comment nahi</div>';
+      return;
+    }
+
+    list.innerHTML = data.comments.map(c => `
       <div class="comment-item">
-        <div class="comment-avatar">${(c.user.name||'U')[0].toUpperCase()}</div>
-        <div><div class="comment-name">${c.user.name}</div><div class="comment-text">${c.content}</div></div>
-      </div>`).join('');
-  }catch(e){}
-}
-async function submitComment(postId){
-  const input=document.getElementById(`comment-input-${postId}`);
-  const content=input.value.trim();if(!content)return;
-  try{
-    const res=await fetch(`${API}/posts/${postId}/comments`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${getToken()}`},body:JSON.stringify({content})});
-    const data=await res.json();if(!data.success)return;
-    input.value='';loadComments(postId);
+        <div class="comment-avatar">${(c.user.name || 'U')[0].toUpperCase()}</div>
+        <div>
+          <div class="comment-name">${c.user.name}</div>
+          <div class="comment-text">${c.content}</div>
+        </div>
+      </div>
+    `).join('');
+
   }catch(e){}
 }
 
+
+// 🔥 SUBMIT COMMENT (NO reload)
+async function submitComment(postId){
+  const input = document.getElementById(`comment-input-${postId}`);
+  const content = input.value.trim();
+  if(!content) return;
+
+  try{
+    const res = await fetch(`${API}/posts/${postId}/comments`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        Authorization:`Bearer ${getToken()}`
+      },
+      body: JSON.stringify({ content })
+    });
+
+    const data = await res.json();
+    if(!data.success) return;
+
+    input.value = '';
+    // ❌ loadComments hata diya (real-time use hoga)
+
+  }catch(e){}
+}
+
+
+// ===================== REAL-TIME RECEIVE =====================
+
+socket.on("newComment", (data) => {
+
+  const postId = data.post;
+
+  const list = document.getElementById(`comment-list-${postId}`);
+  if(!list) return;
+
+  const div = document.createElement("div");
+  div.className = "comment-item";
+
+  div.innerHTML = `
+    <div class="comment-avatar">
+      ${(data.user?.name || 'U')[0].toUpperCase()}
+    </div>
+    <div>
+      <div class="comment-name">${data.user?.name || "User"}</div>
+      <div class="comment-text">${data.content}</div>
+    </div>
+  `;
+
+  list.prepend(div); // 🔥 LIVE ADD
+});
 // ===================== EXPLORE =====================
 let exploreTabActive='trending';
 function switchExploreTab(tab,el){
@@ -2314,6 +2383,59 @@ async function loadMyReels(){
       </div>`).join('')}</div>`;
   }catch(e){}
 }
+</script>
+<!-- ✅ SOCKET.IO CDN -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+  const socket = io("https://rollera.onrender.com");
+
+  // 🔗 CONNECT
+  socket.on("connect", () => {
+    console.log("Connected:", socket.id);
+  });
+
+  // ❤️ LIKE UPDATE
+  socket.on("commentLiked", (data) => {
+    const el = document.getElementById(`likes-${data.commentId}`);
+    if (el) el.innerText = data.likes;
+  });
+
+  // 🗑️ DELETE COMMENT
+  socket.on("commentDeleted", (data) => {
+    const el = document.getElementById(`comment-${data.commentId}`);
+    if (el) el.remove();
+  });
+
+  // 💬 NEW COMMENT (POST + REEL)
+  socket.on("newComment", (data) => {
+    const postId = data.post;
+    const reelId = data.reel;
+
+    const userName = data.user?.name || "User";
+    const content = data.content || "";
+
+    // 👉 POST
+    if (postId) {
+      const list = document.getElementById(`comment-list-${postId}`);
+      if (!list) return;
+
+      const div = document.createElement("div");
+      div.innerHTML = `<b>${userName}</b>: ${content}`;
+      list.prepend(div);
+    }
+
+    // 👉 REEL
+    if (reelId) {
+      const list = document.getElementById(`reel-comment-list-${reelId}`);
+      if (!list) return;
+
+      const div = document.createElement("div");
+      div.innerHTML = `<b>${userName}</b>: ${content}`;
+      list.prepend(div);
+    }
+  });
+
 </script>
 </body>
 </html>

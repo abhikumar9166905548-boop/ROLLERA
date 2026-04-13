@@ -190,7 +190,6 @@ const userSchema = new mongoose.Schema(
 
 // ─── INDEXES ──────────────────────────────────────────────────
 userSchema.index({ location: '2dsphere' });   // existing — rakha
-userSchema.index({ username: 1 });
 userSchema.index({ accountStatus: 1 });
 userSchema.index({ createdAt: -1 });
 
