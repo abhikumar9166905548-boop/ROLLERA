@@ -1,12 +1,12 @@
 const Comment = require('../models/Comment.model');
 const Post = require('../models/Post.model');
 const User = require('../models/User.model');
-const { io } = require('../server');
-
 
 // 🔥 ADD COMMENT / REPLY (POST + REEL + REAL-TIME)
 exports.addComment = async (req, res, next) => {
   try {
+    const io = req.app.get("io"); // ✅ FIX
+
     const { content, reelId, parentCommentId } = req.body;
 
     if (!content)
@@ -62,7 +62,6 @@ exports.addComment = async (req, res, next) => {
       io.to(req.params.postId.toString()).emit("newComment", comment);
     }
 
-    // ✅ RESPONSE
     res.status(201).json({ success: true, comment });
 
   } catch (err) {
@@ -128,6 +127,8 @@ exports.getReplies = async (req, res, next) => {
 // ❤️ LIKE / UNLIKE COMMENT (REAL-TIME)
 exports.likeComment = async (req, res, next) => {
   try {
+    const io = req.app.get("io"); // ✅ FIX
+
     const comment = await Comment.findById(req.params.id);
 
     if (!comment)
@@ -163,6 +164,8 @@ exports.likeComment = async (req, res, next) => {
 // ❌ DELETE COMMENT (REAL-TIME)
 exports.deleteComment = async (req, res, next) => {
   try {
+    const io = req.app.get("io"); // ✅ FIX
+
     const comment = await Comment.findById(req.params.id);
 
     if (!comment)

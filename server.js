@@ -10,10 +10,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Socket.IO Setup (ONLY ONCE)
+// ================= SOCKET.IO SETUP =================
 const io = new Server(server, {
   cors: { origin: '*' }
 });
+
+app.set("io", io);
 
 app.set('trust proxy', 1);
 
