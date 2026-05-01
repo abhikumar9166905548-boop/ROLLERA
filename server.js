@@ -5,6 +5,10 @@ const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
 
+// ✅ GraphQL
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+
 dotenv.config();
 
 const app = express();
@@ -16,10 +20,31 @@ const io = new Server(server, {
 });
 
 app.set("io", io);
-
 app.set('trust proxy', 1);
 
-// Middleware
+// ================= GRAPHQL SETUP =================
+
+// Simple test schema (baad me expand karenge)
+const schema = buildSchema(`
+  type Query {
+    hello: String
+    status: String
+  }
+`);
+
+const root = {
+  hello: () => '🔥 GraphQL is working!',
+  status: () => '✅ Server is running perfectly'
+};
+
+// 👉 IMPORTANT: GraphQL route (fallback se pehle hona chahiye)
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true
+}));
+
+// ================= MIDDLEWARE =================
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,24 +59,23 @@ app.use(express.static('public', {
   }
 }));
 
-// Routes
+// ================= ROUTES =================
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/posts', require('./routes/post.routes'));
 app.use('/api/stories', require('./routes/story.routes'));
 app.use('/api/messages', require('./routes/message.routes'));
 app.use('/api/comments', require('./routes/commentRoutes'));
 
-// Home route
+// ================= HOME =================
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// fallback route
+// ================= FALLBACK =================
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
+  if (req.path.startsWith('/api') || req.path.startsWith('/graphql')) return next();
   res.sendFile(__dirname + '/public/index.html');
 });
-
 
 // ================= SOCKET LOGIC =================
 const onlineUsers = new Map();
@@ -75,7 +99,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // optional: reels/posts rooms
   socket.on("joinReel", (reelId) => socket.join(reelId));
   socket.on("joinPost", (postId) => socket.join(postId));
 
