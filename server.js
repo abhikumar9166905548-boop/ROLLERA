@@ -16,15 +16,15 @@ const server = http.createServer(app);
 
 // ================= SOCKET.IO SETUP =================
 const io = new Server(server, {
-  cors: { origin: '*' }
+  cors: { origin: process.env.CLIENT_URL || '*' }
 });
 
+// ✅ GLOBAL IO ACCESS (IMPORTANT)
 app.set("io", io);
+
 app.set('trust proxy', 1);
 
 // ================= GRAPHQL SETUP =================
-
-// Simple test schema (baad me expand karenge)
 const schema = buildSchema(`
   type Query {
     hello: String
@@ -37,7 +37,6 @@ const root = {
   status: () => '✅ Server is running perfectly'
 };
 
-// 👉 IMPORTANT: GraphQL route (fallback se pehle hona chahiye)
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
@@ -81,13 +80,15 @@ app.get('*', (req, res, next) => {
 const onlineUsers = new Map();
 
 io.on('connection', (socket) => {
-  console.log("User connected:", socket.id);
+  console.log("🔥 User connected:", socket.id);
 
+  // ===== USER JOIN =====
   socket.on('join', (userId) => {
     onlineUsers.set(userId, socket.id);
     io.emit('onlineUsers', Array.from(onlineUsers.keys()));
   });
 
+  // ===== MESSAGE =====
   socket.on('sendMessage', ({ senderId, receiverId, content }) => {
     const receiverSocket = onlineUsers.get(receiverId);
     if (receiverSocket) {
@@ -99,9 +100,18 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on("joinReel", (reelId) => socket.join(reelId));
-  socket.on("joinPost", (postId) => socket.join(postId));
+  // ===== ROOMS =====
+  socket.on("joinReel", (reelId) => {
+    socket.join(reelId);
+    console.log("Joined reel:", reelId);
+  });
 
+  socket.on("joinPost", (postId) => {
+    socket.join(postId);
+    console.log("Joined post:", postId);
+  });
+
+  // ===== DISCONNECT =====
   socket.on('disconnect', () => {
     for (const [userId, socketId] of onlineUsers.entries()) {
       if (socketId === socket.id) {
@@ -110,13 +120,13 @@ io.on('connection', (socket) => {
       }
     }
     io.emit('onlineUsers', Array.from(onlineUsers.keys()));
-    console.log("User disconnected:", socket.id);
+    console.log("❌ User disconnected:", socket.id);
   });
 });
 
 // ================= ERROR HANDLER =================
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error("💥 Error:", err);
   res.status(500).json({ success: false, message: err.message });
 });
 

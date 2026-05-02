@@ -1,0 +1,1707 @@
+[33mcommit 998218062efe4841a996f43acde18aad1bcf387a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri May 1 19:29:48 2026 +0530
+
+    Added GraphQL support
+
+[33mcommit f837da4843bd662c94590f9ad2be96de0504a20c[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 27 22:42:07 2026 +0530
+
+    fix controller socket usage
+
+[33mcommit 01dd6d34106bf73940cdbe00ea51d6b8f9bb2f7e[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 27 10:14:48 2026 +0530
+
+    fix case issue properly
+
+[33mcommit 25ad5b1bfa9d4a90eec28097dee6aefd38f31e66[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 27 09:45:43 2026 +0530
+
+    fix case-sensitive import issue
+
+[33mcommit 1d504ccb3febb87d91b34851662a638ee2a3d6e2[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 27 09:33:22 2026 +0530
+
+    fix case sensitivity issue
+
+[33mcommit 73007c57faa890c9f7ae484d85a8c1afd5707adb[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 27 09:09:15 2026 +0530
+
+    add missing Comment model
+
+[33mcommit 0a6315cb18bc355191b976179036bbbeca83d7f9[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 13 11:33:32 2026 +0530
+
+    fix comment model import path
+
+[33mcommit 2e00ce3b0657ada9fdc9e11d65ea9eee43d27009[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Apr 13 11:06:31 2026 +0530
+
+    fix socket and deploy ready
+
+[33mcommit 3bb17b6d7a15eda11c31094f622fc46223969338[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Apr 12 13:43:01 2026 +0530
+
+    Added comment system with routes
+
+[33mcommit 9f9f55c3aa5f4d5a786c2f48aeb54acf70642d77[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Apr 12 10:42:37 2026 +0530
+
+    Fix: Added missing admin controller functions and fixed signup scoping
+
+[33mcommit bbc0382378445a7138ce713d8cd7736201cabddd[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Apr 11 21:45:24 2026 +0530
+
+    Final working fix
+
+[33mcommit 2cb51ee2ce7a10e9d61def1e1f86214c4ef97f8e[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Apr 11 21:25:37 2026 +0530
+
+    Added missing controller functions
+
+[33mcommit b58804a6d6c3debd05b8a379ec77fb9c9b2b855c[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Apr 11 21:19:08 2026 +0530
+
+    Fixed route undefined error
+
+[33mcommit 0651d8157a8049f6c864d795bbb62a96451f9b00[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Wed Apr 8 21:24:43 2026 +0530
+
+    Added message button and updated follow list
+
+[33mcommit 4caaa0b2fef88e4fe297c400e4018872295ce2c4[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 18:11:09 2026 +0530
+
+    ultra pro profile design
+
+[33mcommit ac7340568ae6edb028390415075822c61aa44258[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 18:06:52 2026 +0530
+
+    ultra pro profile design
+
+[33mcommit 7e07f9559f6a7889d91e05997ddf985de999f2cc[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 17:19:22 2026 +0530
+
+    ultra pro profile design
+
+[33mcommit be5ee9caf7a28459f2a136b8eb0e72ffd3f2c5bc[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 03:05:02 2026 +0530
+
+    Pro level user profile view
+
+[33mcommit 5a94f32daf6c7dce16099b85a6e2a87682f94c84[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 02:53:48 2026 +0530
+
+    Pure black background
+
+[33mcommit 5420a96101fd6c6cc12d88f79a61b16314120ede[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 02:32:47 2026 +0530
+
+    Add mood post, self-destruct, close friends, voice DM, nearby users
+
+[33mcommit 031abe4ab6a79017404d6c1f66a5a5f907e7f370[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Mon Mar 23 01:03:17 2026 +0530
+
+    Add admin panel
+
+[33mcommit 5c2156b626e4b28a1a75c002d5809d5345b17cdc[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 23:51:45 2026 +0530
+
+    feat: search better, share sheet, theme toast
+
+[33mcommit c1210042a83d1787df96699b208a34449a515b9e[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 22:52:18 2026 +0530
+
+    feat: verified badge, story reply, real-time notifications
+
+[33mcommit 1d50c5e04250a9304ebbecd9e386dffdb99e63a2[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 22:07:34 2026 +0530
+
+    fix: syntax error fixed, profile complete
+
+[33mcommit 11ba667030a7290209df1e211e82c97d1d47647e[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 21:24:06 2026 +0530
+
+    feat: ultra pro profile
+
+[33mcommit 017ec563e55490410291760dc219f7813e635cba[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 21:07:29 2026 +0530
+
+    fix: reels comment box working
+
+[33mcommit 88335108cab8ee02422be821cee6c036a9949ece[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 04:19:26 2026 +0530
+
+    feat: cover photo, followers list, grid view, website link
+
+[33mcommit 508f0e54bb7c370d6a95121609335a834ae713ce[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 03:14:36 2026 +0530
+
+    feat: custom icon lagaya
+
+[33mcommit 74c28ecc9c5e975914d9f7d1e26caf2a32ba832f[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 02:18:18 2026 +0530
+
+    fix: force no cache permanently
+
+[33mcommit 78d92f124918013271c099318f7651eca22b087d[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 01:59:58 2026 +0530
+
+    fix: cache meta tags
+
+[33mcommit d668733a5e7a54441d233dd79b9dde0a38bdf5c3[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 01:54:51 2026 +0530
+
+    fix: manifest icons update
+
+[33mcommit 7e3071edc4f66715b70592c325966830c1596f7d[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 01:26:10 2026 +0530
+
+    fix: reels auto audio
+
+[33mcommit 2d2730eeaf1735f8029684d269c54f738685dcdf[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 01:12:44 2026 +0530
+
+    fix: browser cache band kiya
+
+[33mcommit f3d044b24c8ef5a3eda77fbbb1fc2dce956b7bcf[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 01:04:15 2026 +0530
+
+    fix: reels mute/unmute button
+
+[33mcommit 573037e8191fde5942340ceecdda5cbab47bd396[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 00:43:43 2026 +0530
+
+    fix: serve index.html from root
+
+[33mcommit 13ec1a31a96f11049c11695b5b02297511ffb6ba[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sun Mar 22 00:23:44 2026 +0530
+
+    feat: Reels, Music Player, Explore tabs added
+
+[33mcommit 06f97ae9d468bb9149e652342aceccfb1afa9b18[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 23:47:27 2026 +0530
+
+    fix: follow state save hoga search mein
+
+[33mcommit 4a1a43aaf53966e6ac5965279f227ba26afb1b27[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 23:35:06 2026 +0530
+
+    fix: search me user profile click + duplicates hataye
+
+[33mcommit b3cc2b5cf520f63628ffd5b7b0cd86c30225b165[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 23:23:18 2026 +0530
+
+    feat: explore trending posts + click to open
+
+[33mcommit 115c39c7137bc3225464d20fa552e22d48111535[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 23:16:05 2026 +0530
+
+    feat: user profile click open karo
+
+[33mcommit 638ffdc15028ca27083884af66e34a0ef5969807[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 23:04:16 2026 +0530
+
+    fix: remove isVerified check from login
+
+[33mcommit e0f413f216b3e198abc3d2d0738e615004e1194f[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 12:17:51 2026 +0530
+
+    fix: signup aur sendEmail fix
+
+[33mcommit 0b959fa4660cad540fa2ea0b80db066842cc6ea0[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 11:19:18 2026 +0530
+
+    Add story music, fullscreen video
+
+[33mcommit ecd86645b8d81f7902eb8a358eb207322894256d[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 10:34:25 2026 +0530
+
+    Add auto play video on scroll
+
+[33mcommit 63b13e5d2485f574220500b8a48e2317d72b6007[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 10:19:24 2026 +0530
+
+    Fix duplicate signup, add verified check on login
+
+[33mcommit 2d3f2e83218c2d644fa21f38c88618956eeafbff[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 09:46:39 2026 +0530
+
+    Switch to SendGrid email
+
+[33mcommit edfaab2703e2b6d37e78c3d1f0e9c1bbeeca0879[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 00:43:38 2026 +0530
+
+    Fix SMTP port 465
+
+[33mcommit 6bfb8c2bf529d2b5d04a06047e064a4bdca55a15[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 00:31:08 2026 +0530
+
+    Fix SMTP timeout issue
+
+[33mcommit 13a260edb11c84aacaedaf49af8069d726933a2c[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Sat Mar 21 00:08:46 2026 +0530
+
+    Fix SMTP port 465
+
+[33mcommit 9139df55a75a559554668b72d2e6b5a4c54539db[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri Mar 20 22:53:17 2026 +0530
+
+    Add OTP verification, Google login, story music
+
+[33mcommit e1be45edeecd601cbc14a3f09ddc177189aac415[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri Mar 20 21:16:51 2026 +0530
+
+    Add verification badge UI
+
+[33mcommit 705069e469cb49caa1fd49f50643c66d27f120cf[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri Mar 20 09:52:46 2026 +0530
+
+    Add music, friend suggestions, improved login, live chat
+
+[33mcommit af10c194f83f0e910d1b1d19ba20000edac627a1[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri Mar 20 08:23:38 2026 +0530
+
+    Add live chat, reactions, block, report, splash screen, online status
+
+[33mcommit e476a35109b38558406ca5e9234e4c29c069031a[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Fri Mar 20 07:53:42 2026 +0530
+
+    Add socket.io live chat, reactions, block, report, splash
+
+[33mcommit 7cab35a82e5b835ad633aa49eb6817e5a763aa0e[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 23:09:32 2026 +0530
+
+    Add PWA, profile photo, bio, save posts, hashtags
+
+[33mcommit 2f2e6b5e61e613d5db832d58924d7a69aaa9b1f7[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 22:47:13 2026 +0530
+
+    Add stories, DM, reels, explore, edit post, user profiles
+
+[33mcommit 37ab0fbe4cf4c5b816bc563f7d4fd56e58cab21c[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 22:26:26 2026 +0530
+
+    Fix logout clear storage
+
+[33mcommit 0c39173eff084ac05e441c59f2663ff305293c18[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 22:08:43 2026 +0530
+
+    Add comments, follow, notifications, dark/light mode, share
+
+[33mcommit d77d31af2bb6ed77553a8eb96cf4fd5d16f5f1a0[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 21:46:37 2026 +0530
+
+    New UI with FAB post button
+
+[33mcommit 3f3cb8297b411b2cfb8856aed5ee7fa63480c57a[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 21:21:00 2026 +0530
+
+    Fix cloudinary cloud name
+
+[33mcommit f3b845c24b1af09312ee68e4d0429859f6ab44ef[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 20:59:50 2026 +0530
+
+    Add photo upload and search
+
+[33mcommit 896904319c632bbf3631d1203dac33c51f093809[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 15:22:01 2026 +0530
+
+    Add navigation - home, search, profile
+
+[33mcommit 3cf1926f7406f56f5208e717d8a756c7aee92b54[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 15:09:46 2026 +0530
+
+    Add posts feed UI
+
+[33mcommit dce4f8dbd5e3f4fa98f980524874c7a944cf28d3[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 14:57:26 2026 +0530
+
+    Add posts feature
+
+[33mcommit 09935918097b065aa892a067420cc4cc18064aa8[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 14:19:45 2026 +0530
+
+    Serve static files
+
+[33mcommit 5ae9e002d00c32cf8023f2e8eb5f58eeafd9ac8b[m
+Author: Abhishek <abhikumar@gmail.com>
+Date:   Thu Mar 19 12:08:59 2026 +0530
+
+    Fix folder structure
+
+[33mcommit ee1cd86155918f5f4be4bca678839595fcf77382[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:11:57 2026 +0530
+
+    Rename server[1].js to server.js
+
+[33mcommit ee7137b7b6ebc7713d342662410b4730c6fe39dd[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:11:41 2026 +0530
+
+    Rename sendEmail[1].js to sendEmail.js
+
+[33mcommit be92199725c72b458f1bf3e0995d93158643a71f[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:11:23 2026 +0530
+
+    Rename package[1].json to package.json
+
+[33mcommit a90d3d28fe34c36851249d245142619f57b4233a[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:11:08 2026 +0530
+
+    Rename index[1].html to index.html
+
+[33mcommit d26eb5835edd605d815245d4eaa1bbd3b93f2c37[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:10:52 2026 +0530
+
+    Rename auth.routes[1].js to auth.routes.js
+
+[33mcommit c930b83bcad1d12e26769be5a70e7a37a4148378[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:10:33 2026 +0530
+
+    Rename auth.middleware[1].js to auth.middleware.js
+
+[33mcommit 091fd145017edb10c65943d41d660b2c79264333[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:10:19 2026 +0530
+
+    Rename auth.controller[1].js to auth.controller.js
+
+[33mcommit 1d075beace226fa99db8bf5ba3c0b24de204a02a[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:09:52 2026 +0530
+
+    Rename User.model[1].js to User.model.js
+
+[33mcommit bcae37ca98af260ab2993048ff30acc5d2796c43[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:09:10 2026 +0530
+
+    Rename README[1].md to README.md
+
+[33mcommit bb800de2033082ffa63f5e837c5787ebeafe3556[m
+Author: AuthFlow <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 19 00:08:49 2026 +0530
+
+    Rename .env[1].example to .env.example
+
+[33mcommit e4a41a072377a336d488609a075381952d824ece[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:48:32 2026 +0530
+
+    Add files via upload
+
+[33mcommit 575561b7f4387248c0227efe8c7d96d5be981233[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:48:04 2026 +0530
+
+    Add files via upload
+
+[33mcommit da42bd1909f5b5d9ec0c75146913a9e2eb31b79e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:47:40 2026 +0530
+
+    Add files via upload
+
+[33mcommit f0783584d4ee082ff712db2fcb0b63b41861e6e5[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:47:04 2026 +0530
+
+    Add files via upload
+
+[33mcommit e709bb3c5620afb517f3349134a2c2334607a3c7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:46:38 2026 +0530
+
+    Add files via upload
+
+[33mcommit 5cbd394ba0a1f24e09c09121f3a695de3eb6063b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:45:59 2026 +0530
+
+    Add files via upload
+
+[33mcommit 510de6be42ee45bd20f3bdec2c616eee40d8b383[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:45:32 2026 +0530
+
+    Add files via upload
+
+[33mcommit 0fe927c816c254f95d254ffb309c4e7830b7ebaa[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:45:07 2026 +0530
+
+    Add files via upload
+
+[33mcommit 8f6c626f062048e129fc86460cecf082dff0369e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:44:41 2026 +0530
+
+    Add files via upload
+
+[33mcommit c119a55c7e1e361082348ba56f5e99c9a0ba59e0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:43:29 2026 +0530
+
+    Add files via upload
+
+[33mcommit fb82f6c2a6f58c0dc013f111aad7296042a4132c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:41:25 2026 +0530
+
+    Delete auth-system (1).zip
+
+[33mcommit 65683eeab9dc07e5623b2ec3341b46d3fcbe47d7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:39:58 2026 +0530
+
+    Add files via upload
+
+[33mcommit 0a505e4f0d2f909506ba0a0a7722185eb80da249[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:38:36 2026 +0530
+
+    Delete .css
+
+[33mcommit eba75a023fc9ecd5d68fde09e84864270412ef5c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:38:24 2026 +0530
+
+    Delete dashboard.html
+
+[33mcommit 68ff722e1ab50d5693f3eee260cb47aded64e164[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:38:09 2026 +0530
+
+    Delete app.js
+
+[33mcommit 454c7bfe8d9efdcebd14b354105037b7030f2795[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:37:55 2026 +0530
+
+    Delete server.js
+
+[33mcommit 85acf4c3cf0d2e75704be2b93fe1d16a8375af70[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:37:40 2026 +0530
+
+    Delete package.json
+
+[33mcommit 9ade020be86bd1a8e27b0e50f7d1b85be7df0a6f[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:37:10 2026 +0530
+
+    Delete .env
+
+[33mcommit 160969b1ccc9597360a7c5ee1f2dd98707e032f6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:36:57 2026 +0530
+
+    Delete models directory
+
+[33mcommit 781a991fc828a63ba0725bcc3b7e1bae07756eb0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Wed Mar 18 23:36:39 2026 +0530
+
+    Delete index.html
+
+[33mcommit e069f78ef96c572ca3000bce578672f03909cbd0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 15:01:50 2026 +0530
+
+    Update index.html
+
+[33mcommit d1509516b7d8cb3cc282bb10b0ee1d744a9ab544[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 15:01:27 2026 +0530
+
+    Update app.js
+
+[33mcommit ff7941e64a6230a67c98f046be5896ca50f44e0b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:58:51 2026 +0530
+
+    Update .css
+
+[33mcommit abe19e2b15a43e1f260206c00cd3e762743118e8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:58:25 2026 +0530
+
+    Create dashboard.html
+
+[33mcommit b65b419e8ffc2cd0414f3198b7df17dc736e8659[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:57:38 2026 +0530
+
+    Update index.html
+
+[33mcommit 25b86282a8fddcf54ebbcc39257a1d4edd87b42c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:57:03 2026 +0530
+
+    Update server.js
+
+[33mcommit 41775d5af7556e5726e3a909a7a64dea916b94a8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:56:41 2026 +0530
+
+    Update app.js
+
+[33mcommit 6115ee62d937a448199bf28f48909b4e26cd3f21[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:55:40 2026 +0530
+
+    Update app.js
+
+[33mcommit 11efd07d7fb74183252d45b05d745775be400c9a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:54:56 2026 +0530
+
+    Update User.js
+
+[33mcommit ab8124c1e6557c8e3b988cbb07d01718b4f12d10[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:47:13 2026 +0530
+
+    Update package.json
+
+[33mcommit 125e5ea1105970658c90131315c8fa268fabdbae[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:46:49 2026 +0530
+
+    Update .env
+
+[33mcommit ed18d1ffea23372320dee6d618abc47ff215122e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:44:05 2026 +0530
+
+    Update .css
+
+[33mcommit fe251f2c3ddaf7d06c96b919303d265d82407646[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:43:40 2026 +0530
+
+    Update index.html
+
+[33mcommit f242f0951ebfa53ae66804ea1892218786672923[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:42:48 2026 +0530
+
+    Update index.html
+
+[33mcommit 004e9f2dc1e37dae978b9912d5598d6fd60bc1df[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:37:45 2026 +0530
+
+    Update server.js
+
+[33mcommit b71104f80a95f86128692a8378b7fc9740097de8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:37:15 2026 +0530
+
+    Update server.js
+
+[33mcommit 2f631c70efbd8b7364f44148ac5fde9830c720a9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:36:49 2026 +0530
+
+    Update index.html
+
+[33mcommit 346619b378d36a98b29019bb662aef06bce24433[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:35:53 2026 +0530
+
+    Update .env
+
+[33mcommit adf50f4ea3456e47713f6881992b0e91674b3c64[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:35:02 2026 +0530
+
+    Update app.js
+
+[33mcommit a91139b6dd8edc9246d2f3df1f8b972d2bc7d764[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:27:33 2026 +0530
+
+    Update server.js
+
+[33mcommit a412a4089888ee77a8071f46a7778cf78d267533[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:26:09 2026 +0530
+
+    Update .css
+
+[33mcommit be01d4ffb75777a140b0627c83540a7bf061de02[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:25:04 2026 +0530
+
+    Update index.html
+
+[33mcommit 58df4ca3f557ee2db9ec861208786818b7c32717[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:23:11 2026 +0530
+
+    Update index.html
+
+[33mcommit 667b6a522b3dcdf03c8f59dd733a4298e14bb776[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Thu Mar 5 14:15:37 2026 +0530
+
+    Update index.html
+
+[33mcommit 9583a817b379e8068345f95d5f57be1440a5f0a5[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 14:52:34 2026 +0530
+
+    Update server.js
+
+[33mcommit 20385cafe66c4f5a69f9c1e0d02c1374cb2e56f6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 14:50:20 2026 +0530
+
+    Update .css
+
+[33mcommit 4e2a9184d6b0626164fd9537d510afe1705afba9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 14:43:22 2026 +0530
+
+    Update server.js
+
+[33mcommit 09fca69e24f582173bef6de7cbb66ff468a60f24[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 14:33:57 2026 +0530
+
+    Update server.js
+
+[33mcommit c79cc67398bb70c843f4247090fd7c076135fa68[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 13:37:17 2026 +0530
+
+    Update .css
+
+[33mcommit a430b9c94228df468de6c28bb8c3ad496a3f6b38[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 13:36:40 2026 +0530
+
+    Update index.html
+
+[33mcommit 86132f01291635e69f59181232869890a7507196[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 12:46:56 2026 +0530
+
+    Update index.html
+
+[33mcommit b180a21d76800d862ba8c8a8705487be8398e9d7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 12:43:27 2026 +0530
+
+    Update index.html
+
+[33mcommit 0df48e864177fbb41ea0a657cd1e0f6b699059fa[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 12:01:41 2026 +0530
+
+    Update index.html
+
+[33mcommit c398955aabd17e19b8146ce0e5e0fe30ea355586[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:51:32 2026 +0530
+
+    Update index.html
+
+[33mcommit 61db421ccc518764b28a7554d09ccec226e4f52d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:26:37 2026 +0530
+
+    Update index.html
+
+[33mcommit cb4aa7b507e8427fdb3597a79801390640b99827[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:18:16 2026 +0530
+
+    Update index.html
+
+[33mcommit 448d12dc2aec127ef739cdc0114e97aae99e67a9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:12:40 2026 +0530
+
+    Update index.html
+
+[33mcommit 20079eaab241d312619064464474e736cf7c799d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:09:52 2026 +0530
+
+    Update index.html
+
+[33mcommit 8d26a801e8c41cbc30bddac1b007592e50336297[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 11:05:24 2026 +0530
+
+    Update index.html
+
+[33mcommit 4b55fc2e553130f99e795378fae3bd7aef136ac2[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 10:59:22 2026 +0530
+
+    Update index.html
+
+[33mcommit 1b22feaf0a91995b0b3a62fd332ab268d1034d0a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 10:15:17 2026 +0530
+
+    Update package.json
+
+[33mcommit c14ac89374ba541c0f69b2328e5b5710a7d1f6fb[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 10:12:14 2026 +0530
+
+    Update package.json
+
+[33mcommit 41066085b8a8089d0fee530ea21c6b5804f0ecda[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 10:04:36 2026 +0530
+
+    Update package.json
+
+[33mcommit 9e5863547c9cc33b2b30c4ad0a10357f7855022b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Mon Mar 2 09:54:18 2026 +0530
+
+    Update server.js
+
+[33mcommit 3ceeed9518887eed4803c5b6da6c3c1acf43b56c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 21:04:25 2026 +0530
+
+    Update server.js
+
+[33mcommit be563a4f59877a6609d9affffa8235b01e12196f[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 13:19:20 2026 +0530
+
+    Update server.js
+
+[33mcommit 4afe242adf9d25197b1b552cf20dac3e3207eca8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 13:12:08 2026 +0530
+
+    Update server.js
+
+[33mcommit f769c3b97f7611f61dfec8a5a3bd0ad3f2bd5100[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 13:09:34 2026 +0530
+
+    Delete uploads
+
+[33mcommit 1999e0c15b221c491fe58fd28fbd09590b93e7ce[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 13:05:05 2026 +0530
+
+    Update app.js
+
+[33mcommit 22be95a541ee49a947467da4eeb3436097ff726f[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:43:50 2026 +0530
+
+    Update server.js
+
+[33mcommit 0df423d42a99542dc34c18efad87489e0868fa05[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:38:47 2026 +0530
+
+    Update server.js
+
+[33mcommit ff832075ac7aa90148b33fa0dc6f90de479b1b5d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:30:16 2026 +0530
+
+    Update package.json
+
+[33mcommit 6b1129423f5dba5498d6ac2ae7d44e17a44a99f8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:22:27 2026 +0530
+
+    Update package.json
+
+[33mcommit 11ec013ff76416f68426f10eb563a8df4bccd76a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:18:45 2026 +0530
+
+    Update package.json
+
+[33mcommit ff7b20b693554372e8b233bd58216d324a471e8e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:09:00 2026 +0530
+
+    Update package.json
+
+[33mcommit b90663404203da3828e9983417750a8a79596949[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:07:19 2026 +0530
+
+    Update package.json
+
+[33mcommit ee547d7e541638d2f77d147cbceef4087e3b7e51[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 12:01:59 2026 +0530
+
+    Update app.js
+
+[33mcommit ff2be5d796591f3ea640af72bbe14f31ef03b413[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:57:33 2026 +0530
+
+    Update server.js
+
+[33mcommit 06610b31987d2969152c0e7194e71e2b48911495[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:55:25 2026 +0530
+
+    Update app.js
+
+[33mcommit 48160d9d24c893ba3fd5a638f02ab5c3f9905aef[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:07:25 2026 +0530
+
+    Update .css
+
+[33mcommit 29471285a83644151dc2ee475c71d6fef98e4ff5[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:05:51 2026 +0530
+
+    Update app.js
+
+[33mcommit 35278bb85427d2edb1c66811580121e75a08c06e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:03:47 2026 +0530
+
+    Update index.html
+
+[33mcommit e00b20c1a7c70b9e3d12b044880a6e659b8e47a1[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 11:00:44 2026 +0530
+
+    Update index.html
+
+[33mcommit 507b5e73bf0e4d5685419740694ffcc81b8b02b1[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:58:55 2026 +0530
+
+    Update .css
+
+[33mcommit dc225712d3f65e778e1eeb6a6db870809a947445[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:56:41 2026 +0530
+
+    Update app.js
+
+[33mcommit e29bd146de13cedb73fd9bd5f678d768a58282c9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:51:35 2026 +0530
+
+    Update app.js
+
+[33mcommit a9fdb37b1cc3fe137517bd239d3d687317ec3318[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:49:05 2026 +0530
+
+    Update server.js
+
+[33mcommit a7d83da2cc2d11724b784105098d68f664153700[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:42:11 2026 +0530
+
+    Update app.js
+
+[33mcommit f65cd42792000a597c80cfde4163e78ce90a0314[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:39:16 2026 +0530
+
+    Update index.html
+
+[33mcommit 89bba55db1f08db1bdc70998fa02cd3797cd5a58[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:36:42 2026 +0530
+
+    Update .css
+
+[33mcommit b0828bea5d5b0cd3776757638090bd47934eb611[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:34:28 2026 +0530
+
+    Update .css
+
+[33mcommit 0019f37179e23fc0f3a32a8854bf14dab7318c03[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:32:20 2026 +0530
+
+    Update app.js
+
+[33mcommit cf6cd8610d477d0927a98eebe20e143a443590a9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:22:37 2026 +0530
+
+    Update app.js
+
+[33mcommit 03ef7e8ed1d266b99fcc5c145c02ab0e3d76fcc2[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:17:47 2026 +0530
+
+    Update server.js
+
+[33mcommit d7a8ff68dbd9256305520cfd0011b796a2082a08[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 10:15:26 2026 +0530
+
+    Update app.js
+
+[33mcommit b4182708acb50fbeb2377fb7378c7fa0c8518bbd[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:19:56 2026 +0530
+
+    Update app.js
+
+[33mcommit d215e2aea0052c098fe1b225c23222124cee4429[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:12:45 2026 +0530
+
+    Update .css
+
+[33mcommit 2228a8a274d1ee508d2746562ce6b3d448e03320[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:12:04 2026 +0530
+
+    Update app.js
+
+[33mcommit 82ec5387fd25bd4847596f678964353edd1b5a35[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:09:33 2026 +0530
+
+    Update index.html
+
+[33mcommit ebfab3ecf568f156e5a3bde291208211fcb220e8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:06:44 2026 +0530
+
+    Update app.js
+
+[33mcommit 820c57a2862e99ff459f025c3ed1f26ce08fa88a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:01:13 2026 +0530
+
+    Update app.js
+
+[33mcommit a8c896271e7eb610785d9220cb4169a2fb9b97ba[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sun Mar 1 00:00:24 2026 +0530
+
+    Update app.js
+
+[33mcommit 22a6690043253aecaed7155e8e0c024c0fd66612[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:57:46 2026 +0530
+
+    Create .css
+
+[33mcommit f8f36a354f9a68bbf750fad5c3fd698694108742[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:56:18 2026 +0530
+
+    Update app.js
+
+[33mcommit 19372ee3902e2644268ca278482629eca43a830d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:51:51 2026 +0530
+
+    Update index.html
+
+[33mcommit 3ee3a2da7c7ac250c87096205d6b87641950805a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:49:47 2026 +0530
+
+    Update app.js
+
+[33mcommit 601c12573ee51a17bff642be8aede28f76403c72[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:46:51 2026 +0530
+
+    Update app.js
+
+[33mcommit 9890e653727f4e2d786f110c6fbdc6d090044200[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:42:48 2026 +0530
+
+    Update index.html
+
+[33mcommit 8bb3d3b1b43b81c63398447e33a9cf8c1e3439b0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:38:15 2026 +0530
+
+    Update app.js
+
+[33mcommit 26f200c006189b3c0fbcda3d6e09bcaf92679e9b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:35:05 2026 +0530
+
+    Update index.html
+
+[33mcommit 213c9c4e35b3f4b7a1523c2e1604e9f344e5a0d9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:31:43 2026 +0530
+
+    Update app.js
+
+[33mcommit 3c178e3161df6cb7d041a67854c277f799db4cc0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:24:03 2026 +0530
+
+    Update index.html
+
+[33mcommit a818c6dabf6501b0fecd61db9087cc626028eb26[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:17:04 2026 +0530
+
+    Update app.js
+
+[33mcommit 292d6581a797bd6d9ddfb0185f3063f6f901a01e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:13:14 2026 +0530
+
+    Update index.html
+
+[33mcommit aa4ab16bf9e6c0219fdf7f7e8a146c392d375b43[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:09:54 2026 +0530
+
+    Update app.js
+
+[33mcommit ee504cf01f689ec54f8060182e314113668331bc[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:07:30 2026 +0530
+
+    Update app.js
+
+[33mcommit 257fdf0b92c64569fc420b94aa7a4eef9199f6b9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:05:52 2026 +0530
+
+    Update index.html
+
+[33mcommit a40441dc1e42b60fc9a677b2b54677a98fc391c1[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 23:01:25 2026 +0530
+
+    Update app.js
+
+[33mcommit 9445ea5c5200d66e626fcc31ae1f7341f1560292[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:50:41 2026 +0530
+
+    Update index.html
+
+[33mcommit bd484a4ced317d189e684c5d768a251f04da804d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:39:02 2026 +0530
+
+    Update app.js
+
+[33mcommit c65e4f3dcda6e046b86e9de71771c09b8784de5c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:37:38 2026 +0530
+
+    Update index.html
+
+[33mcommit 52ac04b55181aef1a904e1522b69b9235998c423[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:31:42 2026 +0530
+
+    Update server.js
+
+[33mcommit 77d9c51c8e7ff78182d3af96d5ce0cf7a4bf9f9c[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:29:20 2026 +0530
+
+    Update index.html
+
+[33mcommit 9015ee46530d2852cfb4f33b5ac9cb79c863052d[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:09:24 2026 +0530
+
+    Update app.js
+
+[33mcommit 48a463331998ceb71d4348bedc8f5827869a03bb[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:08:43 2026 +0530
+
+    Update index.html
+
+[33mcommit 7683e9ff98f7fbece2031b1d1942b48b376488ab[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:08:09 2026 +0530
+
+    Update server.js
+
+[33mcommit 7800f50941ae536e107a1168e3f6727268f9e202[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:07:23 2026 +0530
+
+    Delete routes directory
+
+[33mcommit 613beb049b6c777d7d0f74cce3981b33aa3272c7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:06:42 2026 +0530
+
+    Delete models/middleware/routes directory
+
+[33mcommit 461d922fb5d6f479c891aa84936bf14d83bcc964[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:02:01 2026 +0530
+
+    Update app.js
+
+[33mcommit 5fcb44c12025d86ec1fbda7ed7f7c4753ad6c9af[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:01:38 2026 +0530
+
+    Update index.html
+
+[33mcommit d3e254ab8ec2a8c1681e6a3506acd936a409eba7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 22:01:12 2026 +0530
+
+    Update server.js
+
+[33mcommit 67df9be6b1372f8a69aeb35f0e93b8e396fee3ac[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 21:56:32 2026 +0530
+
+    Update server.js
+
+[33mcommit aed7ec8edce233930b90acc83dd617cd3298d9f9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 21:53:40 2026 +0530
+
+    Create app.js
+
+[33mcommit f25db25e0643715f6ce49885048f65799c47b003[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 21:52:47 2026 +0530
+
+    Update index.html
+
+[33mcommit d672199c55ca19fcdc626f1e6708467d752c99cf[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 21:48:17 2026 +0530
+
+    Update index.html
+
+[33mcommit f3054dc9902b42f37cd84b8c83cc0f378a6e7465[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 21:31:41 2026 +0530
+
+    Update index.html
+
+[33mcommit 74b8d410f6d2f45abc3aaded4ea9e900fd6459f6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 16:08:03 2026 +0530
+
+    Update index.html
+
+[33mcommit f17ccd1b5fd89d714e8fdcc5fe45ec0c25b71197[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 16:03:03 2026 +0530
+
+    Update server.js
+
+[33mcommit 34efe78ca1ef7bf93f764fe6770a620c858c93c0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:56:56 2026 +0530
+
+    Update server.js
+
+[33mcommit 90132256ad60add7c2b56f610a7b8be42144e50f[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:47:43 2026 +0530
+
+    Update server.js
+
+[33mcommit daf6627123375335a9e295284085719718be7b01[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:45:36 2026 +0530
+
+    Create index.html
+
+[33mcommit 645005d12698f7fe8682555b91a1cb66c5ea69d9[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:40:59 2026 +0530
+
+    Update server.js
+
+[33mcommit 54b7117f2d7d44aadc4f6e63ea493c5230ae65e6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:38:49 2026 +0530
+
+    Update server.js
+
+[33mcommit 1bdfd0e05c03b96849715f7c36b9f38a0d08f927[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:35:41 2026 +0530
+
+    Update server.js
+
+[33mcommit b6ce29955a5e127d2bb3fff3350ac7258e127516[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:31:26 2026 +0530
+
+    Update and rename app.js to routes/auth.js
+
+[33mcommit 62f6cba0f70a2c0893ae7d8dc873b7957dd1a228[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:27:46 2026 +0530
+
+    Delete style.css
+
+[33mcommit 6883711da3202face0b02842b5b386147fc63dab[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:26:44 2026 +0530
+
+    Delete index.html
+
+[33mcommit 7499d328c9ef7cf36cd2973088b0eb4d2855bf0e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:26:24 2026 +0530
+
+    Delete Untitled-4.js
+
+[33mcommit 22cd40b07bfcdeacb4e7b15a950c21d02a2f28f7[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:25:29 2026 +0530
+
+    Delete node Untitled-6.js
+
+[33mcommit f8046366f4d34b8ee158065a06d604e207995a85[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:22:37 2026 +0530
+
+    Delete Untitled-5.js
+
+[33mcommit 477d4b56fe50c8a926ef6e4d524d7f475ddbeac5[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:22:17 2026 +0530
+
+    Delete Untitled-3.js
+
+[33mcommit 24a58f8fe7729d63cee7549407a417ee2fa93e45[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:20:09 2026 +0530
+
+    Create auth.js
+
+[33mcommit 499dee377059a0910c9273cbc33412423c5ce440[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:19:21 2026 +0530
+
+    Create authMiddleware.js
+
+[33mcommit 25453c453d83f48f4908f5702ed53893232d54a8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:18:22 2026 +0530
+
+    Create User.js
+
+[33mcommit e72579b7a19da77357c857ccefd141a80bf1d4e0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:17:30 2026 +0530
+
+    Update server.js
+
+[33mcommit 25b8fae0cbd478e5d7cb968a12456ed733bc4f7e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:16:46 2026 +0530
+
+    Create .env
+
+[33mcommit bfbedf61067295a53e9fd2aad4ca115499c88c1b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:15:50 2026 +0530
+
+    Update package.json
+
+[33mcommit 58ea5dba49ec0d602e4ccb2bd0215761836d87f5[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:08:03 2026 +0530
+
+    Update server.js
+
+[33mcommit 6ca8b5f38e7d57e9566f42f9d48636dfa7f6fe7b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:07:28 2026 +0530
+
+    Update app.js
+
+[33mcommit 0441bdcbd24bc2aaf6abe10a224fa5c6f1473f8a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 15:02:47 2026 +0530
+
+    Update index.html
+
+[33mcommit eacdb60fccac0ca1cb189236e7da05dd5f7f26bc[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:59:04 2026 +0530
+
+    Update app.js
+
+[33mcommit fbf2448315f885c27c65cad91b6628e595a53bce[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:57:56 2026 +0530
+
+    Update style.css
+
+[33mcommit 9b02c2ccbfc1d1231dd0f067351759d0933e79d0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:56:36 2026 +0530
+
+    Refactor authentication and signup modal structure
+
+[33mcommit 1d89e3f0aaf058621a52f044c27ce9ed4fd75807[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:55:09 2026 +0530
+
+    Update server.js
+
+[33mcommit c1c713c7b076dbdc046fd98e5d216e3f1ad52966[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:54:03 2026 +0530
+
+    Refactor signup function to include additional fields
+
+[33mcommit f505b05e133dafbc35576ee8680eec4302f24fcd[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:53:25 2026 +0530
+
+    Update index.html
+
+[33mcommit 9a5eb1e822daad75b915c9444830898c6fd39634[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:49:59 2026 +0530
+
+    Update server.js
+
+[33mcommit 859fc6da73a2661d95a18a1c76fef9a5b18edfdb[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:47:23 2026 +0530
+
+    Update server.js
+
+[33mcommit 6ba845372f5ff118226204476bbdb4f428b6df48[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:32:47 2026 +0530
+
+    Update app.js
+
+[33mcommit 03417291e49116b572d29ecbba7f274b1ede5211[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:30:13 2026 +0530
+
+    Improve error messages and add loadReels function
+
+[33mcommit 40ad7f08707368b98e3773b342d52e26fbea1693[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:28:12 2026 +0530
+
+    Update app.js
+
+[33mcommit 56ee7cdca9b57f5360af39205cb6a1f7a64eef3a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:25:57 2026 +0530
+
+    Update app.js
+
+[33mcommit 3eb9527b13df5fc9b9eb17a76ab561823aa0a39a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:16:57 2026 +0530
+
+    Update app.js
+
+[33mcommit 5cb16f6a19f9ecfbfc1cbeb406ab03d35053acdc[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:07:02 2026 +0530
+
+    Update app.js
+
+[33mcommit e730fb70ad55e70633fe751de78c3904d09cae27[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 14:06:29 2026 +0530
+
+    Update app.js
+
+[33mcommit 156b6819da785dfcf7a1ac9af073eb7675b20e68[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 13:20:07 2026 +0530
+
+    Update and rename Untitled-6.js to node Untitled-6.js
+
+[33mcommit 70a6006aeb19dbcbfce2df274205acda813fca58[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 12:42:31 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 31dd51fd0248d3fc85827f4ed93c265689578f27[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 12:37:31 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 79d557be5fb34d591788fa2e4c2ca8a444a2be6a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 12:16:58 2026 +0530
+
+    Create uploads
+
+[33mcommit e2d8997b8559784e7e72b4091673c3cf24bc68b6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 12:03:19 2026 +0530
+
+    Update app.js
+
+[33mcommit 89693ed6d431bdddb88e3cec3168fc494651da36[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:41:14 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 7f9c76fcbc02f0b6e400519b964e7d8195f4236a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:39:29 2026 +0530
+
+    Update app.js
+
+[33mcommit 6b22e22d8d9799a4f3de8a6f61dc7b6a669425e2[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:38:35 2026 +0530
+
+    Update index.html
+
+[33mcommit 8245519987943da46b401c8d0260cde9a83ded4f[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:36:30 2026 +0530
+
+    Update index.html
+
+[33mcommit e3637531c25c4a035cc5c00655b6e17e1697bcbf[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:32:28 2026 +0530
+
+    Refactor signup and login functions to use email
+
+[33mcommit 137d5e2cf505ea2636d26ef60a83dfd0c314d9ea[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:30:55 2026 +0530
+
+    Update index.html
+
+[33mcommit 0eca1ba158f8d0056060ccd503b51d63410b247e[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:18:38 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 23acd995b4c3267e0c1abb4e120bf29454da0086[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:15:33 2026 +0530
+
+    Enhance index.html with welcome and action buttons
+    
+    Added a welcome message and signup/login buttons to the homepage.
+
+[33mcommit ee2af2b11679d7b95083fc4ae1d9123b8fbd8c5a[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:13:00 2026 +0530
+
+    Update app.js
+
+[33mcommit 90885a14abb16e2793e1d48b7c532677a711a532[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 11:09:37 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 6d51972ec77a9119abcc808ccbf6420e16a18537[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:52:28 2026 +0530
+
+    Create app.js
+
+[33mcommit b6f5be41b596a6611801696cd3c08429e26dd165[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:49:36 2026 +0530
+
+    Add login route and refactor server.js
+
+[33mcommit 34a45ab9f2c43ed044c308b9035f5276566624e6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:47:46 2026 +0530
+
+    Update server.js
+
+[33mcommit 285033208dd5bddae350c9bc6cbea45f555163cc[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:44:47 2026 +0530
+
+    Update script source from Untitled-6.js to app.js
+
+[33mcommit 8d0cdc6e3cf2c068dac93577a3654e1954a1ea48[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:42:20 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit e22b32472b03d63cfd52521151b948abebb73a63[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:38:54 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit edcef617083a6b795fc96a927920459015d461f2[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:36:37 2026 +0530
+
+    Update Untitled-6.js
+
+[33mcommit 366027f02bd010e04f1f5b7037f4a25ed068a1aa[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:34:37 2026 +0530
+
+    Update script source in index.html
+
+[33mcommit 6fd2aff6a6b12f698054900cec9b0d09d4e034b0[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:25:31 2026 +0530
+
+    Implement user signup route with password hashing
+    
+    Added user signup functionality with password hashing.
+
+[33mcommit 76e5c11efc8dadefea35f2838e69b41aecc6ba95[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 10:01:45 2026 +0530
+
+    Change script source from app.js to Untitled-3.js
+
+[33mcommit a0deebdc56bf99e863dc934980d1f476c74236b6[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Sat Feb 28 09:27:11 2026 +0530
+
+    Update server.js
+
+[33mcommit 6007929c6be4d4a304e9fb97b2c2d925ca1d49cd[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 22:48:21 2026 +0530
+
+    Update server.js
+
+[33mcommit b99c1eccb370429442242ba8aa1cd140d2b31cae[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 22:14:15 2026 +0530
+
+    Format style.css with consistent indentation
+
+[33mcommit d3acf9aa62a88a270eb13c72cbadee8436efd889[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 21:27:24 2026 +0530
+
+    Update and rename Untitled-8.css to style.css
+
+[33mcommit ad03d209409ec106a53b04a523e31122fe7a4e08[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 21:26:40 2026 +0530
+
+    Update and rename Untitled-7.html to index.html
+
+[33mcommit 68ee1fb80ab56d79e0a31704bd6436bcb1e4a5ee[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 21:25:51 2026 +0530
+
+    Update and rename Untitled-2.js to server.js
+
+[33mcommit de93e60beca9128d2cb62bd25bc27783653fc76b[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 21:24:54 2026 +0530
+
+    Update and rename Untitled-1.json to package.json
+
+[33mcommit 5966abd0a2ab7cebbff7ef6ac75fda1d0910c9e8[m
+Author: abhikumar9166905548-boop <abhikumar9166905548@gmail.com>
+Date:   Fri Feb 27 21:21:09 2026 +0530
+
+    Add files via upload

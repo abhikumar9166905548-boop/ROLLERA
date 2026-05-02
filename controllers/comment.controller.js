@@ -5,12 +5,20 @@ const User = require('../models/User.model');
 // 🔥 ADD COMMENT / REPLY (POST + REEL + REAL-TIME)
 exports.addComment = async (req, res, next) => {
   try {
-    const io = req.app.get("io"); // ✅ FIX
+    const io = req.app.get("io");
 
     const { content, reelId, parentCommentId } = req.body;
 
     if (!content)
       return res.status(400).json({ success: false, message: 'Content required' });
+
+    // ✅ SAFETY CHECK
+    if (!req.params.postId && !reelId) {
+      return res.status(400).json({
+        success: false,
+        message: "PostId ya ReelId required hai"
+      });
+    }
 
     let post = null;
 
@@ -53,13 +61,14 @@ exports.addComment = async (req, res, next) => {
       });
     }
 
-    // 🔥 REAL-TIME EMIT (ROOM BASED)
-    if (reelId) {
-      io.to(reelId.toString()).emit("newComment", comment);
-    }
+    // 🔥 ROOM TARGET
+    const roomId = reelId || req.params.postId;
 
-    if (req.params.postId) {
-      io.to(req.params.postId.toString()).emit("newComment", comment);
+    // 🔥 DIFFERENT EVENT (comment vs reply)
+    if (parentCommentId) {
+      io.to(roomId.toString()).emit("newReply", comment);
+    } else {
+      io.to(roomId.toString()).emit("newComment", comment);
     }
 
     res.status(201).json({ success: true, comment });
@@ -127,7 +136,7 @@ exports.getReplies = async (req, res, next) => {
 // ❤️ LIKE / UNLIKE COMMENT (REAL-TIME)
 exports.likeComment = async (req, res, next) => {
   try {
-    const io = req.app.get("io"); // ✅ FIX
+    const io = req.app.get("io");
 
     const comment = await Comment.findById(req.params.id);
 
@@ -144,8 +153,10 @@ exports.likeComment = async (req, res, next) => {
 
     await comment.save();
 
-    // 🔥 REAL-TIME LIKE UPDATE
-    io.emit("commentLiked", {
+    const roomId = comment.post || comment.reel;
+
+    // 🔥 ONLY ROOM USERS (FIXED)
+    io.to(roomId.toString()).emit("commentLiked", {
       commentId: comment._id,
       likes: comment.likes.length,
     });
@@ -164,7 +175,7 @@ exports.likeComment = async (req, res, next) => {
 // ❌ DELETE COMMENT (REAL-TIME)
 exports.deleteComment = async (req, res, next) => {
   try {
-    const io = req.app.get("io"); // ✅ FIX
+    const io = req.app.get("io");
 
     const comment = await Comment.findById(req.params.id);
 
@@ -174,10 +185,12 @@ exports.deleteComment = async (req, res, next) => {
     if (comment.user.toString() !== req.user.id)
       return res.status(403).json({ success: false, message: 'Not authorized' });
 
+    const roomId = comment.post || comment.reel;
+
     await comment.deleteOne();
 
-    // 🔥 REAL-TIME DELETE
-    io.emit("commentDeleted", {
+    // 🔥 ONLY ROOM USERS (FIXED)
+    io.to(roomId.toString()).emit("commentDeleted", {
       commentId: req.params.id,
     });
 
